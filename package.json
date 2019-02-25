@@ -21,10 +21,10 @@
     "eject": "react-scripts eject",
     "lint": "yarn lint-ts ; yarn lint-prettier",
     "lint-ts": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "lint-prettier": "prettier-check 'src/**/*.{ts,tsx,less}'",
+    "lint-prettier": "prettier-check 'src/**/*.{ts,tsx}'",
     "lint:fix": "yarn lint-ts:fix && yarn lint-prettier:fix",
     "lint-ts:fix": "tslint --fix -c tslint.json 'src/**/*.{ts,tsx}'",
-    "lint-prettier:fix": "prettier-check --write 'src/**/*.{ts,tsx,less}'",
+    "lint-prettier:fix": "prettier-check --write 'src/**/*.{ts,tsx}'",
     "tsc": "tsc --noEmit"
   },
   "eslintConfig": {
