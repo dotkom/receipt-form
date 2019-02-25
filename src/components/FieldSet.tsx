@@ -10,3 +10,10 @@ export const FieldSet = styled.div`
     gap: 1rem;
   }
 `;
+
+export const SeparatedFieldSet = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 2rem 0;
+`;
