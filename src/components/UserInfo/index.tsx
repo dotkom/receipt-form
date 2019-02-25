@@ -3,21 +3,40 @@ import styled from 'styled-components';
 import { LoginText } from './Logintext';
 import { Button } from '../Button';
 import { FileInput, Input } from '../Input';
-import { FieldSet } from '../FieldSet';
+import { FieldSet, SeparatedFieldSet } from '../FieldSet';
+import { OwLogo } from '../Icons/OwLogo';
 
-const LoginContainer = styled.div`
+const InfoFieldSet = styled(FieldSet)`
+  grid-template-columns: 2fr 1fr;
+`;
+
+const LoginButton = styled(Button)`
   display: flex;
+  margin: auto;
+`;
+
+const OwButtonLogo = styled(OwLogo)`
+  height: 1.4rem;
+  margin-right: 0.6rem;
+`;
+
+const ButtonText = styled.p`
+  margin: auto;
+  font-size: 1.1rem;
 `;
 
 export const UserInfo = () => {
   return (
     <>
-      <LoginContainer>
+      <InfoFieldSet>
         <LoginText />
-        <Button>
-          LOGG INN
-        </Button>
-      </LoginContainer>
+        <SeparatedFieldSet>
+          <LoginButton>
+            <OwButtonLogo />
+            <ButtonText>LOGG INN</ButtonText>
+          </LoginButton>
+        </SeparatedFieldSet>
+      </InfoFieldSet>
       <FieldSet>
         <Input label="Navn" />
         <Input label="E-post" />

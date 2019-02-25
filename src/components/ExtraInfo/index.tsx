@@ -1,6 +1,6 @@
 import React from 'react';
 import { FileInput, Input, TextArea, DateField } from '../Input';
-import { FieldSet } from '../FieldSet';
+import { FieldSet, SeparatedFieldSet } from '../FieldSet';
 import { Button } from '../Button';
 
 export const ExtraInfo = () => {
@@ -8,14 +8,14 @@ export const ExtraInfo = () => {
     <>
       <FieldSet>
         <Input label="Komité" />
-        <DateField label="Kjøpsdato" />
+        <Input label="E-post til økonomiansvarlig" />
       </FieldSet>
       <TextArea label="Kommentarer" />
       <FileInput label="Vedlegg" />
-      <FieldSet>
+      <SeparatedFieldSet>
         <Button title="download" onClick={()=> {}} >Last ned PDF</Button>
         <Button title="send" onClick={()=> {}} >Send til Bankom</Button>
-      </FieldSet>
+      </SeparatedFieldSet>
     </>
   );
 };
