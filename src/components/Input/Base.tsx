@@ -21,11 +21,15 @@ export const StyledInput = styled.input`
   ${BaseInputStyle}
 `;
 
-export const Label = styled.p`
+export const BaseLabelStyle = css`
   font-weight: bold;
   color: #8E8E8E;
   margin: 3px 0;
   font-size: 1.2rem;
+`;
+
+export const Label = styled.p`
+  ${BaseLabelStyle}
 `;
 
 export const InputContainer = styled.div`
