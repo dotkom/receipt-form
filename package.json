@@ -18,7 +18,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "yarn lint-ts ; yarn lint-prettier",
+    "lint-ts": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "lint-prettier": "prettier-check 'src/**/*.{ts,tsx,less}'",
+    "lint:fix": "yarn lint-ts:fix && yarn lint-prettier:fix",
+    "lint-ts:fix": "tslint --fix -c tslint.json 'src/**/*.{ts,tsx}'",
+    "lint-prettier:fix": "prettier-check --write 'src/**/*.{ts,tsx,less}'",
+    "tsc": "tsc --noEmit"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -28,5 +35,12 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "^1.16.4",
+    "prettier-check": "^2.0.0",
+    "tslint": "^5.13.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^3.6.0"
+  }
 }
