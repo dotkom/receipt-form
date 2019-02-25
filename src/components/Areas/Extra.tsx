@@ -1,7 +1,7 @@
 import React from 'react';
-import { FileInput, Input, TextArea, DateField } from '../Input';
-import { FieldSet, SeparatedFieldSet } from '../FieldSet';
 import { Button } from '../Button';
+import { FieldSet, SeparatedFieldSet } from '../FieldSet';
+import { DateField, FileInput, Input, TextArea } from '../Input';
 
 export const ExtraInfo = () => {
   return (
@@ -13,8 +13,8 @@ export const ExtraInfo = () => {
       <TextArea label="Kommentarer" />
       <FileInput label="Vedlegg" />
       <SeparatedFieldSet>
-        <Button title="download" onClick={()=> {}} >Last ned PDF</Button>
-        <Button title="send" onClick={()=> {}} >Send til Bankom</Button>
+        <Button title="download">Last ned PDF</Button>
+        <Button title="send">Send til Bankom</Button>
       </SeparatedFieldSet>
     </>
   );

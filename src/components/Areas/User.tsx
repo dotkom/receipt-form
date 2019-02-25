@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LoginText } from './Logintext';
 import { Button } from '../Button';
-import { FileInput, Input } from '../Input';
 import { FieldSet, SeparatedFieldSet } from '../FieldSet';
 import { OwLogo } from '../Icons/OwLogo';
+import { FileInput, Input } from '../Input';
+import { LoginText } from './Logintext';
 
 const InfoFieldSet = styled(FieldSet)`
   grid-template-columns: 2fr 1fr;

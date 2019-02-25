@@ -8,9 +8,5 @@ const FooterStyle = styled.footer`
 `;
 
 export const Footer = () => {
-  return (
-    <FooterStyle>
-      Fra Dotkom med kjærlighet {"<3"}
-    </FooterStyle>
-  );
+  return <FooterStyle>Fra Dotkom med kjærlighet {'<3'}</FooterStyle>;
 };

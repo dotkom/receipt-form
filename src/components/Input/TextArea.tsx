@@ -1,6 +1,6 @@
-import React, { FC, HTMLProps, useRef, useLayoutEffect, useEffect } from 'react';
-import { InputContainer, Label, BaseInputStyle } from './Base';
+import React, { FC, HTMLProps, useEffect, useLayoutEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { BaseInputStyle, InputContainer, Label } from './Base';
 
 export interface ITextAreaProps extends HTMLProps<HTMLTextAreaElement> {
   label: string;
@@ -17,11 +17,7 @@ export const TextArea: FC<ITextAreaProps> = ({ label, ...props }) => {
   return (
     <InputContainer>
       <Label>{label}</Label>
-      <MultilineInput
-        value={props.value}
-        onChange={props.onChange}
-        placeholder={props.placeholder}
-      />
+      <MultilineInput value={props.value} onChange={props.onChange} placeholder={props.placeholder} />
     </InputContainer>
   );
 };

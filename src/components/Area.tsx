@@ -20,9 +20,7 @@ const AreaContent = styled.div`
 export const Area: FC<IAreaProps> = (props) => {
   return (
     <AreaContainer color={props.color}>
-      <AreaContent>
-        {props.children}
-      </AreaContent>
+      <AreaContent>{props.children}</AreaContent>
     </AreaContainer>
   );
 };

@@ -8,15 +8,11 @@ const LOGIN_TEXT = `
 
 const TextStyle = styled.p`
   font-weight: 600;
-  color: #8E8E8E;
+  color: #8e8e8e;
   max-width: 32rem;
   font-size: 20px;
 `;
 
 export const LoginText = () => {
-  return (
-    <TextStyle>
-      {LOGIN_TEXT}
-    </TextStyle>
-  );
+  return <TextStyle>{LOGIN_TEXT}</TextStyle>;
 };

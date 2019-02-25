@@ -1,7 +1,7 @@
-import React, { FC, useState, useRef, ChangeEvent } from 'react';
+import React, { ChangeEvent, FC, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { IInputProps, InputContainer, Label, StyledInput } from './Base';
 import { Cross } from '../Icons/Cross';
+import { IInputProps, InputContainer, Label, StyledInput } from './Base';
 import { FileImage } from './Image';
 
 const LabelsContainer = styled.div`
@@ -27,11 +27,11 @@ export const FileInput: FC<IInputProps> = ({ label, ...props }) => {
   const handleFileRead = (event: ProgressEvent): any => {
     const content = fileReader.result;
     if (content instanceof ArrayBuffer) {
-      console.log(content);
+      throw new Error('Image output was of type ArrayBuffer, should be String');
     } else {
-      setImage(content)
+      setImage(content);
     }
-  }
+  };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
@@ -41,33 +41,36 @@ export const FileInput: FC<IInputProps> = ({ label, ...props }) => {
     } else {
       setImage(null);
     }
-  }
+  };
 
   const removeFiles = () => {
     setImage(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  }
+  };
 
   return (
     <InputContainer>
       <LabelsContainer>
         <Label>{label}</Label>
-        { image ? <CrossContainer>
-          <Cross onClick={removeFiles} />
-        </CrossContainer> : null }
+        {image ? (
+          <CrossContainer>
+            <Cross onClick={removeFiles} />
+          </CrossContainer>
+        ) : null}
       </LabelsContainer>
-      { image
-        ? <FileImage dataUrl={image} />
-        : <StyledInput
+      {image ? (
+        <FileImage dataUrl={image} />
+      ) : (
+        <StyledInput
           type="file"
           value={props.value}
           onChange={handleFileChange}
           placeholder={props.placeholder}
           ref={fileInputRef}
         />
-      }
+      )}
     </InputContainer>
   );
 };

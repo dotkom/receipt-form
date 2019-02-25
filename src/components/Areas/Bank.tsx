@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Input, RadioButton } from '../Input';
 import { FieldSet, SeparatedFieldSet } from '../FieldSet';
+import { Input, RadioButton } from '../Input';
 
 export const BankInfo = () => {
   return (
@@ -18,5 +18,5 @@ export const BankInfo = () => {
         <Input label="Anledning" />
       </FieldSet>
     </>
-  )
+  );
 };

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { InputContainer, IInputProps, Label, StyledInput } from './Base';
+import { IInputProps, InputContainer, Label, StyledInput } from './Base';
 
 export const DateField: FC<IInputProps> = ({ label, ...props }) => {
   return (
@@ -10,4 +10,3 @@ export const DateField: FC<IInputProps> = ({ label, ...props }) => {
     </InputContainer>
   );
 };
-

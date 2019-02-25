@@ -24,7 +24,7 @@ export const RadioButton: FC<IRadioProps> = ({ label, checked = false, onClick }
   return (
     <RadioLabel>
       <Radio onClick={onClick} />
-      { label }
+      {label}
     </RadioLabel>
   );
 };

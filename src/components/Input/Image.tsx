@@ -6,7 +6,7 @@ const ImageContainer = styled.div`
 
   background: #fff;
   border-radius: 5px;
-  border: 2px solid #E5E5E5;
+  border: 2px solid #e5e5e5;
 
   padding: 0.6rem;
   box-sizing: border-box;
@@ -24,5 +24,5 @@ export const FileImage = ({ dataUrl }: { dataUrl: string }) => {
     <ImageContainer>
       <Image src={dataUrl} />
     </ImageContainer>
-  )
+  );
 };
