@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Area } from './Area';
-import { UserInfo } from './UserInfo';
-import { BankInfo } from './BankInfo';
-import { ExtraInfo } from './ExtraInfo';
+import { UserInfo } from './Areas/User';
+import { BankInfo } from './Areas/Bank';
+import { ExtraInfo } from './Areas/Extra';
 
 export const Main = () => {
   return (
