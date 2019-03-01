@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button } from '../Button';
-import { FieldSet, SeparatedFieldSet } from '../FieldSet';
-import { OwLogo } from '../Icons/OwLogo';
-import { FileInput, Input } from '../Input';
+import { Button } from '../../Button';
+import { FieldSet, SeparatedFieldSet } from '../../FieldSet';
+import { OwLogo } from '../../Icons/OwLogo';
+import { FileInput, Input } from '../../Input';
 import { LoginText } from './Logintext';
 
 const InfoFieldSet = styled(FieldSet)`
