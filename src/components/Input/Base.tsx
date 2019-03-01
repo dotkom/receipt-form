@@ -15,6 +15,11 @@ export const BaseInputStyle = css`
 
   padding: 0.6rem;
   box-sizing: border-box;
+
+  :focus {
+    outline: none;
+    border-color: #0060a3;
+  }
 `;
 
 export const StyledInput = styled.input`
