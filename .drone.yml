@@ -75,11 +75,10 @@ pipeline:
       event: push
       branch: master
       status: success
-    settings:
-      bucket: receipt-form-prod
-      source: build/**/*
-      target: /
-      acl: public-read
-      region: eu-west-1
-      access_key: ${AWS_ACCESS_KEY}
-      secret_key: ${AWS_SECRET_KEY}
+    bucket: receipt-form-prod
+    source: build/**/*
+    target: /
+    acl: public-read
+    region: eu-west-1
+    access_key: ${AWS_ACCESS_KEY}
+    secret_key: ${AWS_SECRET_KEY}
