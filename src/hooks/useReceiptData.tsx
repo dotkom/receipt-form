@@ -1,10 +1,12 @@
 import { Dispatch, Reducer, useReducer } from 'react';
 
+export type ReceiptType = 'card' | 'deposit';
+
 export interface IState {
   fullname: string | null;
   email: string | null;
   signature: string | null;
-  type: 'card' | 'deposit';
+  type: ReceiptType;
   amount: number | null;
   intent: string | null;
   account: string | null;

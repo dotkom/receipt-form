@@ -65,8 +65,13 @@ export const useUserInfo = () => {
   };
 
   const catchCallback = async () => {
-    const user = await MANAGER.signinRedirectCallback();
-    processUser(user);
+    try {
+      const user = await MANAGER.signinRedirectCallback();
+      processUser(user);
+    } catch (err) {
+      /** Do nothing if no user data is present */
+      return;
+    }
   };
 
   useEffect(() => {

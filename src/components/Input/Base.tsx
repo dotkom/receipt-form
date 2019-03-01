@@ -16,6 +16,10 @@ export const BaseInputStyle = css`
   padding: 0.6rem;
   box-sizing: border-box;
 
+  :disabled {
+    background: #efefef;
+  }
+
   :focus {
     outline: none;
     border-color: #0060a3;
@@ -43,11 +47,13 @@ export const InputContainer = styled.div`
   box-sizing: border-box;
 `;
 
-export const Input: FC<IInputProps> = ({ label, type, ...props }) => {
+export const Input: FC<IInputProps> = ({ label, ...rest }) => {
+  /** Extract 'ref' and 'as' from props as styled-components types mismatch with React */
+  const { ref, as, ...props } = rest;
   return (
     <InputContainer>
       <Label>{label}</Label>
-      <StyledInput type={type} value={props.value} onChange={props.onChange} placeholder={props.placeholder} />
+      <StyledInput {...props} />
     </InputContainer>
   );
 };

@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { FieldSet } from 'components/FieldSet';
-import { RadioButton } from 'components/Input';
 import { ReceiptNumberField } from 'components/Input/ReceiptNumberField';
 import { ReceiptTextField } from 'components/Input/ReceiptTextField';
+import { ReceiptTypeRadio } from 'components/Input/ReceiptTypeRadio';
 import { ReceiptContext } from 'contexts/ReceiptData';
 
 const RadioFieldSet = styled.div`
@@ -41,8 +41,8 @@ export const BankInfo = () => {
       <ContentFieldSet>
         <div>
           <RadioFieldSet>
-            <RadioButton label="Utlegg" />
-            <RadioButton label="Bankkort" />
+            <ReceiptTypeRadio label="Utlegg" value="deposit" />
+            <ReceiptTypeRadio label="Bankkort" value="card" />
           </RadioFieldSet>
         </div>
         <RadioInfo>{ABOUT_PAYMENT_TYPE}</RadioInfo>
