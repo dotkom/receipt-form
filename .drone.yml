@@ -70,7 +70,11 @@ pipeline:
   
   deploy:
     image: plugins/s3
-    secrets: [aws_access_key, aws_secret_key]
+    secrets:
+      - source: aws_access_key
+        target: AWS_ACCESS_KEY_ID
+      - source: aws_secret_key
+        target: AWS_SECRET_ACCESS_KEY
     when:
       event: push
       branch: master
@@ -80,5 +84,3 @@ pipeline:
     target: /
     acl: public-read
     region: eu-west-1
-    access_key: $AWS_ACCESS_KEY
-    secret_key: $AWS_SECRET_KEY
