@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+
+import { useUserInfo } from '../../../hooks/useUserInfo';
 import { Button } from '../../Button';
 import { FieldSet, SeparatedFieldSet } from '../../FieldSet';
 import { OwLogo } from '../../Icons/OwLogo';
-import { FileInput, Input } from '../../Input';
+import { FileInput } from '../../Input';
+import { ReceiptTextField } from '../../Input/ReceiptTextField';
 import { LoginText } from './Logintext';
 
 const InfoFieldSet = styled(FieldSet)`
@@ -26,20 +29,21 @@ const ButtonText = styled.p`
 `;
 
 export const UserInfo = () => {
+  const { logIn } = useUserInfo();
   return (
     <>
       <InfoFieldSet>
         <LoginText />
         <SeparatedFieldSet>
-          <LoginButton>
+          <LoginButton onClick={logIn}>
             <OwButtonLogo />
             <ButtonText>LOGG INN</ButtonText>
           </LoginButton>
         </SeparatedFieldSet>
       </InfoFieldSet>
       <FieldSet>
-        <Input label="Navn" />
-        <Input label="E-post" />
+        <ReceiptTextField label="Navn" field="fullname" />
+        <ReceiptTextField label="E-post" field="email" />
       </FieldSet>
       <FileInput label="Signatur" />
     </>
