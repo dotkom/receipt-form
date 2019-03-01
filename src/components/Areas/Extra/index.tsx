@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { Button } from '../../Button';
-import { FieldSet, SeparatedFieldSet } from '../../FieldSet';
-import { FileInput, Input, TextArea } from '../../Input';
 
-import { ReceiptContext } from '../../../contexts/ReceiptData';
-import { ActionType } from '../../../hooks/useReceiptData';
-import { ReceiptTextField } from '../../Input/ReceiptTextField';
+import { Button } from 'components/Button';
+import { SeparatedFieldSet } from 'components/FieldSet';
+import { FileInput, TextArea } from 'components/Input';
+import { ReceiptContext } from 'contexts/ReceiptData';
+import { ActionType } from 'hooks/useReceiptData';
 
 export const ExtraInfo = () => {
   const { dispatch } = useContext(ReceiptContext);

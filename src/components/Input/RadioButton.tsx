@@ -1,5 +1,6 @@
 import React, { FC, HTMLProps } from 'react';
 import styled from 'styled-components';
+
 import { Label } from './Base';
 
 const Radio = styled.div`
@@ -20,7 +21,7 @@ export interface IRadioProps extends HTMLProps<HTMLElement> {
   checked?: boolean;
 }
 
-export const RadioButton: FC<IRadioProps> = ({ label, checked = false, onClick }) => {
+export const RadioButton: FC<IRadioProps> = ({ label, onClick }) => {
   return (
     <RadioLabel>
       <Radio onClick={onClick} />

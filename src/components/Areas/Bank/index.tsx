@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import { FieldSet } from '../../FieldSet';
-import { RadioButton } from '../../Input';
-import { ReceiptNumberField } from '../../Input/ReceiptNumberField';
-import { ReceiptTextField } from '../../Input/ReceiptTextField';
-
-import { ReceiptContext } from '../../../contexts/ReceiptData';
+import { FieldSet } from 'components/FieldSet';
+import { RadioButton } from 'components/Input';
+import { ReceiptNumberField } from 'components/Input/ReceiptNumberField';
+import { ReceiptTextField } from 'components/Input/ReceiptTextField';
+import { ReceiptContext } from 'contexts/ReceiptData';
 
 const RadioFieldSet = styled.div`
   display: flex;

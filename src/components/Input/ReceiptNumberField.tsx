@@ -1,8 +1,9 @@
 import React, { FC, useContext } from 'react';
-import { Input } from '.';
 
-import { ReceiptContext } from '../../contexts/ReceiptData';
-import { ActionType, IState } from '../../hooks/useReceiptData';
+import { ReceiptContext } from 'contexts/ReceiptData';
+import { ActionType, IState } from 'hooks/useReceiptData';
+
+import { Input } from './Base';
 
 export interface IProps {
   field: keyof IState;

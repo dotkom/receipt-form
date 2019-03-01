@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useContext } from 'react';
-import { Input } from '../../Input';
 
-import { ReceiptContext } from '../../../contexts/ReceiptData';
-import { ActionType } from '../../../hooks/useReceiptData';
+import { Input } from 'components/Input';
+import { ReceiptContext } from 'contexts/ReceiptData';
+import { ActionType } from 'hooks/useReceiptData';
 
 export const AmountField = () => {
   const { state, dispatch } = useContext(ReceiptContext);

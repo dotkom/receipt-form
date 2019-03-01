@@ -1,5 +1,6 @@
-import React, { FC, HTMLProps, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { FC, HTMLProps } from 'react';
 import styled from 'styled-components';
+
 import { BaseInputStyle, InputContainer, Label } from './Base';
 
 export interface ITextAreaProps extends HTMLProps<HTMLTextAreaElement> {

@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FC, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { Cross } from '../Icons/Cross';
+
+import { Cross } from 'components/Icons/Cross';
 import { IInputProps, InputContainer, Label, StyledInput } from './Base';
 import { FileImage } from './Image';
 
@@ -24,7 +25,7 @@ export const FileInput: FC<IInputProps> = ({ label, ...props }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileReader = new FileReader();
 
-  const handleFileRead = (event: ProgressEvent): any => {
+  const handleFileRead = (_: ProgressEvent): any => {
     const content = fileReader.result;
     if (content instanceof ArrayBuffer) {
       throw new Error('Image output was of type ArrayBuffer, should be String');

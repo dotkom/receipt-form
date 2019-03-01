@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { useUserInfo } from '../../../hooks/useUserInfo';
-import { Button } from '../../Button';
-import { FieldSet, SeparatedFieldSet } from '../../FieldSet';
-import { OwLogo } from '../../Icons/OwLogo';
-import { FileInput } from '../../Input';
-import { ReceiptTextField } from '../../Input/ReceiptTextField';
+import { Button } from 'components/Button';
+import { FieldSet, SeparatedFieldSet } from 'components/FieldSet';
+import { OwLogo } from 'components/Icons/OwLogo';
+import { FileInput } from 'components/Input';
+import { ReceiptTextField } from 'components/Input/ReceiptTextField';
+import { useUserInfo } from 'hooks/useUserInfo';
+
 import { LoginText } from './Logintext';
 
 const InfoFieldSet = styled(FieldSet)`

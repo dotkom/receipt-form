@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+
 import { Area } from './Area';
 import { BankInfo } from './Areas/Bank';
 import { ExtraInfo } from './Areas/Extra';

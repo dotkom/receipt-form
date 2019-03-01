@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
+
 import { IInputProps, InputContainer, Label, StyledInput } from './Base';
 
 export const DateField: FC<IInputProps> = ({ label, ...props }) => {
