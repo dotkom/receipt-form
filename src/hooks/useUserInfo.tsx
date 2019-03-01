@@ -51,8 +51,8 @@ export const useUserInfo = () => {
       data: {
         fullname: profile.name,
         email: profile.email,
-      }
-    })
+      },
+    });
   };
 
   const logIn = async () => {
@@ -67,11 +67,11 @@ export const useUserInfo = () => {
   const catchCallback = async () => {
     const user = await MANAGER.signinRedirectCallback();
     processUser(user);
-  }; 
+  };
 
   useEffect(() => {
     catchCallback();
-  }, [])
+  }, []);
 
   return { logIn };
 };
