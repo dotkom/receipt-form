@@ -23,7 +23,7 @@ pipeline:
     when:
       event: [push, pull_request, tag, deployment]
     commands:
-      - yarn build:prod
+      - yarn build
 
   test:
     image: node:11
