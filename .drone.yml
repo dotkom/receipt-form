@@ -20,6 +20,13 @@ pipeline:
   build:
     image: node:11
     group: testing
+    secrets:
+      - source: auth_callback
+        target: REACT_APP_AUTH_CALLBACK
+      - source: auth_client_id
+        target: REACT_APP_AUTH_CLIENT_ID
+      - source: auth_endpoint
+        target: REACT_APP_AUTH_ENDPOINT
     when:
       event: [push, pull_request, tag, deployment]
     commands:
