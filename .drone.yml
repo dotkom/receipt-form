@@ -1,0 +1,85 @@
+pipeline:
+  restore-cache:
+    image: drillster/drone-volume-cache
+    pull: true
+    when:
+      event: [push, pull_request, tag, deployment]
+    restore: true
+    mount:
+      - ./node_modules
+    volumes:
+      - /tmp/cache:/cache
+
+  setup:
+    image: node:11
+    when:
+      event: [push, pull_request, tag, deployment]
+    commands:
+      - yarn
+
+  build:
+    image: node:11
+    group: testing
+    when:
+      event: [push, pull_request, tag, deployment]
+    commands:
+      - yarn build:prod
+
+  test:
+    image: node:11
+    group: testing
+    when:
+      event: [push, pull_request, tag, deployment]
+    commands:
+      yarn test
+
+  compile-typescript:
+    image: node:11
+    group: testing
+    when:
+      event: [push, pull_request, tag, deployment]
+    commands:
+      - yarn run tsc
+
+  lint-typescript:
+    image: node:11
+    group: testing
+    when:
+      event: [push, pull_request, tag, deployment]
+    commands:
+      - yarn lint-ts
+
+  lint-prettier:
+    image: node:11
+    group: testing
+    when:
+      event: [push, pull_request, tag, deployment]
+    commands:
+      - yarn lint-prettier
+
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    pull: true
+    when:
+      event: [push, pull_request, tag, deployment]
+    rebuild: true
+    mount:
+      - ./node_modules
+    volumes:
+      - /tmp/cache:/cache
+  
+  deploy:
+    image: plugins/s3
+    secrets: [aws_access_key, aws_secret_key]
+    when:
+      event: push
+      branch: master
+      status: success
+    settings:
+      bucket: receipt-form-prod
+      source: build/**/*
+      target: /
+      acl: public-read
+      region: eu-west-1
+      access_key: ${AWS_ACCESS_KEY}
+      secret_key: ${AWS_SECRET_KEY}
