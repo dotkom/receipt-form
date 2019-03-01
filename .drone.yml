@@ -80,7 +80,5 @@ pipeline:
     target: /
     acl: public-read
     region: eu-west-1
-    access_key:
-      from_secret: aws_access_key
-    secret_key:
-      from_secret: aws_secret_key
+    access_key: $AWS_ACCESS_KEY
+    secret_key: $AWS_SECRET_KEY
