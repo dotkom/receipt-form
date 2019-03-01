@@ -89,5 +89,6 @@ pipeline:
     bucket: receipt-form-prod
     source: build/**/*
     target: /
+    strip_prefix: build/
     acl: public-read
     region: eu-west-1
