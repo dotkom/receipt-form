@@ -6,7 +6,6 @@
       "dom.iterable",
       "esnext"
     ],
-    "baseUrl": "./src",
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -18,7 +17,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -26,13 +24,13 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src"
-  ]
+  ],
+  "extends": "./tsconfig.paths.json"
 }
