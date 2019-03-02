@@ -9,32 +9,23 @@ import { ReceiptTypeRadio } from 'components/Input/ReceiptTypeRadio';
 import { ReceiptContext } from 'contexts/ReceiptData';
 
 const RadioFieldSet = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 1.4rem 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 
   @media screen and (max-width: 768px) {
-    margin: 1rem 1rem 0;
+    gap: 1rem;
   }
 `;
 
 const ContentFieldSet = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 2fr 1fr;
   gap: 2rem;
 
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
   }
-`;
-
-const ABOUT_PAYMENT_TYPE = `
-  \$\{Vet ikke helt hva som burde stå her ennå, tar gjerne imot ideer?\}
-`;
-
-const RadioInfo = styled.p`
-  color: #8e8e8e;
-  font-size: 20px;
 `;
 
 export const BankInfo = () => {
@@ -44,11 +35,14 @@ export const BankInfo = () => {
       <ContentFieldSet>
         <div>
           <RadioFieldSet>
-            <ReceiptTypeRadio label="Utlegg" value="deposit" />
-            <ReceiptTypeRadio label="Bankkort" value="card" />
+            <ReceiptTypeRadio label="Utlegg" value="deposit" tooltip="Hvis du har lagt ut med ditt eget kort" />
+            <ReceiptTypeRadio
+              label="Bankkort"
+              value="card"
+              tooltip="Hvis du har betalt for noe med ett av Online sine kort"
+            />
           </RadioFieldSet>
         </div>
-        <RadioInfo>{ABOUT_PAYMENT_TYPE}</RadioInfo>
       </ContentFieldSet>
       <FieldSet>
         {state.type === 'deposit' && (

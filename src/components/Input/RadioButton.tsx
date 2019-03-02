@@ -63,20 +63,30 @@ const StyledRadioChecked = () => {
   );
 };
 
+const Container = styled.div``;
+
+const Tooltip = styled.p`
+  color: #8e8e8e;
+`;
+
 export interface IRadioProps extends HTMLProps<HTMLInputElement> {
   label: string;
+  tooltip: string;
 }
 
 export const RadioButton: FC<IRadioProps> = ({ className, label, checked = false, onClick, ...rest }) => {
   /** Extract 'ref', 'type' and 'as' from props as styled-components types mismatch with React */
-  const { ref, type, as, ...props } = rest;
+  const { ref, type, as, tooltip, ...props } = rest;
   return (
-    <RadioLabel className={className} onClick={onClick}>
-      <RadioContainer>
-        <HiddenRadio checked={checked} {...props} />
-        {checked ? <StyledRadioChecked /> : <StyledRadio />}
-      </RadioContainer>
-      {label}
-    </RadioLabel>
+    <Container>
+      <RadioLabel className={className} onClick={onClick}>
+        <RadioContainer>
+          <HiddenRadio checked={checked} {...props} />
+          {checked ? <StyledRadioChecked /> : <StyledRadio />}
+        </RadioContainer>
+        {label}
+      </RadioLabel>
+      <Tooltip>{tooltip}</Tooltip>
+    </Container>
   );
 };

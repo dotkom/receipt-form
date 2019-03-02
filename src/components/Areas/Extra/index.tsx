@@ -9,6 +9,10 @@ import { ActionType } from 'hooks/useReceiptData';
 import { AttachmentsInputs } from './AttachmentInputs';
 import { FileSize } from './FileSize';
 
+const COMMENTS_PLACEHOLDER = `Andre kommentarer eller viktig informasjon rundt kjøpet kan skrives her.
+
+Hvis det gjelder teambuilding, skrive også inn navn på alle deltakere.`;
+
 export const ExtraInfo = () => {
   const { dispatch } = useContext(ReceiptContext);
 
@@ -22,7 +26,7 @@ export const ExtraInfo = () => {
 
   return (
     <>
-      <TextArea label="Kommentarer" placeholder="Andre kommentarer eller viktig informasjon rundt kjøpet" />
+      <TextArea label="Kommentarer" placeholder={COMMENTS_PLACEHOLDER} />
       <AttachmentsInputs />
       <FileSize />
       <SeparatedFieldSet>

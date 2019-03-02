@@ -8,18 +8,19 @@ import { RadioButton } from './RadioButton';
 export interface IProps {
   label: string;
   value: ReceiptType;
+  tooltip: string;
 }
 
-export const ReceiptTypeRadio = ({ label, value }: IProps) => {
+export const ReceiptTypeRadio = (props: IProps) => {
   const { state, dispatch } = useContext(ReceiptContext);
 
   const handleClick = () => {
     dispatch({
       type: ActionType.CHANGE,
-      data: { type: value },
+      data: { type: props.value },
     });
   };
 
-  const checked = state.type === value;
-  return <RadioButton label={label} checked={checked} onClick={handleClick} value={value} onChange={handleClick} />;
+  const checked = state.type === props.value;
+  return <RadioButton checked={checked} onClick={handleClick} onChange={handleClick} {...props} />;
 };
