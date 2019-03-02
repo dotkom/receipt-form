@@ -16,6 +16,7 @@ const AreaContent = styled.div`
   max-width: 96vw;
   margin: auto;
   padding: 1rem;
+  box-sizing: border-box;
 `;
 
 const AreaHeader = styled.h2`
