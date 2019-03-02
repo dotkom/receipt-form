@@ -12,6 +12,7 @@ export interface IState {
   amount: number | null;
   intent: string | null;
   account: string | null;
+  cardDetails: string | null;
   committee: ICommittee | null;
   comments: string | null;
   attachments: string | null;
@@ -21,10 +22,11 @@ const INITIAL_STATE: IState = {
   fullname: null,
   email: null,
   signature: null,
-  type: 'card',
+  type: 'deposit',
   amount: null,
   intent: null,
   account: null,
+  cardDetails: null,
   committee: null,
   comments: null,
   attachments: null,
