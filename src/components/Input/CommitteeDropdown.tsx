@@ -30,10 +30,10 @@ export const CommitteeDropdown = () => {
 
   return (
     <SelectContainer>
-      <Label>komité</Label>
+      <Label>Ansvarlig enhet</Label>
       <Select onChange={onDropdownChange} defaultValue="default">
         <Option disabled value="default">
-          Velg en komité
+          Velg enheten/komiteen kjøpet er gjort for
         </Option>
         {COMMITTEES.map(({ group, name }) => (
           <Option key={group} value={group}>
