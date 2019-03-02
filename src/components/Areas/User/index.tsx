@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { Button } from 'components/Button';
 import { FieldSet, SeparatedFieldSet } from 'components/FieldSet';
 import { OwLogo } from 'components/Icons/OwLogo';
-import { FileInput } from 'components/Input';
 import { ReceiptTextField } from 'components/Input/ReceiptTextField';
 import { useUserInfo } from 'hooks/useUserInfo';
 
 import { LoginText } from './Logintext';
+import { SignatureInput } from './SignatureInput';
 
 const InfoFieldSet = styled(FieldSet)`
   grid-template-columns: 2fr 1fr;
@@ -46,7 +46,7 @@ export const UserInfo = () => {
         <ReceiptTextField label="Navn" field="fullname" placeholder="Ditt fulle navn" />
         <ReceiptTextField label="E-post" field="email" placeholder="Din epostadresse. Onlinemail hvis du har" />
       </FieldSet>
-      <FileInput label="Signatur" />
+      <SignatureInput />
     </>
   );
 };
