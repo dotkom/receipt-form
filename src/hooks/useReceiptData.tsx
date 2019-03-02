@@ -7,14 +7,14 @@ export type ReceiptType = 'card' | 'deposit';
 export interface IState {
   fullname: string | null;
   email: string | null;
-  signature: string | null;
+  signature: File | null;
   type: ReceiptType;
   amount: number | null;
   intent: string | null;
   account: string | null;
   committee: ICommittee | null;
   comments: string | null;
-  attachments: string | null;
+  attachments: File[];
 }
 
 const INITIAL_STATE: IState = {
@@ -27,7 +27,7 @@ const INITIAL_STATE: IState = {
   account: null,
   committee: null,
   comments: null,
-  attachments: null,
+  attachments: [],
 };
 
 export enum ActionType {
