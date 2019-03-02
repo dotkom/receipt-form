@@ -34,19 +34,34 @@ const StyledRadio = styled.div`
   border-radius: 1rem;
   margin-right: 0.6rem;
 
+  display: grid;
+  justify-content: center;
+  align-content: center;
+
   :focus {
     border-color: #0060a3;
   }
-`;
-
-const StyledRadioChecked = styled(StyledRadio)`
-  background: #0060a3;
 `;
 
 const RadioContainer = styled.div`
   display: inline-block;
   vertical-align: middle;
 `;
+
+const Checked = styled.div`
+  background: #0060a3;
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+`;
+
+const StyledRadioChecked = () => {
+  return (
+    <StyledRadio>
+      <Checked />
+    </StyledRadio>
+  );
+};
 
 export interface IRadioProps extends HTMLProps<HTMLInputElement> {
   label: string;
