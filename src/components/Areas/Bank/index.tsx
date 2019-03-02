@@ -39,8 +39,6 @@ const RadioInfo = styled.p`
 
 export const BankInfo = () => {
   const { state } = useContext(ReceiptContext);
-  const disableAccount = state.type === 'deposit';
-  const accountPlaceholder = disableAccount ? 'Kontonummer brukes ikke ved utlegg' : 'Kontonummeret som ble brukt';
   return (
     <>
       <ContentFieldSet>
@@ -53,12 +51,16 @@ export const BankInfo = () => {
         <RadioInfo>{ABOUT_PAYMENT_TYPE}</RadioInfo>
       </ContentFieldSet>
       <FieldSet>
-        <ReceiptTextField
-          field="account"
-          label="Kontonummer"
-          disabled={disableAccount}
-          placeholder={accountPlaceholder}
-        />
+        {state.type === 'deposit' && (
+          <ReceiptTextField field="account" label="Kontonummer" placeholder="Kontonummer for tilbakeføring" />
+        )}
+        {state.type === 'card' && (
+          <ReceiptTextField
+            field="cardDetails"
+            label="Kortinformasjon"
+            placeholder="Kortnummer/hvilken komite kortet tilhører"
+          />
+        )}
         <ReceiptNumberField field="amount" label="Beløp" placeholder="Beløpet i NOK" />
       </FieldSet>
       <FieldSet>
