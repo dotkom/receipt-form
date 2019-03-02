@@ -8,9 +8,7 @@ import { COMMITTEES } from 'models/comittees';
 import { Label } from './Base';
 import { Select } from './Dropdown';
 
-const Option = styled.option`
-
-`;
+const Option = styled.option``;
 
 const SelectContainer = styled.div`
   margin: auto 0;
@@ -37,12 +35,14 @@ export const CommitteeDropdown = () => {
     <SelectContainer>
       <Label>komité</Label>
       <Select onChange={onDropdownChange}>
-        <Option disabled selected={defaultSelected}>Velg en komité</Option>
-        { COMMITTEES.map(({ group, name }) => (
+        <Option disabled selected={defaultSelected}>
+          Velg en komité
+        </Option>
+        {COMMITTEES.map(({ group, name }) => (
           <Option key={group} value={group} selected={selected ? selected.group === group : false}>
-            { name }
+            {name}
           </Option>
-        )) }
+        ))}
       </Select>
     </SelectContainer>
   );

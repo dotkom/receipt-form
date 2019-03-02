@@ -1,5 +1,7 @@
 import { Dispatch, Reducer, useReducer } from 'react';
 
+import { ICommittee } from 'models/comittees';
+
 export type ReceiptType = 'card' | 'deposit';
 
 export interface IState {
@@ -10,7 +12,7 @@ export interface IState {
   amount: number | null;
   intent: string | null;
   account: string | null;
-  committee: string | null;
+  committee: ICommittee | null;
   comments: string | null;
   attachments: string | null;
 }

@@ -22,5 +22,10 @@ export const ReceiptNumberField: FC<IProps> = ({ field, label }) => {
     });
   };
 
-  return <Input type="number" label={label} value={state[field] || ''} onChange={change} />;
+  const value = state[field];
+  if (value !== null && typeof value !== 'number') {
+    throw new Error('ReceiptTextField supplied field value is not a number');
+  }
+
+  return <Input type="number" label={label} value={value || ''} onChange={change} />;
 };

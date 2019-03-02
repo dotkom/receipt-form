@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { FieldSet } from 'components/FieldSet';
+import { CommitteeDropdown } from 'components/Input/CommitteeDropdown';
 import { ReceiptNumberField } from 'components/Input/ReceiptNumberField';
 import { ReceiptTextField } from 'components/Input/ReceiptTextField';
 import { ReceiptTypeRadio } from 'components/Input/ReceiptTypeRadio';
@@ -52,7 +53,7 @@ export const BankInfo = () => {
         <ReceiptNumberField field="amount" label="Beløp" />
       </FieldSet>
       <FieldSet>
-        <ReceiptTextField label="Komité" field="committee" />
+        <CommitteeDropdown />
         <ReceiptTextField field="intent" label="Anledning" />
       </FieldSet>
     </>

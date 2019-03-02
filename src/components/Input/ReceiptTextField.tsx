@@ -23,5 +23,10 @@ export const ReceiptTextField: FC<IProps> = ({ field, label, disabled }) => {
     });
   };
 
-  return <Input label={label} value={state[field] || ''} onChange={change} disabled={disabled} />;
+  const value = state[field] || '';
+  if (typeof value !== 'string') {
+    throw new Error('ReceiptTextField supplied field value is not a string');
+  }
+
+  return <Input label={label} value={value} onChange={change} disabled={disabled} />;
 };

@@ -10,6 +10,7 @@ export const BaseInputStyle = css`
   width: 100%;
 
   background: #fff;
+  color: #333333;
   border-radius: 5px;
   border: 2px solid #e5e5e5;
 
