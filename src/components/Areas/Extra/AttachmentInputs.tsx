@@ -28,16 +28,15 @@ export const AttachmentsInputs = () => {
 
   return (
     <>
-      {length &&
-        state.attachments.map((attachment, i) => (
-          <FileInput
-            key={`Vedlegg ${i + 1}`}
-            label={`Vedlegg ${i + 1}`}
-            onUpload={handleFileChange}
-            onRemove={() => removeFile(i)}
-            file={attachment || undefined}
-          />
-        ))}
+      {state.attachments.map((attachment, i) => (
+        <FileInput
+          key={`Vedlegg ${i + 1}`}
+          label={`Vedlegg ${i + 1}`}
+          onUpload={handleFileChange}
+          onRemove={() => removeFile(i)}
+          file={attachment || undefined}
+        />
+      ))}
       <FileInput label={`Vedlegg ${count}`} onUpload={handleFileChange} />
     </>
   );
