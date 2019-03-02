@@ -1,8 +1,10 @@
 import { User, UserManager } from 'oidc-client';
 import { useContext, useEffect } from 'react';
 
-import { AUTH_CALLBACK, AUTH_CLIENT_ID, AUTH_ENDPOINT } from '../constants/auth';
-import { ReceiptContext } from '../contexts/ReceiptData';
+import { AUTH_CALLBACK, AUTH_CLIENT_ID, AUTH_ENDPOINT } from 'constants/auth';
+import { ReceiptContext } from 'contexts/ReceiptData';
+import { getProfile, IProfile } from 'utils/profile';
+
 import { ActionType } from './useReceiptData';
 
 const MANAGER = new UserManager({
@@ -41,16 +43,22 @@ export interface IAuthProfile {
   email: string;
 }
 
+/** Prefer committee/Online mail is the user has one */
+const getEmail = (email: string, profile?: IProfile) => {
+  return profile && profile.online_mail ? `${profile.online_mail}@online.ntnu.no` : email;
+};
+
 export const useUserInfo = () => {
   const { dispatch } = useContext(ReceiptContext);
 
-  const processUser = (user: User) => {
+  const processUser = (user: User, extProfile?: IProfile) => {
     const profile: IAuthProfile = user.profile;
+    const email = getEmail(profile.email, extProfile);
     dispatch({
       type: ActionType.CHANGE,
       data: {
         fullname: profile.name,
-        email: profile.email,
+        email,
       },
     });
   };
@@ -67,7 +75,8 @@ export const useUserInfo = () => {
   const catchCallback = async () => {
     try {
       const user = await MANAGER.signinRedirectCallback();
-      processUser(user);
+      const profile = await getProfile(user.access_token);
+      processUser(user, profile);
     } catch (err) {
       /** Do nothing if no user data is present */
       return;
