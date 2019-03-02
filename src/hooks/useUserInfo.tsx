@@ -51,8 +51,9 @@ const getEmail = (email: string, profile?: IProfile) => {
 export const useUserInfo = () => {
   const { dispatch } = useContext(ReceiptContext);
 
-  const processUser = (user: User, extProfile?: IProfile) => {
+  const processUser = async (user: User) => {
     const profile: IAuthProfile = user.profile;
+    const extProfile = await getProfile(user.access_token);
     const email = getEmail(profile.email, extProfile);
     dispatch({
       type: ActionType.CHANGE,
@@ -65,8 +66,12 @@ export const useUserInfo = () => {
 
   const logIn = async () => {
     try {
-      const user = await MANAGER.getUser();
-      processUser(user);
+      const user: User | null = await MANAGER.getUser();
+      if (user) {
+        processUser(user);
+      } else {
+        MANAGER.signinRedirect();
+      }
     } catch (err) {
       MANAGER.signinRedirect();
     }
@@ -75,8 +80,7 @@ export const useUserInfo = () => {
   const catchCallback = async () => {
     try {
       const user = await MANAGER.signinRedirectCallback();
-      const profile = await getProfile(user.access_token);
-      processUser(user, profile);
+      processUser(user);
     } catch (err) {
       /** Do nothing if no user data is present */
       return;
