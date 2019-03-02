@@ -8,9 +8,10 @@ import { Input } from './Base';
 export interface IProps {
   field: keyof IState;
   label: string;
+  placeholder?: string;
 }
 
-export const ReceiptNumberField: FC<IProps> = ({ field, label }) => {
+export const ReceiptNumberField: FC<IProps> = ({ field, ...props }) => {
   const { state, dispatch } = useContext(ReceiptContext);
 
   const change = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,5 +28,5 @@ export const ReceiptNumberField: FC<IProps> = ({ field, label }) => {
     throw new Error('ReceiptTextField supplied field value is not a number');
   }
 
-  return <Input type="number" label={label} value={value || ''} onChange={change} />;
+  return <Input type="number" value={value || ''} onChange={change} {...props} />;
 };

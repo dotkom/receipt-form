@@ -9,9 +9,10 @@ export interface IProps {
   field: keyof IState;
   label: string;
   disabled?: boolean;
+  placeholder?: string;
 }
 
-export const ReceiptTextField: FC<IProps> = ({ field, label, disabled }) => {
+export const ReceiptTextField: FC<IProps> = ({ field, ...props }) => {
   const { state, dispatch } = useContext(ReceiptContext);
 
   const change = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,5 +29,5 @@ export const ReceiptTextField: FC<IProps> = ({ field, label, disabled }) => {
     throw new Error('ReceiptTextField supplied field value is not a string');
   }
 
-  return <Input label={label} value={value} onChange={change} disabled={disabled} />;
+  return <Input value={value} onChange={change} {...props} />;
 };

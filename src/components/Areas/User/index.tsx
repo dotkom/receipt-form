@@ -43,8 +43,8 @@ export const UserInfo = () => {
         </SeparatedFieldSet>
       </InfoFieldSet>
       <FieldSet>
-        <ReceiptTextField label="Navn" field="fullname" />
-        <ReceiptTextField label="E-post" field="email" />
+        <ReceiptTextField label="Navn" field="fullname" placeholder="Ditt fulle navn" />
+        <ReceiptTextField label="E-post" field="email" placeholder="Din epostadresse. Onlinemail hvis du har" />
       </FieldSet>
       <FileInput label="Signatur" />
     </>

@@ -19,7 +19,7 @@ export const ExtraInfo = () => {
 
   return (
     <>
-      <TextArea label="Kommentarer" />
+      <TextArea label="Kommentarer" placeholder="Andre kommentarer eller viktig informasjon rundt kjøpet" />
       <FileInput label="Vedlegg" />
       <SeparatedFieldSet>
         <Button title="download" onClick={download}>
