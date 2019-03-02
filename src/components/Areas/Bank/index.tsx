@@ -12,6 +12,10 @@ const RadioFieldSet = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 1.4rem 0;
+
+  @media screen and (max-width: 768px) {
+    margin: 1rem 1rem 0;
+  }
 `;
 
 const ContentFieldSet = styled.div`
