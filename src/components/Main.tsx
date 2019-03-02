@@ -8,13 +8,13 @@ import { UserInfo } from './Areas/User';
 export const Main = () => {
   return (
     <>
-      <Area>
+      <Area header="Personinformasjon">
         <UserInfo />
       </Area>
-      <Area color="#f2f2f2">
+      <Area header="Kvitteringsinformasjon" color="#f2f2f2">
         <BankInfo />
       </Area>
-      <Area>
+      <Area header="Extrainformasjon">
         <ExtraInfo />
       </Area>
     </>

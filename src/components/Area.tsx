@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export interface IAreaProps {
   color?: string;
+  header: string;
 }
 
 const AreaContainer = styled.div`
@@ -17,10 +18,17 @@ const AreaContent = styled.div`
   padding: 1rem;
 `;
 
+const AreaHeader = styled.h2`
+  color: #8e8e8e;
+`;
+
 export const Area: FC<IAreaProps> = (props) => {
   return (
     <AreaContainer color={props.color}>
-      <AreaContent>{props.children}</AreaContent>
+      <AreaContent>
+        <AreaHeader>{props.header}</AreaHeader>
+        {props.children}
+      </AreaContent>
     </AreaContainer>
   );
 };

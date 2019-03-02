@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const LOGIN_TEXT = `
   For å automatisk fylle inn informasjon som navn, signatur og e-post kan du logge inn via Onlineweb.
-  Denne informasjonen vil bare fylle ut feltene, og kan overskrives i etterkant
+  Denne informasjonen vil bare fylle ut feltene, og kan overskrives i etterkant.
 `;
 
 const TextStyle = styled.p`
