@@ -88,6 +88,7 @@ export const useUserInfo = () => {
       const storedStateString = window.sessionStorage.getItem('LOGIN_REDIRECT_STATE');
       if (storedStateString) {
         const storedState = JSON.parse(storedStateString) as IState;
+        window.sessionStorage.removeItem('LOGIN_REDIRECT_STATE');
         dispatch({
           type: ActionType.CHANGE,
           data: storedState,
