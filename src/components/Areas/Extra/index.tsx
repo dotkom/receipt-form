@@ -2,9 +2,12 @@ import React, { useContext } from 'react';
 
 import { Button } from 'components/Button';
 import { SeparatedFieldSet } from 'components/FieldSet';
-import { FileInput, TextArea } from 'components/Input';
+import { TextArea } from 'components/Input';
 import { ReceiptContext } from 'contexts/ReceiptData';
 import { ActionType } from 'hooks/useReceiptData';
+
+import { AttachmentsInputs } from './AttachmentInputs';
+import { FileSize } from './FileSize';
 
 export const ExtraInfo = () => {
   const { dispatch } = useContext(ReceiptContext);
@@ -20,7 +23,8 @@ export const ExtraInfo = () => {
   return (
     <>
       <TextArea label="Kommentarer" placeholder="Andre kommentarer eller viktig informasjon rundt kjøpet" />
-      <FileInput label="Vedlegg" />
+      <AttachmentsInputs />
+      <FileSize />
       <SeparatedFieldSet>
         <Button title="download" onClick={download}>
           Last ned PDF
