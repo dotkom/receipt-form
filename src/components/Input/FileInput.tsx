@@ -1,5 +1,7 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 
+import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
+
 import { IInputProps, InputContainer, StyledInput } from './Base';
 import { FileDisplay } from './FileDisplay';
 import { FileInfo } from './FileInfo';
@@ -17,20 +19,10 @@ export interface IFileInputProps extends IInputProps {
 export const FileInput: FC<IFileInputProps> = ({ label, file, onRemove, onUpload, ...props }) => {
   const [image, setImage] = useState<null | string>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const imageReader = new FileReader();
 
-  const handleImageRead = (_: ProgressEvent): any => {
-    const content = imageReader.result;
-    if (content instanceof ArrayBuffer) {
-      throw new Error('ImageReader got an ArrayBuffer, should only get String');
-    } else {
-      setImage(content);
-    }
-  };
-
-  const readImageFile = (newFile: Blob) => {
-    imageReader.onloadend = handleImageRead;
-    imageReader.readAsDataURL(newFile);
+  const readImageFile = async (dataFile: File) => {
+    const newImage = await readFileAsDataUrl(dataFile);
+    setImage(newImage);
   };
 
   useEffect(() => {
