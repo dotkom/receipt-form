@@ -48,7 +48,7 @@ export const COMMITTEES: ICommittee[] = [
   {
     group: 'Hovedstyret',
     name: 'Hovedstyret',
-    email: 'hovedstyret@online.ntnu.no'
+    email: 'hovedstyret@online.ntnu.no',
   },
   {
     group: 'proKom',
