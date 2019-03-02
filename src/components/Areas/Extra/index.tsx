@@ -9,9 +9,9 @@ import { ActionType } from 'hooks/useReceiptData';
 import { AttachmentsInputs } from './AttachmentInputs';
 import { FileSize } from './FileSize';
 
-const COMMENTS_PLACEHOLDER = `Andre kommentarer eller viktig informasjon rundt kjøpet kan skrives her.
+const COMMENTS_PLACEHOLDER = `Andre kommentarer eller viktig informasjon rundt kjøpet kan skrives her
 
-Hvis det gjelder teambuilding, skrive også inn navn på alle deltakere.`;
+Hvis det gjelder teambuilding, skriv også inn navn på alle deltakere`;
 
 export const ExtraInfo = () => {
   const { dispatch } = useContext(ReceiptContext);
