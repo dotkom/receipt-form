@@ -1,77 +1,84 @@
-import React, { ChangeEvent, FC, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 
-import { Cross } from 'components/Icons/Cross';
-import { IInputProps, InputContainer, Label, StyledInput } from './Base';
-import { FileImage } from './Image';
+import { IInputProps, InputContainer, StyledInput } from './Base';
+import { FileDisplay } from './FileDisplay';
+import { FileInfo } from './FileInfo';
+import { FileLabels } from './FileLabels';
 
-const LabelsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-`;
+const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/svg+xml', 'image/jpg'];
+const ALLOWED_TYPES = [...IMAGE_TYPES, 'application/pdf', '.pdf'];
 
-const CrossContainer = styled.span`
-  height: 2rem;
-  width: 2rem;
+export interface IFileInputProps extends IInputProps {
+  file?: File;
+  onUpload: (file: File) => void;
+  onRemove?: () => void;
+}
 
-  :hover {
-    cursor: pointer;
-  }
-`;
-
-export const FileInput: FC<IInputProps> = ({ label, ...props }) => {
+export const FileInput: FC<IFileInputProps> = ({ label, file, onRemove, onUpload, ...props }) => {
   const [image, setImage] = useState<null | string>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const fileReader = new FileReader();
+  const imageReader = new FileReader();
 
-  const handleFileRead = (_: ProgressEvent): any => {
-    const content = fileReader.result;
+  const handleImageRead = (_: ProgressEvent): any => {
+    const content = imageReader.result;
     if (content instanceof ArrayBuffer) {
-      throw new Error('Image output was of type ArrayBuffer, should be String');
+      throw new Error('ImageReader got an ArrayBuffer, should only get String');
     } else {
       setImage(content);
     }
   };
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { files } = event.target;
-    if (files) {
-      fileReader.onloadend = handleFileRead;
-      fileReader.readAsDataURL(files[0]);
+  const readImageFile = (newFile: Blob) => {
+    imageReader.onloadend = handleImageRead;
+    imageReader.readAsDataURL(newFile);
+  };
+
+  useEffect(() => {
+    if (file && IMAGE_TYPES.includes(file.type)) {
+      readImageFile(file);
     } else {
       setImage(null);
     }
-  };
+  }, [file]);
 
-  const removeFiles = () => {
-    setImage(null);
+  const clearInputValue = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
+  const clearFile = () => {
+    setImage(null);
+    clearInputValue();
+    if (onRemove) {
+      onRemove();
+    }
+  };
+
+  const handleUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const { files } = event.target;
+    if (files && files[0] && ALLOWED_TYPES.includes(files[0].type)) {
+      onUpload(files[0]);
+    }
+    clearInputValue();
+  };
+
   return (
     <InputContainer>
-      <LabelsContainer>
-        <Label>{label}</Label>
-        {image ? (
-          <CrossContainer>
-            <Cross onClick={removeFiles} />
-          </CrossContainer>
-        ) : null}
-      </LabelsContainer>
-      {image ? (
-        <FileImage dataUrl={image} />
+      <FileLabels label={label} onCrossClick={clearFile} displayCross={!!file} />
+      {file ? (
+        <FileDisplay file={file} image={image} />
       ) : (
         <StyledInput
           type="file"
           value={props.value}
-          onChange={handleFileChange}
+          onChange={handleUpload}
           placeholder={props.placeholder}
           ref={fileInputRef}
+          accept={ALLOWED_TYPES.join(',')}
         />
       )}
+      <FileInfo file={file} />
     </InputContainer>
   );
 };
