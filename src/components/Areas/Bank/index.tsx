@@ -25,8 +25,7 @@ const ContentFieldSet = styled.div`
 `;
 
 const ABOUT_PAYMENT_TYPE = `
-  Hvis dette velger du det, hvis det andre velger du det andre.
-  Og sånn fungerer denne funksjonaliteten!
+  \$\{Vet ikke helt hva som burde stå her ennå, tar gjerne imot ideer?\}
 `;
 
 const RadioInfo = styled.p`
