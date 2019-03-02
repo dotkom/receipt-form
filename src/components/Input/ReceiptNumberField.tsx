@@ -23,7 +23,7 @@ export const ReceiptNumberField: FC<IProps> = ({ field, label }) => {
   };
 
   const value = state[field];
-  if (value !== null && typeof value !== 'number') {
+  if (!!value && typeof value !== 'number') {
     throw new Error('ReceiptTextField supplied field value is not a number');
   }
 

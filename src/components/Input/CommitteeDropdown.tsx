@@ -15,7 +15,7 @@ const SelectContainer = styled.div`
 `;
 
 export const CommitteeDropdown = () => {
-  const { state, dispatch } = useContext(ReceiptContext);
+  const { dispatch } = useContext(ReceiptContext);
 
   const onDropdownChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const key = event.target.value;
@@ -28,18 +28,15 @@ export const CommitteeDropdown = () => {
     }
   };
 
-  const selected = state.committee;
-  const defaultSelected = state.committee === null;
-
   return (
     <SelectContainer>
       <Label>komité</Label>
-      <Select onChange={onDropdownChange}>
-        <Option disabled selected={defaultSelected}>
+      <Select onChange={onDropdownChange} defaultValue="default">
+        <Option disabled value="default">
           Velg en komité
         </Option>
         {COMMITTEES.map(({ group, name }) => (
-          <Option key={group} value={group} selected={selected ? selected.group === group : false}>
+          <Option key={group} value={group}>
             {name}
           </Option>
         ))}
