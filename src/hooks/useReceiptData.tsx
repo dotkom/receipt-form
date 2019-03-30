@@ -1,36 +1,7 @@
-import { Dispatch, Reducer, useReducer } from 'react';
+import { Dispatch, Reducer, useEffect, useReducer, useState } from 'react';
 
-import { ICommittee } from 'models/comittees';
-
-export type ReceiptType = 'card' | 'deposit';
-
-export interface IState {
-  fullname: string | null;
-  email: string | null;
-  signature: File | null;
-  type: ReceiptType;
-  amount: number | null;
-  intent: string | null;
-  account: string | null;
-  cardDetails: string | null;
-  committee: ICommittee | null;
-  comments: string | null;
-  attachments: File[];
-}
-
-const INITIAL_STATE: IState = {
-  fullname: null,
-  email: null,
-  signature: null,
-  type: 'deposit',
-  amount: null,
-  intent: null,
-  account: null,
-  cardDetails: null,
-  committee: null,
-  comments: null,
-  attachments: [],
-};
+import { INITIAL_STATE, IState } from 'form/state';
+import { IValidation, IValidator, STATE_VALIDATION, StateValidation } from 'form/validation';
 
 export enum ActionType {
   CHANGE,
@@ -71,7 +42,53 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
   return state;
 };
 
-export const useReceiptData = (): [IState, Dispatch<Actions>] => {
+const validate = (state: IState): StateValidation => {
+  const keys = Object.entries(STATE_VALIDATION) as Array<[keyof IState, IValidator[]]>;
+  const validation = keys.map<[keyof IState, IValidation[]]>(([key, validators]) => {
+    return [
+      key,
+      validators.map<IValidation>(({ validator, level, message }) => ({ valid: validator(state), level, message })),
+    ];
+  });
+  return validation.reduce<StateValidation>((acc, [key, value]) => ({ ...acc, [key]: value }), {} as StateValidation);
+};
+
+export type ReceiptData = [IState, Dispatch<Actions>, StateValidation];
+
+const VALIDATION_TIMEOUT = 250;
+
+export const useReceiptData = (): ReceiptData => {
   const [state, dispatch] = useReducer(receiptReducer, INITIAL_STATE);
-  return [state, dispatch];
+
+  /** Set the initial validation, will not recalculate on rerender, will only happen in effect */
+  const initialValidation = validate(state);
+  const [validation, setValidation] = useState<StateValidation>(initialValidation);
+  const [trigger, setTrigger] = useState<number | null>(null);
+
+  const storeValidation = () => {
+    setValidation(validate(state));
+    setTrigger(null);
+  };
+
+  const activateTrigger = (timeout = VALIDATION_TIMEOUT) => {
+    const newTrigger = window.setTimeout(storeValidation, timeout);
+    setTrigger(newTrigger);
+  };
+
+  const replaceTrigger = () => {
+    if (trigger) {
+      window.clearTimeout(trigger);
+    }
+    activateTrigger(100);
+  };
+
+  useEffect(() => {
+    if (!trigger) {
+      activateTrigger();
+    } else {
+      replaceTrigger();
+    }
+  }, [state]);
+
+  return [state, dispatch, validation];
 };

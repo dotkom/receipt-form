@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 import { ReceiptData } from 'contexts/ReceiptData';
-
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
