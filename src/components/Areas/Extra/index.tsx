@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { Button } from 'components/Button';
 import { SeparatedFieldSet } from 'components/FieldSet';
-import { TextArea } from 'components/Input';
+import { ReceiptTextArea } from 'components/Input/ReceiptTextArea';
 import { ReceiptContext } from 'contexts/ReceiptData';
 import { ActionType } from 'hooks/useReceiptData';
 
@@ -26,7 +26,7 @@ export const ExtraInfo = () => {
 
   return (
     <>
-      <TextArea label="Kommentarer" placeholder={COMMENTS_PLACEHOLDER} />
+      <ReceiptTextArea field="comments" label="Kommentarer" placeholder={COMMENTS_PLACEHOLDER} />
       <AttachmentsInputs />
       <FileSize />
       <SeparatedFieldSet>

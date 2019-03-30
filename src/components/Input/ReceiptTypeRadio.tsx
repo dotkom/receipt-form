@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 
 import { ReceiptContext } from 'contexts/ReceiptData';
-import { ActionType, ReceiptType } from 'hooks/useReceiptData';
+import { ReceiptType } from 'form/state';
+import { ActionType } from 'hooks/useReceiptData';
 
 import { RadioButton } from './RadioButton';
 

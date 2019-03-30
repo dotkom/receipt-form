@@ -5,7 +5,7 @@ import { IState } from 'form/state';
 import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
 
-import { Input } from './Base';
+import { TextArea } from './TextArea';
 
 export interface IProps {
   field: keyof IState;
@@ -14,10 +14,10 @@ export interface IProps {
   placeholder?: string;
 }
 
-export const ReceiptTextField: FC<IProps> = ({ field, ...props }) => {
+export const ReceiptTextArea: FC<IProps> = ({ field, ...props }) => {
   const { state, dispatch } = useContext(ReceiptContext);
 
-  const change = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const change = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     dispatch({
       type: ActionType.CHANGE,
       data: {
@@ -33,5 +33,5 @@ export const ReceiptTextField: FC<IProps> = ({ field, ...props }) => {
 
   const { validation, level } = useValidation(field);
 
-  return <Input value={value} onChange={change} {...props} validation={validation} validationLevel={level} />;
+  return <TextArea value={value} onChange={change} {...props} validation={validation} validationLevel={level} />;
 };

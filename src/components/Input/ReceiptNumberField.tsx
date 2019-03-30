@@ -1,7 +1,9 @@
 import React, { FC, useContext } from 'react';
 
 import { ReceiptContext } from 'contexts/ReceiptData';
-import { ActionType, IState } from 'hooks/useReceiptData';
+import { IState } from 'form/state';
+import { ActionType } from 'hooks/useReceiptData';
+import { useValidation } from 'hooks/useValidation';
 
 import { Input } from './Base';
 
@@ -28,5 +30,16 @@ export const ReceiptNumberField: FC<IProps> = ({ field, ...props }) => {
     throw new Error('ReceiptTextField supplied field value is not a number');
   }
 
-  return <Input type="number" value={value || ''} onChange={change} {...props} />;
+  const { validation, level } = useValidation(field);
+
+  return (
+    <Input
+      type="number"
+      value={value || ''}
+      onChange={change}
+      validation={validation}
+      validationLevel={level}
+      {...props}
+    />
+  );
 };

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext } from 'react';
+import React, { ChangeEvent, FC, useContext } from 'react';
 import styled from 'styled-components';
 
 import { ReceiptContext } from 'contexts/ReceiptData';
@@ -14,7 +14,7 @@ const SelectContainer = styled.div`
   margin: auto 0;
 `;
 
-export const CommitteeDropdown = () => {
+export const CommitteeDropdown: FC = () => {
   const { dispatch } = useContext(ReceiptContext);
 
   const onDropdownChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -23,7 +23,9 @@ export const CommitteeDropdown = () => {
     if (committee) {
       dispatch({
         type: ActionType.CHANGE,
-        data: { committee },
+        data: {
+          committee,
+        },
       });
     }
   };
