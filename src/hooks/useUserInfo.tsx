@@ -3,9 +3,10 @@ import { useContext, useEffect } from 'react';
 
 import { AUTH_CALLBACK, AUTH_CLIENT_ID, AUTH_ENDPOINT } from 'constants/auth';
 import { ReceiptContext } from 'contexts/ReceiptData';
+import { IState } from 'form/state';
 import { getProfile, IProfile } from 'utils/profile';
 
-import { ActionType, IState } from './useReceiptData';
+import { ActionType } from './useReceiptData';
 
 const MANAGER = new UserManager({
   authority: AUTH_ENDPOINT,
