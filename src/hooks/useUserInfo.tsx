@@ -5,7 +5,7 @@ import { AUTH_CALLBACK, AUTH_CLIENT_ID, AUTH_ENDPOINT } from 'constants/auth';
 import { ReceiptContext } from 'contexts/ReceiptData';
 import { getProfile, IProfile } from 'utils/profile';
 
-import { ActionType } from './useReceiptData';
+import { ActionType, IState } from './useReceiptData';
 
 const MANAGER = new UserManager({
   authority: AUTH_ENDPOINT,
@@ -49,7 +49,7 @@ const getEmail = (email: string, profile?: IProfile) => {
 };
 
 export const useUserInfo = () => {
-  const { dispatch } = useContext(ReceiptContext);
+  const { state, dispatch } = useContext(ReceiptContext);
 
   const processUser = async (user: User) => {
     const profile: IAuthProfile = user.profile;
@@ -64,22 +64,36 @@ export const useUserInfo = () => {
     });
   };
 
+  const logInRedirect = () => {
+    window.sessionStorage.setItem('LOGIN_REDIRECT_STATE', JSON.stringify(state));
+    MANAGER.signinRedirect();
+  };
+
   const logIn = async () => {
     try {
       const user: User | null = await MANAGER.getUser();
       if (user) {
         processUser(user);
       } else {
-        MANAGER.signinRedirect();
+        logInRedirect();
       }
     } catch (err) {
-      MANAGER.signinRedirect();
+      logInRedirect();
     }
   };
 
   const catchCallback = async () => {
     try {
       const user = await MANAGER.signinRedirectCallback();
+      const storedStateString = window.sessionStorage.getItem('LOGIN_REDIRECT_STATE');
+      if (storedStateString) {
+        const storedState = JSON.parse(storedStateString) as IState;
+        window.sessionStorage.removeItem('LOGIN_REDIRECT_STATE');
+        dispatch({
+          type: ActionType.CHANGE,
+          data: storedState,
+        });
+      }
       processUser(user);
     } catch (err) {
       /** Do nothing if no user data is present */
