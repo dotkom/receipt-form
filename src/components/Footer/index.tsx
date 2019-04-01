@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { colors } from 'constants/colors';
+
 const FooterStyle = styled.footer`
-  background: #f2f2f2;
+  background: ${colors.backgroundGray};
   padding: 4rem 2.5rem;
   text-align: center;
 `;

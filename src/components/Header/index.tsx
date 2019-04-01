@@ -1,17 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { colors } from 'constants/colors';
+
 import logo from './online-logo.png';
 
 const HeaderStyle = styled.div`
-  background-color: #0060a3;
+  background-color: ${colors.blue};
   display: grid;
   justify-content: center;
   box-sizing: border-box;
 `;
 
 const Text = styled.h2`
-  color: #fff;
+  color: ${colors.white};
   text-align: center;
   letter-spacing: 2px;
 `;

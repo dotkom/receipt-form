@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
+import { colors } from 'constants/colors';
+
 export interface IAreaProps {
   color?: string;
   header: string;
 }
 
 const AreaContainer = styled.div`
-  background: ${(props) => props.color || '#fff'};
+  background: ${(props) => props.color || colors.white};
   width: 100%;
 `;
 
@@ -20,7 +22,7 @@ const AreaContent = styled.div`
 `;
 
 const AreaHeader = styled.h2`
-  color: #8e8e8e;
+  color: ${colors.darkGray};
 `;
 
 export const Area: FC<IAreaProps> = (props) => {
