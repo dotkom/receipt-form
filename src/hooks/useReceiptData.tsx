@@ -1,6 +1,6 @@
 import { Dispatch, Reducer, useEffect, useReducer, useState } from 'react';
 
-import { INITIAL_STATE, IState } from 'form/state';
+import { deserializeReceipt, INITIAL_STATE, IState } from 'form/state';
 import { EXCLUDE_FIELDS, IValidation, IValidator, STATE_VALIDATION, StateValidation } from 'form/validation';
 
 export enum ActionType {
@@ -29,8 +29,10 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
         ...action.data,
       };
     case ActionType.DOWNLOAD:
-      // tslint:disable-next-line no-console
-      console.log('Download action called', state);
+      deserializeReceipt(state).then((data) => {
+        // tslint:disable-next-line no-console
+        console.log('Download action called', JSON.stringify(data));
+      });
       return state;
     case ActionType.SEND:
       // tslint:disable-next-line no-console
