@@ -27,6 +27,8 @@ pipeline:
         target: REACT_APP_AUTH_CLIENT_ID
       - source: auth_endpoint
         target: REACT_APP_AUTH_ENDPOINT
+      - source: sentry_dsn
+        target: REACT_APP_SENTRY_DSN
     when:
       event: [push, pull_request, tag, deployment]
     commands:
