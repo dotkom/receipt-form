@@ -1,7 +1,7 @@
 import { Dispatch, Reducer, useEffect, useReducer, useState } from 'react';
 
-import { INITIAL_STATE, IState } from 'form/state';
-import { IValidation, IValidator, STATE_VALIDATION, StateValidation } from 'form/validation';
+import { deserializeReceipt, INITIAL_STATE, IState } from 'form/state';
+import { EXCLUDE_FIELDS, IValidation, IValidator, STATE_VALIDATION, StateValidation } from 'form/validation';
 
 export enum ActionType {
   CHANGE,
@@ -29,8 +29,10 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
         ...action.data,
       };
     case ActionType.DOWNLOAD:
-      // tslint:disable-next-line no-console
-      console.log('Download action called', state);
+      deserializeReceipt(state).then((data) => {
+        // tslint:disable-next-line no-console
+        console.log('Download action called', JSON.stringify(data));
+      });
       return state;
     case ActionType.SEND:
       // tslint:disable-next-line no-console
@@ -44,7 +46,12 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
 
 const validate = (state: IState): StateValidation => {
   const keys = Object.entries(STATE_VALIDATION) as Array<[keyof IState, IValidator[]]>;
+  const excludes = EXCLUDE_FIELDS.map((excludeFunction) => excludeFunction(state));
   const validation = keys.map<[keyof IState, IValidation[]]>(([key, validators]) => {
+    /** Return empty validators if key is excluded from the validation */
+    if (excludes.includes(key)) {
+      return [key, []];
+    }
     return [
       key,
       validators.map<IValidation>(({ validator, level, message }) => ({ valid: validator(state), level, message })),

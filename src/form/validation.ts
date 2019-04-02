@@ -136,3 +136,10 @@ export const STATE_VALIDATION: StateValidators = {
     },
   ],
 };
+
+export type ExcludeFunction = (state: IState) => keyof IState;
+
+/**
+ * Functions for excluding certain fields based on the values of other fields.
+ */
+export const EXCLUDE_FIELDS: ExcludeFunction[] = [({ type }) => (type === 'card' ? 'account' : 'cardDetails')];
