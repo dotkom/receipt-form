@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { colors } from 'constants/colors';
+
 import { Area } from './Area';
 import { BankInfo } from './Areas/Bank';
 import { ExtraInfo } from './Areas/Extra';
@@ -11,7 +13,7 @@ export const Main = () => {
       <Area header="Personinformasjon">
         <UserInfo />
       </Area>
-      <Area header="Kvitteringsinformasjon" color="#f2f2f2">
+      <Area header="Kvitteringsinformasjon" color={colors.backgroundGray}>
         <BankInfo />
       </Area>
       <Area header="Extrainformasjon">

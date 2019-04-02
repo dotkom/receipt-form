@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 import { formatBytes } from 'utils/bytes';
 
+import { colors } from 'constants/colors';
+
 const InfoBar = styled.div`
   display: flex;
   flex-direction: row;
@@ -11,7 +13,7 @@ const InfoBar = styled.div`
 `;
 
 const FileSize = styled.p`
-  color: #8e8e8e;
+  color: ${colors.darkGray};
   margin: 0.4rem 0 0.4rem 0.8rem;
 `;
 

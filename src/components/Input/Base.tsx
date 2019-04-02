@@ -1,26 +1,27 @@
 import React, { FC, HTMLProps, useState } from 'react';
 import styled, { css } from 'styled-components';
 
+import { colors } from 'constants/colors';
 import { IValidation, ValidationLevel } from 'form/validation';
 
 export const BaseInputStyle = css`
   width: 100%;
 
-  background: #fff;
-  color: #333333;
+  background: ${colors.white};
+  color: ${colors.lightBlack};
   border-radius: 5px;
-  border: 2px solid #e5e5e5;
+  border: 2px solid ${colors.gray};
 
   padding: 0.6rem;
   box-sizing: border-box;
 
   :disabled {
-    background: #efefef;
+    background: ${colors.gray2};
   }
 
   :focus {
     outline: none;
-    border-color: #0060a3;
+    border-color: ${colors.blue};
   }
 `;
 
@@ -35,7 +36,7 @@ export const StyledInput = React.memo(styled.input<IValidationMessageProps>`
 
 export const BaseLabelStyle = css`
   font-weight: bold;
-  color: #8e8e8e;
+  color: ${colors.darkGray};
   margin: 3px 0;
   font-size: 1.2rem;
 `;
@@ -60,13 +61,13 @@ export interface IValidationMessageProps {
 export const getValidationLevelColor = (level?: ValidationLevel) => {
   switch (level) {
     default:
-      return '#8e8e8e';
+      return colors.darkGray;
     case ValidationLevel.NONE:
-      return '#8e8e8e';
+      return colors.darkGray;
     case ValidationLevel.WARNING:
-      return '#faa21b';
+      return colors.orange;
     case ValidationLevel.REQUIRED:
-      return '#eb536e';
+      return colors.red;
   }
 };
 

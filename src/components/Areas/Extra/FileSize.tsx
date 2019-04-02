@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
+import { colors } from 'constants/colors';
 import { ReceiptContext } from 'contexts/ReceiptData';
 import { formatBytes } from 'utils/bytes';
 
@@ -11,11 +12,11 @@ const StatusContainer = styled.div`
 `;
 
 const StatusText = styled.h3`
-  color: #8e8e8e;
+  color: ${colors.darkGray};
 `;
 
 const WarningText = styled(StatusText)`
-  color: #eb536e;
+  color: ${colors.red};
 `;
 
 const MAX_SIZE = 19 * 1024 * 1024; // 19 MB

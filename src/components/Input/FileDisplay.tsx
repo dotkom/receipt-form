@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import { FakeInput } from './FakeInput';
 import { FileImage } from './FileImage';
 
+import { colors } from 'constants/colors';
+
 const FileName = styled.p`
-  color: #8e8e8e;
+  color: ${colors.darkGray};
 `;
 
 export interface IFileDisplayProps {

@@ -1,6 +1,8 @@
 import React, { FC, HTMLProps } from 'react';
 import styled from 'styled-components';
 
+import { colors } from 'constants/colors';
+
 import { BaseLabelStyle } from './Base';
 
 const RadioLabel = styled.div`
@@ -27,8 +29,8 @@ const HiddenRadio = styled.input.attrs({ type: 'radio' })`
 
 const StyledRadio = styled.div`
   display: inline-block;
-  background: #fff;
-  border: 2px solid #e5e5e5;
+  background: ${colors.white};
+  border: 2px solid ${colors.gray};
   width: 1rem;
   height: 1rem;
   border-radius: 1rem;
@@ -39,7 +41,7 @@ const StyledRadio = styled.div`
   align-content: center;
 
   :focus {
-    border-color: #0060a3;
+    border-color: ${colors.blue};
   }
 `;
 
@@ -49,7 +51,7 @@ const RadioContainer = styled.div`
 `;
 
 const Checked = styled.div`
-  background: #0060a3;
+  background: ${colors.blue};
   width: 10px;
   height: 10px;
   border-radius: 10px;
@@ -66,7 +68,7 @@ const StyledRadioChecked = () => {
 const Container = styled.div``;
 
 const Tooltip = styled.p`
-  color: #8e8e8e;
+  color: ${colors.darkGray};
 `;
 
 export interface IRadioProps extends HTMLProps<HTMLInputElement> {
