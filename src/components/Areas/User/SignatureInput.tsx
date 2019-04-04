@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { FileInput } from 'components/Input';
 import { ReceiptContext } from 'contexts/ReceiptData';
 import { ActionType } from 'hooks/useReceiptData';
+import { useValidation } from 'hooks/useValidation';
 
 export const SignatureInput = () => {
   const { state, dispatch } = useContext(ReceiptContext);
@@ -25,7 +26,16 @@ export const SignatureInput = () => {
     });
   };
 
+  const { validation, level } = useValidation('signature');
+
   return (
-    <FileInput label="Signatur" onUpload={handleFileChange} onRemove={removeFile} file={state.signature || undefined} />
+    <FileInput
+      label="Signatur"
+      onUpload={handleFileChange}
+      onRemove={removeFile}
+      file={state.signature || undefined}
+      validation={validation}
+      validationLevel={level}
+    />
   );
 };
