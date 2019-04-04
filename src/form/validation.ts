@@ -6,6 +6,7 @@ export enum ValidationLevel {
   NONE,
   WARNING,
   REQUIRED,
+  VALID,
 }
 
 export interface IValidator {
@@ -24,7 +25,7 @@ export type StateValidation = { [K in keyof IState]: IValidation[] };
 
 export type StateValidators = { [K in keyof IState]: IValidator[] };
 
-const ACCOUNT_NUMBER_REGEX = new RegExp(/^\d{11}$/);
+const ACCOUNT_NUMBER_REGEX = new RegExp(/^\d{4}\ \d{2}\ \d{5}$/);
 const COMMITTEE_EMAIL_REGEX = new RegExp(/^.{2,50}@online\.ntnu\.no$/);
 const EMAIL_REGEX = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 const CARD_DETAIL_REGEX = new RegExp(/^.{5,30}$/);

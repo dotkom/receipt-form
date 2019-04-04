@@ -14,5 +14,5 @@ export const useValidation = (field: keyof IState) => {
     ValidationLevel.NONE
   );
 
-  return { validation, level };
+  return { validation, level: validation.length ? level : ValidationLevel.VALID };
 };

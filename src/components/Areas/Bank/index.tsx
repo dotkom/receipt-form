@@ -8,6 +8,8 @@ import { ReceiptTextField } from 'components/Input/ReceiptTextField';
 import { ReceiptTypeRadio } from 'components/Input/ReceiptTypeRadio';
 import { ReceiptContext } from 'contexts/ReceiptData';
 
+import { AccountField } from './AccountField';
+
 const RadioFieldSet = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -30,6 +32,7 @@ const ContentFieldSet = styled.div`
 
 export const BankInfo = () => {
   const { state } = useContext(ReceiptContext);
+
   return (
     <>
       <ContentFieldSet>
@@ -45,9 +48,7 @@ export const BankInfo = () => {
         </div>
       </ContentFieldSet>
       <FieldSet>
-        {state.type === 'deposit' && (
-          <ReceiptTextField field="account" label="Kontonummer" placeholder="Kontonummer for tilbakeføring" />
-        )}
+        {state.type === 'deposit' && <AccountField />}
         {state.type === 'card' && (
           <ReceiptTextField
             field="cardDetails"

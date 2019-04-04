@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 import { IValidation, ValidationLevel } from 'form/validation';
 
-import { BaseInputStyle, getValidationLevelColor, InputContainer, Label, ValidationMessage } from './Base';
+import { BaseInputStyle, InputContainer, Label } from './Base';
+import { getValidationLevelColor, ValidationMessages } from './ValidationMessages';
 
 export interface ITextAreaProps extends HTMLProps<HTMLTextAreaElement> {
   label: string;
@@ -45,12 +46,7 @@ export const TextArea: FC<ITextAreaProps> = ({
   return (
     <InputContainer>
       <Label>{label}</Label>
-      {interacted &&
-        validation.map(({ level, message }) => (
-          <ValidationMessage key={message} level={level}>
-            {message}
-          </ValidationMessage>
-        ))}
+      <ValidationMessages display={interacted} validation={validation} />
       <MultilineInput
         value={props.value}
         onChange={props.onChange}

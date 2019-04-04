@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 import { colors } from 'constants/colors';
 import { IValidation, ValidationLevel } from 'form/validation';
+import { getValidationLevelColor, IValidationMessageProps, ValidationMessages } from './ValidationMessages';
 
 export const BaseInputStyle = css`
   width: 100%;
@@ -29,6 +30,8 @@ export const StyledInput = React.memo(styled.input<IValidationMessageProps>`
   ${BaseInputStyle}
   ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
 
+  ${({ highlight }) => highlight && `border-color: ${colors.blue};`}
+
   :focus {
     ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
   }
@@ -54,34 +57,12 @@ export const InputContainer = React.memo(styled.div`
   flex-direction: column;
 `);
 
-export interface IValidationMessageProps {
-  level?: ValidationLevel;
-}
-
-export const getValidationLevelColor = (level?: ValidationLevel) => {
-  switch (level) {
-    default:
-      return colors.darkGray;
-    case ValidationLevel.NONE:
-      return colors.darkGray;
-    case ValidationLevel.WARNING:
-      return colors.orange;
-    case ValidationLevel.REQUIRED:
-      return colors.red;
-  }
-};
-
-export const ValidationMessage = React.memo(styled.p<IValidationMessageProps>`
-  color: ${({ level }) => getValidationLevelColor(level)};
-  margin: 0 0 4px 0;
-  transition: opacity 1s linear;
-`);
-
 export interface IInputProps extends HTMLProps<HTMLInputElement> {
   label: string;
   type?: string;
   validation?: IValidation[];
   validationLevel?: ValidationLevel;
+  highlight?: boolean;
 }
 
 export const Input: FC<IInputProps> = React.memo(
@@ -100,12 +81,7 @@ export const Input: FC<IInputProps> = React.memo(
     return (
       <InputContainer>
         <Label>{label}</Label>
-        {interacted &&
-          validation.map(({ level, message }) => (
-            <ValidationMessage key={message} level={level}>
-              {message}
-            </ValidationMessage>
-          ))}
+        <ValidationMessages display={interacted} validation={validation} />
         <StyledInput {...props} onBlur={showValidation} level={interacted ? validationLevel : undefined} />
       </InputContainer>
     );
