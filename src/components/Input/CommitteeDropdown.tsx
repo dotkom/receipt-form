@@ -11,7 +11,10 @@ import { Select } from './Dropdown';
 const Option = styled.option``;
 
 const SelectContainer = styled.div`
-  margin: auto 0;
+  display: flex;
+  margin: 0.8rem 0;
+  flex-direction: column;
+  justify-content: flex-end;
 `;
 
 export const CommitteeDropdown: FC = () => {
