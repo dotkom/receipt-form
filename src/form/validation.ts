@@ -6,6 +6,7 @@ export enum ValidationLevel {
   NONE,
   WARNING,
   REQUIRED,
+  VALID,
 }
 
 export interface IValidator {

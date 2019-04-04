@@ -1,11 +1,13 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 
+import { ValidationLevel } from 'form/validation';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 
 import { IInputProps, InputContainer, StyledInput } from './Base';
 import { FileDisplay } from './FileDisplay';
 import { FileInfo } from './FileInfo';
 import { FileLabels } from './FileLabels';
+import { ValidationMessages } from './ValidationMessages';
 
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/svg+xml', 'image/jpg'];
 const ALLOWED_TYPES = [...IMAGE_TYPES, 'application/pdf', '.pdf'];

@@ -5,6 +5,7 @@ import { FakeInput } from './FakeInput';
 import { FileImage } from './FileImage';
 
 import { colors } from 'constants/colors';
+import { ValidationLevel } from 'form/validation';
 
 const FileName = styled.p`
   color: ${colors.darkGray};
@@ -13,8 +14,9 @@ const FileName = styled.p`
 export interface IFileDisplayProps {
   file: File;
   image: string | null;
+  level?: ValidationLevel;
 }
 
-export const FileDisplay: FC<IFileDisplayProps> = ({ file, image }) => {
-  return <FakeInput>{image ? <FileImage src={image} /> : <FileName>{file.name}</FileName>}</FakeInput>;
+export const FileDisplay: FC<IFileDisplayProps> = ({ file, image, level }) => {
+  return <FakeInput level={level}>{image ? <FileImage src={image} /> : <FileName>{file.name}</FileName>}</FakeInput>;
 };

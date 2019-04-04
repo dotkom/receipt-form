@@ -2,16 +2,20 @@ import styled from 'styled-components';
 
 import { colors } from 'constants/colors';
 
-export const FakeInput = styled.div`
-  width: 100%;
+import { BaseInputStyle } from './Base';
+import { getValidationLevelColor, IValidationMessageProps } from './ValidationMessages';
 
-  background: ${colors.white};
-  border-radius: 5px;
-  border: 2px solid ${colors.gray};
-
-  padding: 0.6rem;
-  box-sizing: border-box;
+export const FakeInput = styled.div<IValidationMessageProps>`
+  ${BaseInputStyle}
 
   display: grid;
   justify-content: center;
+
+  ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
+
+  ${({ highlight }) => highlight && `border-color: ${colors.blue};`}
+
+  :focus {
+    ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
+  }
 `;
