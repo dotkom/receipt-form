@@ -12,16 +12,18 @@ export interface IProps {
   label: string;
   disabled?: boolean;
   placeholder?: string;
+  format?: (value: string) => string;
 }
 
-export const ReceiptTextField: FC<IProps> = ({ field, ...props }) => {
+export const ReceiptTextField: FC<IProps> = ({ field, format, ...props }) => {
   const { state, dispatch } = useContext(ReceiptContext);
 
   const change = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const val = format ? format(event.target.value) : event.target.value;
     dispatch({
       type: ActionType.CHANGE,
       data: {
-        [field]: event.target.value,
+        [field]: val,
       },
     });
   };
