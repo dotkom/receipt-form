@@ -1,5 +1,6 @@
-import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FC, ReactNode, useEffect, useRef, useState } from 'react';
 
+import { Cross } from 'components/Icons/Cross';
 import { ValidationLevel } from 'form/validation';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 
@@ -16,6 +17,7 @@ export interface IFileInputProps extends IInputProps {
   file?: File;
   onUpload: (file: File) => void;
   onRemove?: () => void;
+  buttons?: ReactNode;
 }
 
 export const FileInput: FC<IFileInputProps> = ({
@@ -25,6 +27,7 @@ export const FileInput: FC<IFileInputProps> = ({
   onUpload,
   validation = [],
   validationLevel = ValidationLevel.NONE,
+  buttons,
   ...props
 }) => {
   const [image, setImage] = useState<null | string>(null);
@@ -73,7 +76,10 @@ export const FileInput: FC<IFileInputProps> = ({
 
   return (
     <InputContainer>
-      <FileLabels label={label} onCrossClick={clearFile} displayCross={!!file} />
+      <FileLabels label={label}>
+        {buttons}
+        {!!file && <Cross onClick={clearFile} />}
+      </FileLabels>
       <ValidationMessages display={interacted} validation={validation} />
       {file ? (
         <FileDisplay file={file} image={image} level={validationLevel} />
