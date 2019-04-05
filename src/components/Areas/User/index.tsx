@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from 'components/Button';
@@ -7,6 +7,7 @@ import { OwLogo } from 'components/Icons/OwLogo';
 import { ReceiptTextField } from 'components/Input/ReceiptTextField';
 import { useUserInfo } from 'hooks/useUserInfo';
 
+import { CreateSignature } from './CreateSignature';
 import { LoginText } from './Logintext';
 import { SignatureInput } from './SignatureInput';
 
@@ -31,6 +32,7 @@ const ButtonText = styled.p`
 
 export const UserInfo = () => {
   const { logIn } = useUserInfo();
+  const [editMode, setEditMode] = useState(false);
   return (
     <>
       <InfoFieldSet>
@@ -46,7 +48,11 @@ export const UserInfo = () => {
         <ReceiptTextField label="Navn" field="fullname" placeholder="Ditt fulle navn" />
         <ReceiptTextField label="E-post" field="email" placeholder="Din epostadresse. Onlinemail hvis du har" />
       </FieldSet>
-      <SignatureInput />
+      {editMode ? (
+        <CreateSignature editClick={() => setEditMode(false)} />
+      ) : (
+        <SignatureInput editClick={() => setEditMode(true)} />
+      )}
     </>
   );
 };

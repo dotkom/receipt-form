@@ -1,11 +1,16 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 
+import { Edit } from 'components/Icons/Edit';
 import { FileInput } from 'components/Input';
 import { ReceiptContext } from 'contexts/ReceiptData';
 import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
 
-export const SignatureInput = () => {
+export interface IProps {
+  editClick: () => void;
+}
+
+export const SignatureInput: FC<IProps> = ({ editClick }) => {
   const { state, dispatch } = useContext(ReceiptContext);
 
   const removeFile = () => {
@@ -36,6 +41,7 @@ export const SignatureInput = () => {
       file={state.signature || undefined}
       validation={validation}
       validationLevel={level}
+      buttons={<Edit onClick={editClick} />}
     />
   );
 };
