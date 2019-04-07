@@ -19,6 +19,7 @@ export interface IMultiLineInputProps {
 const MultilineInput = styled.textarea<IMultiLineInputProps>`
   ${BaseInputStyle}
 
+  font-family: 'Source Sans Pro';
   resize: none;
   min-height: 6rem;
 
