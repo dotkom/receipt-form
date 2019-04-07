@@ -92,7 +92,7 @@ export const FileInput: FC<IFileInputProps> = ({
           onDragLeave={onCancelFileHover}
           value={props.value}
           onChange={handleUpload}
-          ref={fileInputRef}
+          inputRef={fileInputRef}
           accept={ALLOWED_TYPES.join(',')}
           onBlur={() => setInteracted(true)}
           level={interacted ? validationLevel : undefined}

@@ -5,7 +5,7 @@ import { colors } from 'constants/colors';
 
 import logo from './online-logo.png';
 
-const HeaderStyle = styled.div`
+const HeaderStyle = styled.header`
   background-color: ${colors.blue};
   display: grid;
   justify-content: center;
@@ -28,7 +28,7 @@ const Image = styled.img`
 export const Header = () => {
   return (
     <HeaderStyle>
-      <Image src={logo} />
+      <Image src={logo} alt="Linjeforeningen Online" />
       <Text>Kvitteringsskjema</Text>
     </HeaderStyle>
   );

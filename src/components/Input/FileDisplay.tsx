@@ -18,5 +18,5 @@ export interface IFileDisplayProps {
 }
 
 export const FileDisplay: FC<IFileDisplayProps> = ({ file, image, level }) => {
-  return <FakeInput level={level}>{image ? <FileImage src={image} /> : <FileName>{file.name}</FileName>}</FakeInput>;
+  return <FakeInput level={level}>{image ? <FileImage src={image} alt={`File: ${file.name}`} /> : <FileName>{file.name}</FileName>}</FakeInput>;
 };
