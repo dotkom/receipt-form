@@ -80,7 +80,7 @@ export const FileInput: FC<IFileInputProps> = ({
     <InputContainer>
       <FileLabels label={label}>
         {buttons}
-        {!!file && <Cross onClick={clearFile} />}
+        {!!file && <Cross onClick={clearFile} title="Fjern fil" />}
       </FileLabels>
       <ValidationMessages display={interacted} validation={validation} />
       {file ? (

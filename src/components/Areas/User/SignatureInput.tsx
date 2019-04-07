@@ -41,7 +41,7 @@ export const SignatureInput: FC<IProps> = ({ editClick }) => {
       file={state.signature || undefined}
       validation={validation}
       validationLevel={level}
-      buttons={<Edit onClick={editClick} />}
+      buttons={<Edit onClick={editClick} title="Tegn signatur" />}
       placeholder="Trykk på pennen for å skrive inn signatur. Klikk på dette feltet, eller dra en fil hit for å laste opp"
     />
   );
