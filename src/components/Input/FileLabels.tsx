@@ -18,7 +18,7 @@ const IconContainer = styled.div`
     height: 2rem;
     width: 2rem;
 
-    margin-left: 2rem;
+    margin-left: 1.5rem;
 
     :hover {
       cursor: pointer;
