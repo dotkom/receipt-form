@@ -1,7 +1,9 @@
 import React, { ChangeEvent, FC, ReactNode, useEffect, useRef, useState } from 'react';
 
 import { Cross } from 'components/Icons/Cross';
+import { Download } from 'components/Icons/Download';
 import { ValidationLevel } from 'form/validation';
+import { downloadFile } from 'utils/download';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 
 import { IInputProps, InputContainer } from './Base';
@@ -67,6 +69,12 @@ export const FileInput: FC<IFileInputProps> = ({
     }
   };
 
+  const download = () => {
+    if (file) {
+      downloadFile(file);
+    }
+  };
+
   const handleUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const { files } = event.target;
     if (files && files[0] && ALLOWED_TYPES.includes(files[0].type)) {
@@ -80,7 +88,12 @@ export const FileInput: FC<IFileInputProps> = ({
     <InputContainer>
       <FileLabels label={label}>
         {buttons}
-        {!!file && <Cross onClick={clearFile} title="Fjern fil" />}
+        {!!file && (
+          <>
+            <Download onClick={download} title="Last ned filen" />
+            <Cross onClick={clearFile} title="Fjern fil" />
+          </>
+        )}
       </FileLabels>
       <ValidationMessages display={interacted} validation={validation} />
       {file ? (
