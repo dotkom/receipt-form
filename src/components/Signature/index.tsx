@@ -68,7 +68,7 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
 
   useEffect(() => {
     window.addEventListener('resize', resizeCanvas);
-    return window.removeEventListener('resize', resizeCanvas);
+    return () => window.removeEventListener('resize', resizeCanvas);
   }, [canvasRef.current, canvasRef, signaturePad]);
 
   return (

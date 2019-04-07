@@ -24,6 +24,10 @@ export const BaseInputStyle = css`
     outline: none;
     border-color: ${colors.blue};
   }
+
+  ::placeholder {
+    color: ${colors.figmaGray};
+  }
 `;
 
 export const StyledInput = React.memo(styled.input<IValidationMessageProps>`

@@ -4,9 +4,10 @@ import { Cross } from 'components/Icons/Cross';
 import { ValidationLevel } from 'form/validation';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 
-import { IInputProps, InputContainer, StyledInput } from './Base';
+import { IInputProps, InputContainer } from './Base';
 import { FileDisplay } from './FileDisplay';
 import { FileInfo } from './FileInfo';
+import { FileInputContainer } from './FileInputContainer';
 import { FileLabels } from './FileLabels';
 import { ValidationMessages } from './ValidationMessages';
 
@@ -28,6 +29,7 @@ export const FileInput: FC<IFileInputProps> = ({
   validation = [],
   validationLevel = ValidationLevel.NONE,
   buttons,
+  placeholder,
   ...props
 }) => {
   const [image, setImage] = useState<null | string>(null);
@@ -84,18 +86,18 @@ export const FileInput: FC<IFileInputProps> = ({
       {file ? (
         <FileDisplay file={file} image={image} level={validationLevel} />
       ) : (
-        <StyledInput
+        <FileInputContainer
           type="file"
           onDragEnter={onFileHover}
           onDragLeave={onCancelFileHover}
-          highlight={fileHover}
           value={props.value}
           onChange={handleUpload}
-          placeholder={props.placeholder}
           ref={fileInputRef}
           accept={ALLOWED_TYPES.join(',')}
-          level={interacted ? validationLevel : undefined}
           onBlur={() => setInteracted(true)}
+          level={interacted ? validationLevel : undefined}
+          highlight={fileHover}
+          placeholder={placeholder}
         />
       )}
       <FileInfo file={file} />
