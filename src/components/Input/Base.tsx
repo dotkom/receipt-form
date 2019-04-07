@@ -48,7 +48,7 @@ export const BaseLabelStyle = css`
   font-size: 1.2rem;
 `;
 
-export const Label = React.memo(styled.p`
+export const Label = React.memo(styled.label`
   ${BaseLabelStyle}
 `);
 

@@ -47,17 +47,21 @@ const Container = styled.div`
 const DEFAULT_PLACEHOLDER = `Klikk på dette feltet, eller dra en fil hit for å laste opp`;
 
 /** Copy props from StyledInput */
-export type IProps = Parameters<typeof StyledInput>[0];
+export type StyledInputProps = Parameters<typeof StyledInput>[0];
+export interface IProps extends StyledInputProps {
+  inputRef: React.RefObject<HTMLInputElement>;
+}
 
-export const FileInputContainer: FC<Parameters<typeof StyledInput>[0]> = ({
+export const FileInputContainer: FC<IProps> = ({
   level,
   highlight,
   placeholder = DEFAULT_PLACEHOLDER,
+  inputRef,
   ...props
 }) => {
   return (
     <Container>
-      <StyledFileInput {...props} />
+      <StyledFileInput {...props} ref={inputRef} />
       <FilePlaceholder level={level} highlight={highlight}>
         <PlaceholderText>{placeholder}</PlaceholderText>
       </FilePlaceholder>

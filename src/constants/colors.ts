@@ -1,5 +1,5 @@
 export const colors = {
-  darkGray: '#8e8e8e',
+  darkGray: '#8c8c8c',
   figmaGray: '#c4c4c4',
   gray2: '#efefef',
   gray: '#e5e5e5',

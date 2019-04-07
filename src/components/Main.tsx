@@ -9,7 +9,7 @@ import { UserInfo } from './Areas/User';
 
 export const Main = () => {
   return (
-    <>
+    <main>
       <Area header="Personinformasjon">
         <UserInfo />
       </Area>
@@ -19,6 +19,6 @@ export const Main = () => {
       <Area header="Extrainformasjon">
         <ExtraInfo />
       </Area>
-    </>
+    </main>
   );
 };
