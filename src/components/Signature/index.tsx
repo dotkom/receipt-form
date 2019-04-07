@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Check } from 'components/Icons/Check';
 import { Cross } from 'components/Icons/Cross';
 import { Edit } from 'components/Icons/Edit';
+import { Undo } from 'components/Icons/Undo';
 import { BaseInputStyle, InputContainer } from 'components/Input';
 import { FileLabels } from 'components/Input/FileLabels';
 import { colors } from 'constants/colors';
@@ -49,6 +50,16 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
     }
   };
 
+  const undo = () => {
+    if (signaturePad) {
+      const data = signaturePad.toData();
+      if (data) {
+        data.pop();
+        signaturePad.fromData(data);
+      }
+    }
+  };
+
   const save = async () => {
     if (signaturePad) {
       const imageURL = signaturePad.toDataURL('image/png');
@@ -74,9 +85,10 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
   return (
     <InputContainer>
       <FileLabels label="Signér">
-        <Edit onClick={editClick} />
-        <Check onClick={save} />
-        <Cross onClick={clear} />
+        <Check onClick={save} title="Lagre signatur" />
+        <Undo onClick={undo} title="Fjern siste linje" />
+        <Cross onClick={clear} title="Start signeringen på nytt" />
+        <Edit onClick={editClick} title="Avslutt uten å lagre" />
       </FileLabels>
       <Canvas ref={canvasRef} />
     </InputContainer>
