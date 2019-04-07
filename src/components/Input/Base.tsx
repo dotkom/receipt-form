@@ -26,7 +26,7 @@ export const BaseInputStyle = css`
   }
 
   ::placeholder {
-    color: ${colors.figmaGray};
+    color: ${colors.darkGray};
   }
 `;
 
