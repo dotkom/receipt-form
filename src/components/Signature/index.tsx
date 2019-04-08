@@ -64,7 +64,9 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
     if (signaturePad) {
       const imageURL = signaturePad.toDataURL('image/png');
       const image = await readDataUrlAsFile(imageURL);
-      saveClick(image);
+      if (image) {
+        saveClick(image);
+      }
       editClick();
     }
   };

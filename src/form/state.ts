@@ -68,7 +68,7 @@ export const serializeReceipt = async (deserializedState: IDeserializedState): P
   const signature = await readDataUrlAsFile(deserializedState.signature);
   return {
     ...deserializedState,
-    attachments,
+    attachments: attachments.filter(Boolean) as File[],
     signature,
   };
 };

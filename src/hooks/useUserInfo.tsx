@@ -61,19 +61,24 @@ const logInRedirect = async (state: IState) => {
   await MANAGER.signinRedirect();
 };
 
+const processUser = async (user: User, state: IState): Promise<IState> => {
+  const profile: IAuthProfile = user.profile;
+  const extProfile = await getProfile(user.access_token);
+  const email = getEmail(profile.email, extProfile);
+  return {
+    ...state,
+    fullname: profile.name,
+    email,
+  };
+};
+
 export const useUserInfo = () => {
   const { state, dispatch } = useContext(ReceiptContext);
 
-  const processUser = async (user: User) => {
-    const profile: IAuthProfile = user.profile;
-    const extProfile = await getProfile(user.access_token);
-    const email = getEmail(profile.email, extProfile);
+  const change = (newState: IState) => {
     dispatch({
       type: ActionType.CHANGE,
-      data: {
-        fullname: profile.name,
-        email,
-      },
+      data: newState,
     });
   };
 
@@ -81,7 +86,8 @@ export const useUserInfo = () => {
     try {
       const user: User | null = await MANAGER.getUser();
       if (user) {
-        processUser(user);
+        const newState = await processUser(user, state);
+        change(newState);
       } else {
         logInRedirect(state);
       }
@@ -97,12 +103,12 @@ export const useUserInfo = () => {
       if (storedStateString) {
         const storedState = await serializeReceipt(JSON.parse(storedStateString) as IDeserializedState);
         window.sessionStorage.removeItem(STORAGE_KEY);
-        dispatch({
-          type: ActionType.CHANGE,
-          data: storedState,
-        });
+        const newState = await processUser(user, storedState);
+        change(newState);
+      } else {
+        const newState = await processUser(user, state);
+        change(newState);
       }
-      processUser(user);
     } catch (err) {
       /** Do nothing if no user data is present */
       return;
