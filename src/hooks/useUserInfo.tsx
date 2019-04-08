@@ -3,7 +3,8 @@ import { useContext, useEffect } from 'react';
 
 import { AUTH_CALLBACK, AUTH_CLIENT_ID, AUTH_ENDPOINT } from 'constants/auth';
 import { ReceiptContext } from 'contexts/ReceiptData';
-import { IState } from 'form/state';
+import { deserializeReceipt, IDeserializedState, IState, serializeReceipt } from 'form/state';
+import { getTotalFileSize } from 'utils/getTotalFileSize';
 import { getProfile, IProfile } from 'utils/profile';
 
 import { ActionType } from './useReceiptData';
@@ -49,53 +50,67 @@ const getEmail = (email: string, profile?: IProfile) => {
   return profile && profile.online_mail ? `${profile.online_mail}@online.ntnu.no` : email;
 };
 
+const MAX_STORAGE_SIZE = 4 * 1024 * 1024; // 4 MB
+const STORAGE_KEY = 'LOGIN_REDIRECT_STATE';
+
+const logInRedirect = async (state: IState) => {
+  const totalSize = getTotalFileSize(state);
+  if (totalSize < MAX_STORAGE_SIZE) {
+    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(await deserializeReceipt(state)));
+  }
+  await MANAGER.signinRedirect();
+};
+
+const processUser = async (user: User, state: IState): Promise<IState> => {
+  const profile: IAuthProfile = user.profile;
+  const extProfile = await getProfile(user.access_token);
+  const email = getEmail(profile.email, extProfile);
+  return {
+    ...state,
+    fullname: profile.name,
+    email,
+  };
+};
+
 export const useUserInfo = () => {
   const { state, dispatch } = useContext(ReceiptContext);
 
-  const processUser = async (user: User) => {
-    const profile: IAuthProfile = user.profile;
-    const extProfile = await getProfile(user.access_token);
-    const email = getEmail(profile.email, extProfile);
+  const change = (newState: IState) => {
     dispatch({
       type: ActionType.CHANGE,
-      data: {
-        fullname: profile.name,
-        email,
-      },
+      data: newState,
     });
-  };
-
-  const logInRedirect = () => {
-    window.sessionStorage.setItem('LOGIN_REDIRECT_STATE', JSON.stringify(state));
-    MANAGER.signinRedirect();
   };
 
   const logIn = async () => {
     try {
       const user: User | null = await MANAGER.getUser();
       if (user) {
-        processUser(user);
+        const newState = await processUser(user, state);
+        change(newState);
       } else {
-        logInRedirect();
+        logInRedirect(state);
       }
     } catch (err) {
-      logInRedirect();
+      logInRedirect(state);
     }
   };
 
   const catchCallback = async () => {
     try {
       const user = await MANAGER.signinRedirectCallback();
-      const storedStateString = window.sessionStorage.getItem('LOGIN_REDIRECT_STATE');
+      const storedStateString = window.sessionStorage.getItem(STORAGE_KEY);
       if (storedStateString) {
-        const storedState = JSON.parse(storedStateString) as IState;
-        window.sessionStorage.removeItem('LOGIN_REDIRECT_STATE');
-        dispatch({
-          type: ActionType.CHANGE,
-          data: storedState,
-        });
+        const storedState = await serializeReceipt(JSON.parse(storedStateString) as IDeserializedState);
+        window.sessionStorage.removeItem(STORAGE_KEY);
+        const newState = await processUser(user, storedState);
+        change(newState);
+      } else {
+        const newState = await processUser(user, state);
+        change(newState);
       }
-      processUser(user);
+      /** Purge all OIDC user data from URL */
+      window.location.hash = '';
     } catch (err) {
       /** Do nothing if no user data is present */
       return;
