@@ -3,7 +3,8 @@ import { useContext, useEffect } from 'react';
 
 import { AUTH_CALLBACK, AUTH_CLIENT_ID, AUTH_ENDPOINT } from 'constants/auth';
 import { ReceiptContext } from 'contexts/ReceiptData';
-import { IState } from 'form/state';
+import { deserializeReceipt, IDeserializedState, IState, serializeReceipt } from 'form/state';
+import { getTotalFileSize } from 'utils/getTotalFileSize';
 import { getProfile, IProfile } from 'utils/profile';
 
 import { ActionType } from './useReceiptData';
@@ -49,6 +50,17 @@ const getEmail = (email: string, profile?: IProfile) => {
   return profile && profile.online_mail ? `${profile.online_mail}@online.ntnu.no` : email;
 };
 
+const MAX_STORAGE_SIZE = 4 * 1024 * 1024; // 4 MB
+const STORAGE_KEY = 'LOGIN_REDIRECT_STATE';
+
+const logInRedirect = async (state: IState) => {
+  const totalSize = getTotalFileSize(state);
+  if (totalSize < MAX_STORAGE_SIZE) {
+    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(await deserializeReceipt(state)));
+  }
+  await MANAGER.signinRedirect();
+};
+
 export const useUserInfo = () => {
   const { state, dispatch } = useContext(ReceiptContext);
 
@@ -65,31 +77,26 @@ export const useUserInfo = () => {
     });
   };
 
-  const logInRedirect = () => {
-    window.sessionStorage.setItem('LOGIN_REDIRECT_STATE', JSON.stringify(state));
-    MANAGER.signinRedirect();
-  };
-
   const logIn = async () => {
     try {
       const user: User | null = await MANAGER.getUser();
       if (user) {
         processUser(user);
       } else {
-        logInRedirect();
+        logInRedirect(state);
       }
     } catch (err) {
-      logInRedirect();
+      logInRedirect(state);
     }
   };
 
   const catchCallback = async () => {
     try {
       const user = await MANAGER.signinRedirectCallback();
-      const storedStateString = window.sessionStorage.getItem('LOGIN_REDIRECT_STATE');
+      const storedStateString = window.sessionStorage.getItem(STORAGE_KEY);
       if (storedStateString) {
-        const storedState = JSON.parse(storedStateString) as IState;
-        window.sessionStorage.removeItem('LOGIN_REDIRECT_STATE');
+        const storedState = await serializeReceipt(JSON.parse(storedStateString) as IDeserializedState);
+        window.sessionStorage.removeItem(STORAGE_KEY);
         dispatch({
           type: ActionType.CHANGE,
           data: storedState,
