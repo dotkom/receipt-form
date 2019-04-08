@@ -109,6 +109,8 @@ export const useUserInfo = () => {
         const newState = await processUser(user, state);
         change(newState);
       }
+      /** Purge all OIDC user data from URL */
+      window.location.hash = '';
     } catch (err) {
       /** Do nothing if no user data is present */
       return;
