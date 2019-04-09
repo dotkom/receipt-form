@@ -1,12 +1,21 @@
 // import React from 'react';
 import styled from 'styled-components';
 
-import { BaseInputStyle } from './Base';
-
 import { colors } from 'constants/colors';
 
-export const Select = styled.select`
+import { BaseInputStyle } from './Base';
+import { getValidationLevelColor, IValidationMessageProps } from './ValidationMessages';
+
+export const Select = styled.select<IValidationMessageProps>`
   border: 2px solid ${colors.darkGray};
   background: ${colors.white};
   ${BaseInputStyle}
+
+  ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
+
+  ${({ highlight }) => highlight && `border-color: ${colors.blue};`}
+
+  :focus {
+    ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
+  }
 `;

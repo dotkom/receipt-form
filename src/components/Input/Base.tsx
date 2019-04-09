@@ -67,14 +67,15 @@ export interface IInputProps extends HTMLProps<HTMLInputElement> {
   validation?: IValidation[];
   validationLevel?: ValidationLevel;
   highlight?: boolean;
+  interacted?: boolean;
 }
 
 export const Input: FC<IInputProps> = React.memo(
-  ({ label, validation = [], validationLevel = ValidationLevel.NONE, ...rest }) => {
+  ({ label, validation = [], validationLevel = ValidationLevel.NONE, interacted, ...rest }) => {
     /** Extract 'ref' and 'as' from props as styled-components types mismatch with React */
     const { ref, as, ...props } = rest;
 
-    const [interacted, setInteracted] = useState(false);
+    const [fieldInteracted, setInteracted] = useState(false);
 
     const showValidation = () => {
       if (props.value !== props.defaultValue) {
@@ -85,7 +86,7 @@ export const Input: FC<IInputProps> = React.memo(
     return (
       <InputContainer>
         <Label>{label}</Label>
-        <ValidationMessages display={interacted} validation={validation} />
+        <ValidationMessages display={interacted || fieldInteracted} validation={validation} />
         <StyledInput {...props} onBlur={showValidation} level={interacted ? validationLevel : undefined} />
       </InputContainer>
     );
