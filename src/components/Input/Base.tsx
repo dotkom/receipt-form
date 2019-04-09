@@ -83,11 +83,13 @@ export const Input: FC<IInputProps> = React.memo(
       }
     };
 
+    const isInteracted = interacted || fieldInteracted;
+
     return (
       <InputContainer>
         <Label>{label}</Label>
-        <ValidationMessages display={interacted || fieldInteracted} validation={validation} />
-        <StyledInput {...props} onBlur={showValidation} level={interacted ? validationLevel : undefined} />
+        <ValidationMessages display={isInteracted} validation={validation} />
+        <StyledInput {...props} onBlur={showValidation} level={isInteracted ? validationLevel : undefined} />
       </InputContainer>
     );
   }
