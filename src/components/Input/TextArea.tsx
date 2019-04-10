@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps, useState } from 'react';
+import React, { FC, HTMLProps } from 'react';
 import styled from 'styled-components';
 
 import { IValidation, ValidationLevel } from 'form/validation';
@@ -10,6 +10,7 @@ export interface ITextAreaProps extends HTMLProps<HTMLTextAreaElement> {
   label: string;
   validation?: IValidation[];
   validationLevel?: ValidationLevel;
+  interacted?: boolean;
 }
 
 export interface IMultiLineInputProps {
@@ -34,27 +35,16 @@ export const TextArea: FC<ITextAreaProps> = ({
   label,
   validationLevel = ValidationLevel.NONE,
   validation = [],
+  interacted,
+  ref,
+  as,
   ...props
 }) => {
-  const [interacted, setInteracted] = useState(false);
-
-  const showValidation = () => {
-    if (props.value !== props.defaultValue) {
-      setInteracted(true);
-    }
-  };
-
   return (
     <InputContainer>
       <Label>{label}</Label>
-      <ValidationMessages display={interacted} validation={validation} />
-      <MultilineInput
-        value={props.value}
-        onChange={props.onChange}
-        placeholder={props.placeholder}
-        level={interacted ? validationLevel : undefined}
-        onBlur={showValidation}
-      />
+      <ValidationMessages display={Boolean(interacted)} validation={validation} />
+      <MultilineInput level={interacted ? validationLevel : undefined} {...props} />
     </InputContainer>
   );
 };

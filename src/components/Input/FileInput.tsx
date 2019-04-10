@@ -31,12 +31,13 @@ export const FileInput: FC<IFileInputProps> = ({
   validation = [],
   validationLevel = ValidationLevel.NONE,
   buttons,
-  placeholder,
+  interacted,
+  ref,
+  as,
   ...props
 }) => {
   const [image, setImage] = useState<null | string>(null);
   const [fileHover, setFileHover] = useState(false);
-  const [interacted, setInteracted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const onFileHover = () => setFileHover(true);
@@ -95,7 +96,7 @@ export const FileInput: FC<IFileInputProps> = ({
           </>
         )}
       </FileLabels>
-      <ValidationMessages display={interacted} validation={validation} />
+      <ValidationMessages display={Boolean(interacted)} validation={validation} />
       {file ? (
         <FileDisplay file={file} image={image} level={validationLevel} />
       ) : (
@@ -103,14 +104,12 @@ export const FileInput: FC<IFileInputProps> = ({
           type="file"
           onDragEnter={onFileHover}
           onDragLeave={onCancelFileHover}
-          value={props.value}
           onChange={handleUpload}
           inputRef={fileInputRef}
           accept={ALLOWED_TYPES.join(',')}
-          onBlur={() => setInteracted(true)}
           level={interacted ? validationLevel : undefined}
           highlight={fileHover}
-          placeholder={placeholder}
+          {...props}
         />
       )}
       <FileInfo file={file} />

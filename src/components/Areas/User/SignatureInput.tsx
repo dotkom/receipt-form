@@ -3,6 +3,7 @@ import React, { FC, useContext } from 'react';
 import { Edit } from 'components/Icons/Edit';
 import { FileInput } from 'components/Input';
 import { ReceiptContext } from 'contexts/ReceiptData';
+import { useInteraction } from 'hooks/useInteraction';
 import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
 
@@ -32,6 +33,7 @@ export const SignatureInput: FC<IProps> = ({ editClick }) => {
   };
 
   const { validation, level } = useValidation('signature');
+  const { interacted, setInteracted } = useInteraction('signature');
 
   return (
     <FileInput
@@ -43,6 +45,8 @@ export const SignatureInput: FC<IProps> = ({ editClick }) => {
       validationLevel={level}
       buttons={<Edit onClick={editClick} title="Tegn signatur" />}
       placeholder="Trykk på pennen for å skrive inn signatur. Klikk på dette feltet, eller dra en fil hit for å laste opp"
+      interacted={interacted}
+      onBlur={setInteracted}
     />
   );
 };
