@@ -1,0 +1,14 @@
+service: receipt-form-generator
+
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  generateReceipt:
+    handler: handler.generateReceipt
+    events:
+      - http:
+          path: /generateReceipt
+          method: post
