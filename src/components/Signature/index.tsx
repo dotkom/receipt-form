@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import SignaturePad from 'signature_pad';
 import styled from 'styled-components';
 
 import { Check } from 'components/Icons/Check';
@@ -10,6 +9,7 @@ import { BaseInputStyle, InputContainer } from 'components/Input';
 import { FileLabels } from 'components/Input/FileLabels';
 import { colors } from 'constants/colors';
 import { readDataUrlAsFile } from 'utils/readDataUrlAsFile';
+import { SignaturePadReforged as SignaturePad } from 'utils/SignatureReforged';
 
 const Canvas = styled.canvas`
   ${BaseInputStyle}
@@ -40,7 +40,7 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
 
   const createSignaturePad = () => {
     if (canvasRef.current) {
-      setSignaturePad(new SignaturePad(canvasRef.current, { backgroundColor: colors.white }));
+      setSignaturePad(new SignaturePad(canvasRef.current, { backgroundColor: colors.white, enableTouchpad: true }));
     }
   };
 
@@ -71,6 +71,13 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
     }
   };
 
+  const observeTouch = () => {
+    if (canvasRef.current) {
+      console.log(Object.keys(canvasRef.current));
+      canvasRef.current.requestPointerLock();
+    }
+  };
+
   useEffect(() => {
     createSignaturePad();
   }, [canvasRef.current, canvasRef]);
@@ -87,6 +94,7 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
   return (
     <InputContainer>
       <FileLabels label="Signér">
+        <Edit onClick={observeTouch} title="Tegn med touchpad" />
         <Check onClick={save} title="Lagre signatur" />
         <Undo onClick={undo} title="Fjern siste linje" />
         <Cross onClick={clear} title="Start signeringen på nytt" />
