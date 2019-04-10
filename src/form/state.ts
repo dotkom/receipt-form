@@ -1,6 +1,6 @@
 import { ICommittee } from 'models/comittees';
 import { getEntries } from 'utils/object';
-import { readDataUrlAsFile } from 'utils/readDataUrlAsFile';
+import { readDataUrlAsFile2 } from 'utils/readDataUrlAsFile';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 
 export type ReceiptType = 'card' | 'deposit';
@@ -63,9 +63,9 @@ export const deserializeReceipt = async (state: IState): Promise<IDeserializedSt
 
 export const serializeReceipt = async (deserializedState: IDeserializedState): Promise<IState> => {
   const attachments = await Promise.all(
-    deserializedState.attachments.map(async (dataUrl) => readDataUrlAsFile(dataUrl))
+    deserializedState.attachments.map(async (dataUrl) => readDataUrlAsFile2(dataUrl))
   );
-  const signature = await readDataUrlAsFile(deserializedState.signature);
+  const signature = await readDataUrlAsFile2(deserializedState.signature);
   return {
     ...deserializedState,
     attachments: attachments.filter(Boolean) as File[],
