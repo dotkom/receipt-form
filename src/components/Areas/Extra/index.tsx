@@ -1,11 +1,14 @@
 import React, { useContext } from 'react';
+import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 import { Button } from 'components/Button';
 import { SeparatedFieldSet } from 'components/FieldSet';
 import { ReceiptTextArea } from 'components/Input/ReceiptTextArea';
 import { colors } from 'constants/colors';
+import { InteractionContext } from 'contexts/Interaction';
 import { ReceiptContext } from 'contexts/ReceiptData';
+import { INITIAL_INTERACTION } from 'form/interaction';
 import { ValidationLevel } from 'form/validation';
 import { ActionType } from 'hooks/useReceiptData';
 
@@ -26,15 +29,26 @@ const WarningMessage = styled.h3`
   color: ${colors.red};
 `;
 
+const interactAll = () => {
+  return Object.keys(INITIAL_INTERACTION).reduce((acc, key) => ({ ...acc, [key]: true }), INITIAL_INTERACTION);
+};
+
 export const ExtraInfo = () => {
   const { dispatch, validation } = useContext(ReceiptContext);
+  const { updateInteraction } = useContext(InteractionContext);
 
   const send = () => {
-    dispatch({ type: ActionType.SEND, data: undefined });
+    ReactDOM.unstable_batchedUpdates(() => {
+      dispatch({ type: ActionType.SEND, data: undefined });
+      updateInteraction(interactAll());
+    });
   };
 
   const download = () => {
-    dispatch({ type: ActionType.DOWNLOAD, data: undefined });
+    ReactDOM.unstable_batchedUpdates(() => {
+      dispatch({ type: ActionType.DOWNLOAD, data: undefined });
+      updateInteraction(interactAll());
+    });
   };
   const errors = Object.values(validation)
     .flat()

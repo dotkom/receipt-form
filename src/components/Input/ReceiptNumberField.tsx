@@ -2,6 +2,7 @@ import React, { FC, useContext } from 'react';
 
 import { ReceiptContext } from 'contexts/ReceiptData';
 import { IState } from 'form/state';
+import { useInteraction } from 'hooks/useInteraction';
 import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
 
@@ -31,6 +32,7 @@ export const ReceiptNumberField: FC<IProps> = ({ field, ...props }) => {
   }
 
   const { validation, level } = useValidation(field);
+  const { interacted, setInteracted } = useInteraction(field);
 
   return (
     <Input
@@ -39,6 +41,8 @@ export const ReceiptNumberField: FC<IProps> = ({ field, ...props }) => {
       onChange={change}
       validation={validation}
       validationLevel={level}
+      interacted={interacted}
+      onBlur={setInteracted}
       {...props}
     />
   );

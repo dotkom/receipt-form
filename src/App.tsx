@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
+import { Interaction } from 'contexts/Interaction';
 import { ReceiptData } from 'contexts/ReceiptData';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
@@ -13,7 +14,11 @@ const AppStyle = styled.div`
 `;
 
 const Contexts: FC = ({ children }) => {
-  return <ReceiptData>{children}</ReceiptData>;
+  return (
+    <Interaction>
+      <ReceiptData>{children}</ReceiptData>
+    </Interaction>
+  );
 };
 
 export const App = () => {

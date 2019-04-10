@@ -1,4 +1,4 @@
-import React, { FC, HTMLProps, useState } from 'react';
+import React, { FC, HTMLProps } from 'react';
 import styled, { css } from 'styled-components';
 
 import { colors } from 'constants/colors';
@@ -75,21 +75,11 @@ export const Input: FC<IInputProps> = React.memo(
     /** Extract 'ref' and 'as' from props as styled-components types mismatch with React */
     const { ref, as, ...props } = rest;
 
-    const [fieldInteracted, setInteracted] = useState(false);
-
-    const showValidation = () => {
-      if (props.value !== props.defaultValue) {
-        setInteracted(true);
-      }
-    };
-
-    const isInteracted = interacted || fieldInteracted;
-
     return (
       <InputContainer>
         <Label>{label}</Label>
-        <ValidationMessages display={isInteracted} validation={validation} />
-        <StyledInput {...props} onBlur={showValidation} level={isInteracted ? validationLevel : undefined} />
+        <ValidationMessages display={Boolean(interacted)} validation={validation} />
+        <StyledInput {...props} level={interacted ? validationLevel : undefined} />
       </InputContainer>
     );
   }
