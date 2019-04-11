@@ -8,7 +8,7 @@ import { ReceiptTextArea } from 'components/Input/ReceiptTextArea';
 import { colors } from 'constants/colors';
 import { InteractionContext } from 'contexts/Interaction';
 import { ReceiptContext } from 'contexts/ReceiptData';
-import { INITIAL_INTERACTION } from 'form/interaction';
+import { interactAll } from 'form/interaction';
 import { ValidationLevel } from 'form/validation';
 import { ActionType } from 'hooks/useReceiptData';
 
