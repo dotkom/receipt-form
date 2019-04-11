@@ -1,7 +1,8 @@
-import React, { ChangeEvent, FC, useContext, useState } from 'react';
+import React, { ChangeEvent, FC, useContext } from 'react';
 import styled from 'styled-components';
 
 import { ReceiptContext } from 'contexts/ReceiptData';
+import { useInteraction } from 'hooks/useInteraction';
 import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
 import { COMMITTEES } from 'models/comittees';
@@ -21,8 +22,8 @@ const SelectContainer = styled.div`
 
 export const CommitteeDropdown: FC = () => {
   const { dispatch } = useContext(ReceiptContext);
-  const [interacted, setIneraction] = useState(false);
-  const setInteracted = () => setIneraction(true);
+  const { interacted, setInteracted } = useInteraction('committee');
+  const { validation, level } = useValidation('committee');
 
   const onDropdownChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const key = event.target.value;
@@ -34,10 +35,9 @@ export const CommitteeDropdown: FC = () => {
           committee,
         },
       });
+      setInteracted();
     }
   };
-
-  const { validation, level } = useValidation('committee');
 
   return (
     <SelectContainer>
