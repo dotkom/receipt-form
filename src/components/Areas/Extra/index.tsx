@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
@@ -8,7 +8,7 @@ import { ReceiptTextArea } from 'components/Input/ReceiptTextArea';
 import { colors } from 'constants/colors';
 import { InteractionContext } from 'contexts/Interaction';
 import { ReceiptContext } from 'contexts/ReceiptData';
-import { INITIAL_INTERACTION } from 'form/interaction';
+import { interactAll } from 'form/interaction';
 import { ValidationLevel } from 'form/validation';
 import { ActionType } from 'hooks/useReceiptData';
 
@@ -29,18 +29,17 @@ const WarningMessage = styled.h3`
   color: ${colors.red};
 `;
 
-const interactAll = () => {
-  return Object.keys(INITIAL_INTERACTION).reduce((acc, key) => ({ ...acc, [key]: true }), INITIAL_INTERACTION);
-};
-
 export const ExtraInfo = () => {
   const { dispatch, validation } = useContext(ReceiptContext);
   const { updateInteraction } = useContext(InteractionContext);
+
+  const [interacted, setInteraction] = useState(false);
 
   const send = () => {
     ReactDOM.unstable_batchedUpdates(() => {
       dispatch({ type: ActionType.SEND, data: undefined });
       updateInteraction(interactAll());
+      setInteraction(true);
     });
   };
 
@@ -48,24 +47,24 @@ export const ExtraInfo = () => {
     ReactDOM.unstable_batchedUpdates(() => {
       dispatch({ type: ActionType.DOWNLOAD, data: undefined });
       updateInteraction(interactAll());
+      setInteraction(true);
     });
   };
   const errors = Object.values(validation)
     .flat()
     .filter((val) => val.level === ValidationLevel.REQUIRED && !val.valid);
-  const valid = errors.length === 0;
 
   return (
     <>
       <ReceiptTextArea field="comments" label="Kommentarer" placeholder={COMMENTS_PLACEHOLDER} />
       <AttachmentsInputs />
       <FileSize />
-      {!valid && <WarningMessage>{VALIDATION_COUNT(errors.length)}</WarningMessage>}
+      {interacted && <WarningMessage>{VALIDATION_COUNT(errors.length)}</WarningMessage>}
       <SeparatedFieldSet>
-        <Button title="download" onClick={download} disabled={!valid}>
+        <Button title="download" onClick={download}>
           Last ned PDF
         </Button>
-        <Button title="send" onClick={send} disabled={!valid}>
+        <Button title="send" onClick={send}>
           Send til Bankom
         </Button>
       </SeparatedFieldSet>

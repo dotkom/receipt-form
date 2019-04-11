@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import { AUTH_CALLBACK, AUTH_CLIENT_ID, AUTH_ENDPOINT } from 'constants/auth';
 import { InteractionContext } from 'contexts/Interaction';
 import { ReceiptContext } from 'contexts/ReceiptData';
-import { FieldInteractions, INITIAL_INTERACTION } from 'form/interaction';
-import { deserializeReceipt, IDeserializedState, INITIAL_STATE, IState, serializeReceipt } from 'form/state';
+import { calculateInteractions } from 'form/interaction';
+import { deserializeReceipt, IDeserializedState, IState, serializeReceipt } from 'form/state';
 import { getTotalFileSize } from 'utils/getTotalFileSize';
 import { getProfile, IProfile } from 'utils/profile';
 
@@ -73,16 +73,6 @@ const processUser = async (user: User, state: IState): Promise<IState> => {
     fullname: profile.name,
     email,
   };
-};
-
-const calculateInteractions = (state: IState): FieldInteractions => {
-  const interaction = INITIAL_INTERACTION;
-  for (const key of Object.keys(state) as Array<keyof IState>) {
-    if (state[key] !== INITIAL_STATE[key]) {
-      interaction[key] = true;
-    }
-  }
-  return interaction;
 };
 
 export const useUserInfo = () => {

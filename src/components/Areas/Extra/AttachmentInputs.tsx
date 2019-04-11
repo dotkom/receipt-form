@@ -1,14 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 
 import { FileInput } from 'components/Input';
 import { ReceiptContext } from 'contexts/ReceiptData';
+import { useInteraction } from 'hooks/useInteraction';
 import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
 
 export const AttachmentsInputs = () => {
   const { state, dispatch } = useContext(ReceiptContext);
-  const [interacted, setInteraction] = useState(false);
-  const setInteracted = () => setInteraction(true);
+  const { interacted, setInteracted } = useInteraction('attachments');
+  const { validation, level } = useValidation('attachments');
 
   const removeFile = (index: number) => {
     const attachments = state.attachments.filter((_, i) => i !== index);
@@ -30,10 +31,9 @@ export const AttachmentsInputs = () => {
   const length = state.attachments && state.attachments.length;
   const count = length === 0 ? '' : length + 1;
 
-  const { validation, level } = useValidation('attachments');
-
   return (
     <>
+      <br />
       {state.attachments.map((attachment, i) => (
         <FileInput
           key={`Vedlegg ${i + 1}`}
@@ -43,6 +43,7 @@ export const AttachmentsInputs = () => {
           file={attachment || undefined}
           validationLevel={level}
           onBlur={setInteracted}
+          interacted={interacted}
         />
       ))}
       <FileInput
@@ -51,7 +52,7 @@ export const AttachmentsInputs = () => {
         onBlur={setInteracted}
         validationLevel={level}
         validation={validation}
-        interacted={interacted}
+        interacted={state.attachments.length === 0 && interacted}
       />
     </>
   );
