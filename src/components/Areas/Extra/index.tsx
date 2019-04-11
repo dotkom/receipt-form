@@ -53,13 +53,14 @@ export const ExtraInfo = () => {
   const errors = Object.values(validation)
     .flat()
     .filter((val) => val.level === ValidationLevel.REQUIRED && !val.valid);
+  const isValid = errors.length === 0;
 
   return (
     <>
       <ReceiptTextArea field="comments" label="Kommentarer" placeholder={COMMENTS_PLACEHOLDER} />
       <AttachmentsInputs />
       <FileSize />
-      {interacted && <WarningMessage>{VALIDATION_COUNT(errors.length)}</WarningMessage>}
+      {!isValid && interacted && <WarningMessage>{VALIDATION_COUNT(errors.length)}</WarningMessage>}
       <SeparatedFieldSet>
         <Button title="download" onClick={download}>
           Last ned PDF
