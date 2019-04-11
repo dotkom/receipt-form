@@ -34,6 +34,8 @@ export const FileInput: FC<IFileInputProps> = ({
   interacted,
   ref,
   as,
+  onFocus,
+  onBlur,
   ...props
 }) => {
   const [image, setImage] = useState<null | string>(null);
@@ -85,6 +87,20 @@ export const FileInput: FC<IFileInputProps> = ({
     onCancelFileHover();
   };
 
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (onFocus) {
+      onFocus(event);
+    }
+    setFileHover(true);
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (onBlur) {
+      onBlur(event);
+    }
+    setFileHover(false);
+  };
+
   return (
     <InputContainer>
       <FileLabels label={label}>
@@ -109,6 +125,8 @@ export const FileInput: FC<IFileInputProps> = ({
           accept={ALLOWED_TYPES.join(',')}
           level={interacted ? validationLevel : undefined}
           highlight={fileHover}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           {...props}
         />
       )}
