@@ -44,7 +44,7 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
   return state;
 };
 
-const validate = (state: IState): StateValidation => {
+export const validate = (state: IState): StateValidation => {
   const keys = Object.entries(STATE_VALIDATION) as Array<[keyof IState, IValidator[]]>;
   const excludes = EXCLUDE_FIELDS.map((excludeFunction) => excludeFunction(state));
   const validation = keys.map<[keyof IState, IValidation[]]>(([key, validators]) => {
