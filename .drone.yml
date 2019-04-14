@@ -1,5 +1,8 @@
-pipeline:
-  restore-cache:
+kind: pipeline
+name: default
+
+setps:
+  - name: restore-cache
     image: drillster/drone-volume-cache
     pull: true
     when:
@@ -10,14 +13,14 @@ pipeline:
     volumes:
       - /tmp/cache:/cache
 
-  setup:
+  - name: setup
     image: node:11
     when:
       event: [push, pull_request, tag, deployment]
     commands:
       - yarn
 
-  build:
+  - name: build
     image: node:11
     group: testing
     secrets:
@@ -34,7 +37,7 @@ pipeline:
     commands:
       - yarn build
 
-  build-lambda:
+  - name: build-lambda
     image: node:11
     group: testing
     secrets:
@@ -45,7 +48,7 @@ pipeline:
     commands:
       - yarn build:lambda
 
-  test:
+  - name: test
     image: node:11
     group: testing
     when:
@@ -53,7 +56,7 @@ pipeline:
     commands:
       yarn test
 
-  compile-typescript:
+  - name: compile-typescript
     image: node:11
     group: testing
     when:
@@ -61,7 +64,7 @@ pipeline:
     commands:
       - yarn run tsc
 
-  lint-typescript:
+  - name: lint-typescript
     image: node:11
     group: testing
     when:
@@ -69,7 +72,7 @@ pipeline:
     commands:
       - yarn lint-ts
 
-  lint-prettier:
+  - name: lint-prettier
     image: node:11
     group: testing
     when:
@@ -77,7 +80,7 @@ pipeline:
     commands:
       - yarn lint-prettier
 
-  rebuild-cache:
+  - name: rebuild-cache
     image: drillster/drone-volume-cache
     pull: true
     when:
@@ -88,7 +91,7 @@ pipeline:
     volumes:
       - /tmp/cache:/cache
   
-  deploy:
+  - name: deploy-frontend
     image: plugins/s3
     secrets:
       - source: aws_access_key
@@ -99,14 +102,15 @@ pipeline:
       event: push
       branch: master
       status: success
-    bucket: receipt-form-prod
-    source: build/**/*
-    target: /
-    strip_prefix: build/
-    acl: public-read
-    region: eu-west-1
+    settings:
+      bucket: receipt-form-prod
+      source: build/**/*
+      target: /
+      strip_prefix: build/
+      acl: public-read
+      region: eu-west-1
 
-  deploy-lambda:
+  - name: deploy-lambda
     image: plugins/s3
     secrets:
       - source: aws_access_key
@@ -117,23 +121,24 @@ pipeline:
       event: push
       branch: master
       status: success
-    bucket: receipt-form-lambda
-    source: /**/*
-    target: /
-    region: eu-west-1
-    exclude:
-      - "build/*"
-      - "*.ts*"
-      - "*.tsx*"
-      - "*.map*"
-      - "*.lock*"
-      - "*.git*"
-      - "*.css*"
-      - "*.scss*"
-      - "*.html*"
-      - "*.png*"
-      - "*.md*"
-      - "*LICENSE*"
-      - "*.xml*"
-      - "*.idea*"
-      - "*package-lock.json*"
+    settings:
+      bucket: receipt-form-lambda
+      source: /**/*
+      target: /
+      region: eu-west-1
+      exclude:
+        - "build/*"
+        - "*.ts*"
+        - "*.tsx*"
+        - "*.map*"
+        - "*.lock*"
+        - "*.git*"
+        - "*.css*"
+        - "*.scss*"
+        - "*.html*"
+        - "*.png*"
+        - "*.md*"
+        - "*LICENSE*"
+        - "*.xml*"
+        - "*.idea*"
+        - "*package-lock.json*"
