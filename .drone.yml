@@ -99,6 +99,10 @@ steps:
       branch: master
       status: success
     settings:
+      access_key:
+        from_secret: aws_access_key
+      secret_key:
+        from_secret: aws_secret_key
       bucket: receipt-form-prod
       source: build/**/*
       target: /
@@ -122,6 +126,10 @@ steps:
       status: success
     settings:
       bucket: receipt-form-lambda
+      access_key:
+        from_secret: aws_access_key
+      secret_key:
+        from_secret: aws_secret_key
       source: /**/*
       target: /
       region: eu-west-1
