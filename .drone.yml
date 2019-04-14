@@ -54,7 +54,7 @@ steps:
     when:
       event: [push, pull_request, tag, deployment]
     commands:
-      yarn test
+      - yarn test
 
   - name: compile-typescript
     image: node:11
