@@ -135,4 +135,4 @@ steps:
 volumes:
   - name: cache
     host:
-      path: /var/lib/cache
+      path: /opt/drone/cache
