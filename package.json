@@ -3,20 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-async-generator-functions": "^7.2.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.3",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-typescript": "^7.3.3",
-    "@sentry/browser": "^5.0.3",
     "@types/jest": "24.0.6",
     "@types/jsdom": "^12.2.3",
     "@types/node": "^11.13.4",
     "@types/react": "16.8.4",
     "@types/react-dom": "16.8.2",
     "@types/styled-components": "^4.1.10",
-    "babel-loader": "^8.0.5",
     "core-js": "^3.0.1",
     "isomorphic-fetch": "^2.2.1",
     "jsdom": "^14.0.0",
@@ -33,8 +25,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build:lambda": "NODE_ENV='production' webpack --config src/lambda/webpack.config.js --mode=production --optimize-minimize",
-    "build:lambda:dev": "webpack --config src/lambda/webpack.config.js",
+    "build:lambda": "NODE_ENV='production' ttsc --project src/lambda",
+    "build:lambda:dev": "ttsc --project src/lambda",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -58,7 +50,6 @@
     "prettier-check": "^2.0.0",
     "tslint": "^5.13.0",
     "tslint-config-prettier": "^1.18.0",
-    "tslint-react": "^3.6.0",
-    "webpack-cli": "^3.3.0"
+    "tslint-react": "^3.6.0"
   }
 }
