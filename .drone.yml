@@ -18,15 +18,15 @@ steps:
     volumes:
       - name: cache
         path: /tmp/cache
-    secrets:
-      - source: auth_callback
-        target: REACT_APP_AUTH_CALLBACK
-      - source: auth_client_id
-        target: REACT_APP_AUTH_CLIENT_ID
-      - source: auth_endpoint
-        target: REACT_APP_AUTH_ENDPOINT
-      - source: sentry_dsn
-        target: REACT_APP_SENTRY_DSN
+    environment:
+      REACT_APP_AUTH_CALLBACK:
+        from_secret: auth_callback
+      REACT_APP_AUTH_CLIENT_ID:
+        from_secret: auth_client_id
+      REACT_APP_AUTH_ENDPOINT:
+        from_secret: auth_endpoint
+      REACT_APP_SENTRY_DSN:
+        from_secret: sentry_dsn
     when:
       event: [push, pull_request, tag, deployment]
     commands:
