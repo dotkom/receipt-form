@@ -1,7 +1,7 @@
 kind: pipeline
 name: default
 
-setps:
+steps:
   - name: restore-cache
     image: drillster/drone-volume-cache
     pull: true
