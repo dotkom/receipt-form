@@ -13,11 +13,11 @@ Sentry.init({
   dsn: SENTRY_DSN,
 });
 
-ReactDOM.render(
+// @ts-ignore
+ReactDOM.unstable_createRoot(document.getElementById('root')).render(
   <SentryBoundry>
     <App />
-  </SentryBoundry>,
-  document.getElementById('root')
+  </SentryBoundry>
 );
 
 // If you want your app to work offline and load faster, you can change
