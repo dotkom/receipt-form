@@ -94,3 +94,34 @@ pipeline:
     strip_prefix: build/
     acl: public-read
     region: eu-west-1
+
+  deploy-lambda:
+    image: plugins/s3
+    secrets:
+      - source: aws_access_key
+        target: AWS_ACCESS_KEY_ID
+      - source: aws_secret_key
+        target: AWS_SECRET_ACCESS_KEY
+    when:
+      event: push
+      branch: master
+      status: success
+    bucket: receipt-form-lambda
+    source: /**/*
+    target: /
+    region: eu-west-1
+    exclude:
+      - "*.ts*"
+      - "*.tsx*"
+      - "*.map*"
+      - "*.lock*"
+      - "*.git*"
+      - "*.css*"
+      - "*.scss*"
+      - "*.html*"
+      - "*.png*"
+      - "*.md*"
+      - "*LICENSE*"
+      - "*.xml*"
+      - "*.idea*"
+      - "*package-lock.json*"
