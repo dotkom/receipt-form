@@ -14,8 +14,4 @@ export const Select = styled.select<IValidationMessageProps>`
   ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
 
   ${({ highlight }) => highlight && `border-color: ${colors.blue};`}
-
-  :focus {
-    ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
-  }
 `;

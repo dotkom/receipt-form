@@ -35,10 +35,6 @@ export const StyledInput = React.memo(styled.input<IValidationMessageProps>`
   ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
 
   ${({ highlight }) => highlight && `border-color: ${colors.blue};`}
-
-  :focus {
-    ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
-  }
 `);
 
 export const BaseLabelStyle = css`

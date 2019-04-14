@@ -25,10 +25,6 @@ const MultilineInput = styled.textarea<IMultiLineInputProps>`
   min-height: 6rem;
 
   ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
-
-  :focus {
-    ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
-  }
 `;
 
 export const TextArea: FC<ITextAreaProps> = ({
