@@ -34,6 +34,17 @@ pipeline:
     commands:
       - yarn build
 
+  build-lambda:
+    image: node:11
+    group: testing
+    secrets:
+      - source: sentry_dsn
+        target: SENTRY_DSN
+    when:
+      event: [push, pull_request, tag, deployment]
+    commands:
+      - yarn build:lambda
+
   test:
     image: node:11
     group: testing
@@ -111,6 +122,7 @@ pipeline:
     target: /
     region: eu-west-1
     exclude:
+      - "build/*"
       - "*.ts*"
       - "*.tsx*"
       - "*.map*"
