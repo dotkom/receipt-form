@@ -1,4 +1,5 @@
 import 'isomorphic-fetch';
+import './polyfills';
 
 import { IDeserializedState, serializeReceipt } from 'form/state';
 import { ValidationLevel } from 'form/validation';

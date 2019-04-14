@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "commonjs",
-    "outDir": "./dist",
 
     /* Strict Type-Checking Options */
     "strict": true,                           /* Enable all strict type-checking options. */
@@ -32,6 +31,8 @@
     ],
     "inlineSourceMap": true,
     "moduleResolution": "node",
-
+    "plugins": [
+      { "transform": "ts-transformer-imports" }
+    ]
   }
 }

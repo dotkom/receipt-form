@@ -11,6 +11,8 @@
 # production
 /build
 /dist
+/src/**/*.js
+*.zip
 
 # misc
 .DS_Store
