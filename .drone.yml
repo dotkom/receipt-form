@@ -2,6 +2,16 @@ kind: pipeline
 name: default
 
 steps:
+  - name: setup
+    image: node:11
+    volumes:
+      - name: cache
+        path: /tmp/cache
+    when:
+      event: [push, pull_request, tag, deployment]
+    commands:
+      - yarn
+
   - name: build
     image: node:11
     group: testing
