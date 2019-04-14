@@ -8,6 +8,7 @@ const KILO = 1024;
  * Convert bytes to most fitting format.
  * 1023 => 1023 Bytes
  * 1024 => 1 KB
+ * 1025 => 1 KB
  * @param bytes number of Bytes.
  * @param decimals Amount of decimals to include.
  */
