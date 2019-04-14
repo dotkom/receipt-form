@@ -1,20 +1,12 @@
 kind: pipeline
 name: default
 
-setps:
-  - name: restore-cache
-    image: drillster/drone-volume-cache
-    pull: true
-    when:
-      event: [push, pull_request, tag, deployment]
-    restore: true
-    mount:
-      - ./node_modules
-    volumes:
-      - /tmp/cache:/cache
-
+steps:
   - name: setup
     image: node:11
+    volumes:
+      - name: cache
+        path: /tmp/cache
     when:
       event: [push, pull_request, tag, deployment]
     commands:
@@ -23,6 +15,9 @@ setps:
   - name: build
     image: node:11
     group: testing
+    volumes:
+      - name: cache
+        path: /tmp/cache
     secrets:
       - source: auth_callback
         target: REACT_APP_AUTH_CALLBACK
@@ -40,6 +35,9 @@ setps:
   - name: build-lambda
     image: node:11
     group: testing
+    volumes:
+      - name: cache
+        path: /tmp/cache
     secrets:
       - source: sentry_dsn
         target: SENTRY_DSN
@@ -51,14 +49,20 @@ setps:
   - name: test
     image: node:11
     group: testing
+    volumes:
+      - name: cache
+        path: /tmp/cache
     when:
       event: [push, pull_request, tag, deployment]
     commands:
-      yarn test
+      - yarn test
 
   - name: compile-typescript
     image: node:11
     group: testing
+    volumes:
+      - name: cache
+        path: /tmp/cache
     when:
       event: [push, pull_request, tag, deployment]
     commands:
@@ -79,20 +83,12 @@ setps:
       event: [push, pull_request, tag, deployment]
     commands:
       - yarn lint-prettier
-
-  - name: rebuild-cache
-    image: drillster/drone-volume-cache
-    pull: true
-    when:
-      event: [push, pull_request, tag, deployment]
-    rebuild: true
-    mount:
-      - ./node_modules
-    volumes:
-      - /tmp/cache:/cache
   
   - name: deploy-frontend
     image: plugins/s3
+    volumes:
+      - name: cache
+        path: /tmp/cache
     secrets:
       - source: aws_access_key
         target: AWS_ACCESS_KEY_ID
@@ -112,6 +108,9 @@ setps:
 
   - name: deploy-lambda
     image: plugins/s3
+    volumes:
+      - name: cache
+        path: /tmp/cache
     secrets:
       - source: aws_access_key
         target: AWS_ACCESS_KEY_ID
@@ -142,3 +141,8 @@ setps:
         - "*.xml*"
         - "*.idea*"
         - "*package-lock.json*"
+
+volumes:
+  - name: cache
+    host:
+      path: /opt/drone/cache
