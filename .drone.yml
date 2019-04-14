@@ -110,6 +110,15 @@ steps:
       acl: public-read
       region: eu-west-1
 
+  - name: package-lambda
+    image: kramos/alpine-zip
+    when:
+      event: push
+      branch: master
+      status: success
+    commands:
+      - zip -9 -r --exclude="*.ts*" --exclude="*.tsx*" --exclude="*.map*" --exclude="*.lock*" --exclude="*.git*" --exclude="*.css*" --exclude="*.scss*" --exclude="*.html*" --exclude="*.png*" --exclude="*.md*" --exclude="*LICENSE*" --exclude="*.xml*" --exclude="*.idea*" --exclude="*package-lock.json*" --exclude="build/*" lambda.zip .
+
   - name: deploy-lambda
     image: plugins/s3
     volumes:
@@ -130,25 +139,9 @@ steps:
         from_secret: aws_access_key
       secret_key:
         from_secret: aws_secret_key
-      source: ./**/*
+      source: ./lambda.zip
       target: /
       region: eu-west-1
-      exclude:
-        - "build/*"
-        - "*.ts*"
-        - "*.tsx*"
-        - "*.map*"
-        - "*.lock*"
-        - "*.git*"
-        - "*.css*"
-        - "*.scss*"
-        - "*.html*"
-        - "*.png*"
-        - "*.md*"
-        - "*LICENSE*"
-        - "*.xml*"
-        - "*.idea*"
-        - "*package-lock.json*"
 
 volumes:
   - name: cache
