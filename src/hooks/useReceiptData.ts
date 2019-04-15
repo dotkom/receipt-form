@@ -1,7 +1,7 @@
 import { Dispatch, Reducer, useEffect, useReducer, useState } from 'react';
 
 import { deserializeReceipt, INITIAL_STATE, IState } from 'form/state';
-import { EXCLUDE_FIELDS, IValidation, IValidator, STATE_VALIDATION, StateValidation } from 'form/validation';
+import { StateValidation, validate } from 'form/validation';
 import { postReceipt } from 'utils/postReceipt';
 
 export enum ActionType {
@@ -44,22 +44,6 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
       return INITIAL_STATE;
   }
   return state;
-};
-
-export const validate = (state: IState): StateValidation => {
-  const keys = Object.entries(STATE_VALIDATION) as Array<[keyof IState, IValidator[]]>;
-  const excludes = EXCLUDE_FIELDS.map((excludeFunction) => excludeFunction(state));
-  const validation = keys.map<[keyof IState, IValidation[]]>(([key, validators]) => {
-    /** Return empty validators if key is excluded from the validation */
-    if (excludes.includes(key)) {
-      return [key, []];
-    }
-    return [
-      key,
-      validators.map<IValidation>(({ validator, level, message }) => ({ valid: validator(state), level, message })),
-    ];
-  });
-  return validation.reduce<StateValidation>((acc, [key, value]) => ({ ...acc, [key]: value }), {} as StateValidation);
 };
 
 export type ReceiptData = [IState, Dispatch<Actions>, StateValidation];

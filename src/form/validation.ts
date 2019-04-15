@@ -144,3 +144,28 @@ export type ExcludeFunction = (state: IState) => keyof IState;
  * Functions for excluding certain fields based on the values of other fields.
  */
 export const EXCLUDE_FIELDS: ExcludeFunction[] = [({ type }) => (type === 'card' ? 'account' : 'cardDetails')];
+
+export const validate = (state: IState): StateValidation => {
+  const keys = Object.entries(STATE_VALIDATION) as Array<[keyof IState, IValidator[]]>;
+  const excludes = EXCLUDE_FIELDS.map((excludeFunction) => excludeFunction(state));
+  const validation = keys.map<[keyof IState, IValidation[]]>(([key, validators]) => {
+    /** Return empty validators if key is excluded from the validation */
+    if (excludes.includes(key)) {
+      return [key, []];
+    }
+    return [
+      key,
+      validators.map<IValidation>(({ validator, level, message }) => ({ valid: validator(state), level, message })),
+    ];
+  });
+  return validation.reduce<StateValidation>((acc, [key, value]) => ({ ...acc, [key]: value }), {} as StateValidation);
+};
+
+export const getIsValid = (state: IState): [boolean, IValidation[]] => {
+  const validation = validate(state);
+  const errors = Object.values(validation)
+    .flat()
+    .filter((val) => val.level === ValidationLevel.REQUIRED && !val.valid);
+  const isValid = errors.length === 0;
+  return [isValid, errors];
+};
