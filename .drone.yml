@@ -119,7 +119,7 @@ steps:
     commands:
       - zip -9 -r --exclude="*.ts*" --exclude="*.tsx*" --exclude="*.map*" --exclude="*.lock*" --exclude="*.git*" --exclude="*.css*" --exclude="*.scss*" --exclude="*.html*" --exclude="*.png*" --exclude="*.md*" --exclude="*LICENSE*" --exclude="*.xml*" --exclude="*.idea*" --exclude="*package-lock.json*" --exclude="build/*" lambda.zip .
 
-  - name: deploy-lambda
+  - name: upload-lambda
     image: plugins/s3
     volumes:
       - name: cache
@@ -142,6 +142,25 @@ steps:
       source: ./lambda.zip
       target: /
       region: eu-west-1
+
+  - name: depoy-lambda
+    image: omerxx/drone-lambda-plugin
+    pull: true
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_key
+      AWS_DEFAULT_REGION:
+        from_secret: aws_region
+    when:
+      event: push
+      branch: master
+      status: success
+    settings:
+      function_name: receipt-generator-2
+      s3_bucket: recept-form-lambda
+      file_name: lambda.zip
 
 volumes:
   - name: cache
