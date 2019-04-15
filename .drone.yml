@@ -143,9 +143,8 @@ steps:
       target: /
       region: eu-west-1
 
-  - name: depoy-lambda
-    image: omerxx/drone-lambda-plugin
-    pull: true
+  - name: deploy-lambda
+    image: appleboy/drone-lambda
     environment:
       AWS_ACCESS_KEY_ID:
         from_secret: aws_access_key
@@ -158,9 +157,15 @@ steps:
       branch: master
       status: success
     settings:
-      function_name: receipt-generator-2
-      s3_bucket: recept-form-lambda
-      file_name: lambda.zip
+      pull: true
+      region: eu-west-1
+      function-name: receipt-generator-2
+      s3-bucket: recept-form-lambda
+      s3-key: lambda.zip
+      access-key:
+        from_secret: aws_access_key
+      secret-key:
+        from_secret: aws_secret_key
 
 volumes:
   - name: cache
