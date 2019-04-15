@@ -2,6 +2,7 @@ import { Dispatch, Reducer, useEffect, useReducer, useState } from 'react';
 
 import { deserializeReceipt, INITIAL_STATE, IState } from 'form/state';
 import { EXCLUDE_FIELDS, IValidation, IValidator, STATE_VALIDATION, StateValidation } from 'form/validation';
+import { postReceipt } from 'utils/postReceipt';
 
 export enum ActionType {
   CHANGE,
@@ -32,6 +33,7 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
       deserializeReceipt(state).then((data) => {
         // tslint:disable-next-line no-console
         console.log('Download action called', JSON.stringify(data));
+        postReceipt(data);
       });
       return state;
     case ActionType.SEND:
