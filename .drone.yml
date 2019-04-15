@@ -160,7 +160,7 @@ steps:
       pull: true
       region: eu-west-1
       function_name: receipt-generator-2
-      s3_bucket: recept-form-lambda
+      s3_bucket: receipt-form-lambda
       s3_key: lambda.zip
       access_key:
         from_secret: aws_access_key
