@@ -1,6 +1,6 @@
 import { Dispatch, Reducer, useEffect, useReducer, useState } from 'react';
 
-import { deserializeReceipt, INITIAL_STATE, IState } from 'form/state';
+import { INITIAL_STATE, IState } from 'form/state';
 import { StateValidation, validate } from 'form/validation';
 import { postReceipt } from 'utils/postReceipt';
 
@@ -30,11 +30,7 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
         ...action.data,
       };
     case ActionType.DOWNLOAD:
-      deserializeReceipt(state).then((data) => {
-        // tslint:disable-next-line no-console
-        console.log('Download action called', JSON.stringify(data));
-        postReceipt(data);
-      });
+      postReceipt(state);
       return state;
     case ActionType.SEND:
       // tslint:disable-next-line no-console
