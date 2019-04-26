@@ -28,7 +28,7 @@ export const GENERIC_ERROR: APIGatewayProxyResult = {
   }),
 };
 
-exports.generateReceipt = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   if (!event.body) {
     return MISSING_BODY;
   }
