@@ -1,51 +1,71 @@
 import 'isomorphic-fetch';
 import './polyfills';
 
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { IDeserializedState, serializeReceipt } from 'form/state';
 import { getIsValid } from 'form/validation';
 
 import { pdfGenerator } from './generatePDF';
 
-export const MISSING_BODY: APIGatewayProxyResult = {
+import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
+
+export interface IResultMessage {
+  statusCode: number;
+  body: {
+    message?: string;
+    data?: string;
+  };
+}
+
+export const MISSING_PDF: IResultMessage = {
+  statusCode: 500, // Bad request
+  body: {
+    message: 'PDF was not generated',
+  },
+};
+
+export const MISSING_BODY: IResultMessage = {
   statusCode: 400, // Bad request
-  body: JSON.stringify({
+  body: {
     message: 'Missing request body',
-  }),
+  },
 };
 
-export const VALIDATION_ERROR: APIGatewayProxyResult = {
+export const VALIDATION_ERROR: IResultMessage = {
   statusCode: 400,
-  body: JSON.stringify({
+  body: {
     message: 'Receipt data is not valid',
-  }),
+  },
 };
 
-export const GENERIC_ERROR: APIGatewayProxyResult = {
+export const GENERIC_ERROR: IResultMessage = {
   statusCode: 400,
-  body: JSON.stringify({
+  body: {
     message: 'Something went wrong during with the request',
-  }),
+  },
 };
 
-export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  if (!event.body) {
+export const handler = async (data: IDeserializedState | null): Promise<IResultMessage> => {
+  if (!data) {
     return MISSING_BODY;
   }
 
-  /** Parse twice, since body is an escaped string. string -> JSON -> JS Object */
-  const receiptJson = JSON.parse(JSON.parse(event.body)) as IDeserializedState;
   try {
-    const state = await serializeReceipt(receiptJson);
+    const state = await serializeReceipt(data);
     const [isValid, errors] = getIsValid(state);
     if (isValid) {
       const pdf = await pdfGenerator(state);
+      if (!pdf) {
+        return MISSING_PDF;
+      }
+      const pdfBlob = new Blob([pdf]);
+      const pdfFile = new File([pdfBlob], 'receipt.pdf', { type: 'application/pdf' });
+      const pdfString = await readFileAsDataUrl(pdfFile);
       return {
         statusCode: 201, // Created
-        body: JSON.stringify({
+        body: {
           message: 'Created receipt as PDF',
-          data: pdf,
-        }),
+          data: pdfString,
+        },
       };
     } else {
       throw new Error(`Received invalid receipt data: ${errors}`);
