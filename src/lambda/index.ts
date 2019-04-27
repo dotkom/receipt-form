@@ -10,7 +10,7 @@ const HOST = '0.0.0.0';
 
 const app = express();
 
-app.use(bodyParser());
+app.use(bodyParser.json({ limit: '25MB' }));
 
 app.use((_, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
