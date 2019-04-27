@@ -27,3 +27,6 @@ app.listen(Number(PORT), HOST || '', () => {
   /* tslint:disable-next-line no-console */
   console.log(`Receipt Backend server running on ${HOST}:${PORT}`);
 });
+
+/** Make sure it is possible to exist the application in in Docker */
+process.on('SIGINT', () => process.exit());
