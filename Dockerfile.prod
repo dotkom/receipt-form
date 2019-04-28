@@ -3,6 +3,8 @@ FROM node:12-alpine
 LABEL maintainer="dotkom@online.ntnu.no"
 LABEL project="receipt-form"
 
+ARG SENTRY_DNS=''
+
 ENV WORKDIR=/srv/app
 ENV NODE_ENV=production
 
