@@ -120,9 +120,7 @@ steps:
       dockerfile: Dockerfile.prod
       build_args:
         - SENTRY_DSN
-      tags:
-        - "${DRONE_TAG}"
-        - latest
+      auto_tag: true
 
   - name: deploy-backend
     image: appleboy/drone-ssh
