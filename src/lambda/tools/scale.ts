@@ -1,7 +1,7 @@
 /**
  * Scales the width and height based on maxWidth and maxHeight
  */
-export const scaleDims = (width: number, height: number, maxWidth: number, maxHeight: number) => {
+export const scaleDims = (width: number, height: number, maxWidth: number = width, maxHeight: number = height) => {
   /* calculate scaling factors */
   const widthScalingFactor = width / maxWidth;
   const heightScalingFactor = height / maxHeight;

@@ -50,7 +50,9 @@ export const readDataUrlAsFile2 = async (dataUrl: string, fileName?: string) => 
   try {
     const type = getDataUrlMimeType(dataUrl);
     if (type) {
-      const buffer = dataUrlToArrayBuffer(dataUrl);
+      const dataStart = dataUrl.indexOf(',');
+      const dataUrlContent = dataUrl.slice(dataStart);
+      const buffer = dataUrlToArrayBuffer(dataUrlContent);
       const file = new File(buffer, fileName || generateRandomFileName(), { type });
       return file;
     }

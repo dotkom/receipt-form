@@ -36,20 +36,6 @@ steps:
     commands:
       - yarn build
 
-  - name: build-lambda
-    image: node:11
-    group: testing
-    volumes:
-      - name: cache
-        path: /tmp/cache
-    secrets:
-      - source: sentry_dsn
-        target: SENTRY_DSN
-    when:
-      event: [push, pull_request, tag, deployment]
-    commands:
-      - yarn build:lambda
-
   - name: test
     image: node:11
     group: testing
@@ -114,62 +100,48 @@ steps:
       acl: public-read
       region: eu-west-1
 
-  - name: package-lambda
-    image: kramos/alpine-zip
-    when:
-      event: push
-      branch: master
-      status: success
-    commands:
-      - zip -9 -r --exclude="*.ts*" --exclude="*.tsx*" --exclude="*.map*" --exclude="*.lock*" --exclude="*.git*" --exclude="*.css*" --exclude="*.scss*" --exclude="*.html*" --exclude="*.png*" --exclude="*.md*" --exclude="*LICENSE*" --exclude="*.xml*" --exclude="*.idea*" --exclude="*package-lock.json*" --exclude="build/*" lambda.zip .
-
-  - name: upload-lambda
-    image: plugins/s3
-    volumes:
-      - name: cache
-        path: /tmp/cache
-    secrets:
-      - source: aws_access_key
-        target: AWS_ACCESS_KEY_ID
-      - source: aws_secret_key
-        target: AWS_SECRET_ACCESS_KEY
-    when:
-      event: push
-      branch: master
-      status: success
-    settings:
-      bucket: receipt-form-lambda
-      access_key:
-        from_secret: aws_access_key
-      secret_key:
-        from_secret: aws_secret_key
-      source: ./lambda.zip
-      target: /
-      region: eu-west-1
-
-  - name: deploy-lambda
-    image: appleboy/drone-lambda
+  - name: publish-backend
+    image: plugins/docker
+    secrets: [docker_username, docker_password, sentry_dsn]
     environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: aws_access_key
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: aws_secret_key
-      AWS_DEFAULT_REGION:
-        from_secret: aws_region
+      SENTRY_DSN:
+        from_secret: sentry_dsn
     when:
       event: push
       branch: master
       status: success
     settings:
-      pull: true
-      region: eu-west-1
-      function_name: receipt-generator-2
-      s3_bucket: receipt-form-lambda
-      s3_key: lambda.zip
-      access_key:
-        from_secret: aws_access_key
-      secret_key:
-        from_secret: aws_secret_key
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: registry.online.ntnu.no/dotkom/receipt-form-backend
+      registry: registry.online.ntnu.no
+      dockerfile: Dockerfile.prod
+      build_args:
+        - SENTRY_DSN
+      tags:
+        - "${DRONE_TAG}"
+        - latest
+
+  - name: deploy-backend
+    image: appleboy/drone-ssh
+    pull: true
+    secrets: [ssh_key]
+    when:
+      event: push
+      branch: master
+      status: success
+    settings:
+      host: nansen.online.ntnu.no
+      port: 22
+      username: root
+      key:
+        from_secret: ssh_key
+      command_timeout: 600s
+      script:
+        - /srv/www/receipt-form-prod/deploy.sh
+
 
 volumes:
   - name: cache
