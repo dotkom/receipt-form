@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 import './polyfills';
 
 import { IDeserializedState, serializeReceipt } from 'form/state';
-import { getIsValid } from 'form/validation';
+import { getIsValid, IValidation } from 'form/validation';
 
 import { pdfGenerator } from './generatePDF';
 
@@ -13,6 +13,7 @@ export interface IResultMessage {
   body: {
     message?: string;
     data?: string;
+    validation?: IValidation[];
   };
 }
 
@@ -30,12 +31,13 @@ export const MISSING_BODY: IResultMessage = {
   },
 };
 
-export const VALIDATION_ERROR: IResultMessage = {
+export const VALIDATION_ERROR = (validation: IValidation[]): IResultMessage => ({
   statusCode: 400,
   body: {
     message: 'Receipt data is not valid',
+    validation,
   },
-};
+});
 
 export const GENERIC_ERROR: IResultMessage = {
   statusCode: 400,
@@ -68,12 +70,12 @@ export const handler = async (data: IDeserializedState | null): Promise<IResultM
         },
       };
     } else {
-      throw new Error(`Received invalid receipt data: ${errors}`);
+      VALIDATION_ERROR(errors);
     }
   } catch (err) {
     // tslint:disable-next-line no-console
     console.error(err);
-    return VALIDATION_ERROR;
+    return GENERIC_ERROR;
   }
   return GENERIC_ERROR;
 };
