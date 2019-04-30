@@ -1,24 +1,13 @@
-import fs from 'fs';
-import { drawImage, drawLinesOfText, drawText, PDFDocumentFactory, PDFDocumentWriter, StandardFonts } from 'pdf-lib';
+import { PDFDocumentFactory, PDFDocumentWriter, StandardFonts } from 'pdf-lib';
 
 import { IState } from 'form/state';
-import { readFileAsArrayBuffer } from 'utils/readFileAsArrayBuffer';
+import { readFileAsBytes } from 'utils/readFileAsBytes';
 
-import { getCurrentDateString } from './tools/date';
-import { scaleDims } from './tools/scale';
-import { createMultiLine, positionText } from './tools/text';
+import { attachJPG, attachPDF, attachPNG } from './tools/attachments';
+import { embedSignature, embedText } from './tools/embed';
+import { readFileAsync } from './tools/readFileAsync';
 
-const readFile = async (path: Parameters<typeof fs.readFile>[0]) => {
-  return new Promise<Buffer>((resolve, reject) => {
-    fs.readFile(path, (err, buffer) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(buffer);
-      }
-    });
-  });
-};
+export type NonNullableState = { [K in keyof IState]: NonNullable<IState[K]> };
 
 /**
  * Generates a Reciptform based on the input
@@ -26,102 +15,42 @@ const readFile = async (path: Parameters<typeof fs.readFile>[0]) => {
  */
 export const pdfGenerator = async (inputForm: IState) => {
   try {
-    const template = await readFile(__dirname + '/assets/template.pdf');
+    const form = inputForm as NonNullableState;
 
-    const form = inputForm as { [K in keyof IState]: NonNullable<IState[K]> };
+    /** Initialize template from file */
+    const templateFile = await readFileAsync(__dirname + '/assets/template.pdf');
+    const template = PDFDocumentFactory.load(templateFile);
 
-    // load the template reciptform
-    const reciptform = PDFDocumentFactory.create();
+    /** Initialize a new PDF document as output */
+    const outputPDF = PDFDocumentFactory.create();
+    const [timesRomanRef] = template.embedStandardFont(StandardFonts.TimesRoman);
 
-    const templateReciptForm = PDFDocumentFactory.load(template);
-    const [timesRomanRef] = templateReciptForm.embedStandardFont(StandardFonts.TimesRoman);
-
-    const page = templateReciptForm.getPages()[0];
-
+    /** Load text and signature to templated page */
+    const page = template.getPages()[0];
     page.addFontDictionary('TimesRoman', timesRomanRef);
+    embedText(form, template, page);
+    await embedSignature(form.signature, template, page);
+    outputPDF.addPage(page);
 
-    // place the textual input on the template reciptform
-    const formContentStream = templateReciptForm.createContentStream(
-      drawText(form.fullname, positionText(165, 627)),
-      drawText(form.email, positionText(165, 599)),
-      drawText(form.committee.name, positionText(165, 571)),
-      drawText(getCurrentDateString(), positionText(441, 571)),
-      drawText(form.account, positionText(165, 527)),
-      drawText(String(form.amount), positionText(441, 527)),
-      drawText(form.intent, positionText(165, 483)),
-      drawText(form.type === 'deposit' ? 'X' : '', positionText(392, 483)),
-      drawText(form.type === 'card' ? 'X' : '', positionText(392, 466)),
-      drawLinesOfText(createMultiLine(form.comments), positionText(165, 440))
-    );
-
-    // place the reciptFormInput.signature
-
-    // width/height of signature field
-
-    const signatureAsArrayBuffer = await readFileAsArrayBuffer(form.signature);
-    const signatureAsUnit8Array = new Uint8Array(signatureAsArrayBuffer);
-    const [pngImage, pngDims] = templateReciptForm.embedPNG(signatureAsUnit8Array);
-
-    const maxWidth = 397;
-    const maxHeight = 97;
-    const scaledSignDims = scaleDims(pngDims.width, pngDims.height, maxWidth, maxHeight);
-
-    page.addImageObject('reciptFormInput.signature', pngImage);
-    const signContentStream = templateReciptForm.createContentStream(
-      drawImage('reciptFormInput.signature', {
-        x: 161,
-        y: 101,
-        width: scaledSignDims.width,
-        height: scaledSignDims.height,
-      })
-    );
-
-    page.addContentStreams(
-      templateReciptForm.register(formContentStream),
-      templateReciptForm.register(signContentStream)
-    );
-
-    reciptform.addPage(page);
-
-    // append the attachments
+    /** Load all attachments as separate pages */
     for (const attachment of form.attachments) {
-      const attachmentAsArrayBuffer = await readFileAsArrayBuffer(attachment);
-      const uint8attachment = new Uint8Array(attachmentAsArrayBuffer);
+      const attachmentBytes = await readFileAsBytes(attachment);
       switch (attachment.type) {
-        case 'image/jpg':
+        case 'image/jpeg':
+          attachJPG(attachmentBytes, outputPDF);
+          break;
         case 'image/png':
-          const pageSize = [350, 500] as [number, number];
-          const attachmentPage = reciptform.createPage(pageSize);
-          const [attachmentPngImage, attachmentPngDims] = templateReciptForm.embedPNG(uint8attachment);
-          const scaled = scaleDims(attachmentPngDims.width, attachmentPngDims.height);
-
-          attachmentPage.addImageObject('attachment', attachmentPngImage);
-          const attachmentContentStream = templateReciptForm.createContentStream(
-            drawImage('attachment', {
-              x: 0,
-              y: 0,
-              width: scaled.width,
-              height: scaled.height,
-            })
-          );
-
-          attachmentPage.addContentStreams(templateReciptForm.register(attachmentContentStream));
-
-          reciptform.addPage(attachmentPage);
+          attachPNG(attachmentBytes, outputPDF);
           break;
         case 'application/pdf':
-          const pdf = PDFDocumentFactory.load(uint8attachment);
-          for (const pdfPage of pdf.getPages()) {
-            reciptform.addPage(pdfPage);
-          }
+          attachPDF(attachmentBytes, outputPDF);
           break;
         default:
           throw new Error('Unsupported file type supplied as attachment');
       }
     }
 
-    const pdfBytes = PDFDocumentWriter.saveToBytes(reciptform);
-
+    const pdfBytes = PDFDocumentWriter.saveToBytes(outputPDF);
     return pdfBytes;
   } catch (err) {
     if (err.code === 'ENOENT') {
