@@ -12,7 +12,7 @@ export const postReceipt = async (state: IState) => {
   const response = await post(receiptString);
   if (response) {
     if (response.body.data) {
-      const fileName = `Kvittering-${state.intent}-${getCurrentDateString()}`;
+      const fileName = `Kvittering-${state.intent}-${getCurrentDateString()}.png`;
       const pdfFile = await readDataUrlAsFile(response.body.data, fileName);
       if (pdfFile) {
         downloadFile(pdfFile);
