@@ -47,6 +47,7 @@ export const SignatureInput: FC<IProps> = ({ editClick }) => {
       placeholder="Trykk på pennen for å skrive inn signatur. Klikk på dette feltet, eller dra en fil hit for å laste opp"
       interacted={interacted}
       onBlur={setInteracted}
+      allowedTypes={['image/png']}
     />
   );
 };

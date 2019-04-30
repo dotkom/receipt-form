@@ -3,12 +3,12 @@
  * Reads a file as an ArrayBuffer.
  * @param {Blob} file File or data Blob to read data from.
  */
-export const readFileAsArrayBuffer = async (file: File | Blob) => {
+export const readFileAsBytes = async (file: File | Blob) => {
   /** Create a FileReader to use */
   const tempFileReader = new FileReader();
 
   /** Wrap FileReader methods in a Promise */
-  return new Promise<ArrayBuffer>((resolve, reject) => {
+  return new Promise<Uint8Array>((resolve, reject) => {
     /** Handle FileReader errors with a rejection */
     tempFileReader.onerror = () => {
       tempFileReader.abort();
@@ -23,7 +23,7 @@ export const readFileAsArrayBuffer = async (file: File | Blob) => {
         reject(new Error('Expected ArrayBuffer, got string'));
       } else {
         /** Resolve Promise with data if all goes well */
-        resolve(result || undefined);
+        resolve(result ? new Uint8Array(result) : undefined);
       }
     };
 

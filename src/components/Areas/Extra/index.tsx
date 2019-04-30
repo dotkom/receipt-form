@@ -62,10 +62,10 @@ export const ExtraInfo = () => {
       <FileSize />
       {!isValid && interacted && <WarningMessage>{VALIDATION_COUNT(errors.length)}</WarningMessage>}
       <SeparatedFieldSet>
-        <Button title="download" onClick={download}>
+        <Button title="Last ned PDF til egen maskin" onClick={download}>
           Last ned PDF
         </Button>
-        <Button title="send" onClick={send}>
+        <Button title="Denne funksjonaliteten er ikke ferdigstilt" onClick={send} disabled>
           Send til Bankom
         </Button>
       </SeparatedFieldSet>
