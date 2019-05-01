@@ -4,6 +4,7 @@ import express from 'express';
 import { IDeserializedState } from 'form/state';
 
 import { handler } from './handler';
+import { AUTH_FILE_PATH, getAuthFile } from './sendEmail';
 
 const PORT = 8081;
 const HOST = '0.0.0.0';
@@ -30,3 +31,11 @@ app.listen(Number(PORT), HOST || '', () => {
 
 /** Make sure it is possible to exist the application in in Docker */
 process.on('SIGINT', () => process.exit());
+
+/** Warn about missing Gsuite authentication file */
+getAuthFile().then((file) => {
+  if (!file) {
+    /* tslint:disable-next-line no-console */
+    console.warn(`Gsuite authentcation file at ${AUTH_FILE_PATH} was not found, or is incorrect.`);
+  }
+});

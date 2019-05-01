@@ -7,6 +7,7 @@ import { getIsValid, IValidation } from 'form/validation';
 import { pdfGenerator } from './generatePDF';
 
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
+import { sendEmail } from './sendEmail';
 
 export interface IResultMessage {
   statusCode: number;
@@ -42,7 +43,21 @@ export const VALIDATION_ERROR = (validation: IValidation[]): IResultMessage => (
 export const GENERIC_ERROR: IResultMessage = {
   statusCode: 400,
   body: {
-    message: 'Something went wrong during with the request',
+    message: 'Something went wrong with request',
+  },
+};
+
+export const EMAIL_SUCCESS_MESSAGE: IResultMessage = {
+  statusCode: 201,
+  body: {
+    message: 'Email was sent successfullt',
+  },
+};
+
+export const EMAIL_ERROR_MESSAGE: IResultMessage = {
+  statusCode: 500,
+  body: {
+    message: 'Something went wrong during the email transfer',
   },
 };
 
@@ -62,13 +77,18 @@ export const handler = async (data: IDeserializedState | null): Promise<IResultM
       const pdfBlob = new Blob([pdf]);
       const pdfFile = new File([pdfBlob], 'receipt.pdf', { type: 'application/pdf' });
       const pdfString = await readFileAsDataUrl(pdfFile);
-      return {
-        statusCode: 201, // Created
-        body: {
-          message: 'Created receipt as PDF',
-          data: pdfString,
-        },
-      };
+      if (state.mode === 'download') {
+        return {
+          statusCode: 201, // Created
+          body: {
+            message: 'Created receipt as PDF',
+            data: pdfString,
+          },
+        };
+      } else if (state.mode === 'email') {
+        const emailSuccess = await sendEmail(pdfString, state);
+        return emailSuccess ? EMAIL_SUCCESS_MESSAGE : EMAIL_ERROR_MESSAGE;
+      }
     } else {
       VALIDATION_ERROR(errors);
     }
