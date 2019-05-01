@@ -5,7 +5,7 @@ import { colors } from 'constants/colors';
 
 export interface IAreaProps {
   color?: string;
-  header: string;
+  header?: string;
 }
 
 const AreaContainer = styled.div`
@@ -25,12 +25,12 @@ const AreaHeader = styled.h2`
   color: ${colors.darkGray};
 `;
 
-export const Area: FC<IAreaProps> = (props) => {
+export const Area: FC<IAreaProps> = ({ color, header, children }) => {
   return (
-    <AreaContainer color={props.color}>
+    <AreaContainer color={color}>
       <AreaContent>
-        <AreaHeader>{props.header}</AreaHeader>
-        {props.children}
+        {header && <AreaHeader>{header}</AreaHeader>}
+        {children}
       </AreaContent>
     </AreaContainer>
   );
