@@ -14,6 +14,10 @@
 /src/**/*.js
 *.zip
 
+# Secrets
+/keys/*
+!keys/.gitkeep
+
 # misc
 .DS_Store
 .env.local
