@@ -33,7 +33,6 @@ export const AttachmentsInputs = () => {
 
   return (
     <>
-      <br />
       {state.attachments.map((attachment, i) => (
         <FileInput
           key={`Vedlegg ${i + 1}`}
