@@ -60,6 +60,17 @@ const createTransporter = async (): Promise<null | ReturnType<typeof nodemailer.
   }
 };
 
+const getformattedText = (form: NonNullableState) => `
+Type: [${form.type === 'card' ? 'Bankkort' : 'Utlegg'}]
+
+${form.fullname} har sendt inn skjema på ${form.amount} for:
+${form.intent}
+
+Ekstra informasjon:
+${form.comments}
+
+`;
+
 export const sendEmail = async (pdf: string, formData: IState): Promise<boolean> => {
   const form = formData as NonNullableState;
   const transporter = await createTransporter();
@@ -69,11 +80,11 @@ export const sendEmail = async (pdf: string, formData: IState): Promise<boolean>
         from: SENDER_EMAIL,
         to: DESTINATION_EMAIL,
         cc: form.email,
-        subject: `[Kvitteringsskjema] ${form.fullname} - ${form.intent}`,
-        text: `Kvitteringsskjema ligger vedlagt`,
+        subject: `[${form.committee.shortName}] ${form.intent} - ${form.fullname}`,
+        text: getformattedText(form),
         attachments: [
           {
-            filename: `Kvitteringsskjema-${form.fullname}-${form.intent}-${getCurrentDateString()}.pdf`,
+            filename: `[${getCurrentDateString()}]-${form.intent}-${form.amount}-kvitteringsskjema.pdf`,
             path: pdf,
           },
         ],
