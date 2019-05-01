@@ -65,7 +65,7 @@ export const ExtraInfo = () => {
         <Button title="Last ned PDF til egen maskin" onClick={download}>
           Last ned PDF
         </Button>
-        <Button title="Sende skjemaet direkte til Bankom" onClick={send}>
+        <Button title="Send skjemaet direkte til Bankom" onClick={send}>
           Send til Bankom
         </Button>
       </SeparatedFieldSet>

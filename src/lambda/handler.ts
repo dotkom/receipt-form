@@ -43,7 +43,7 @@ export const VALIDATION_ERROR = (validation: IValidation[]): IResultMessage => (
 export const GENERIC_ERROR: IResultMessage = {
   statusCode: 400,
   body: {
-    message: 'Something went wrong with request',
+    message: 'Something went wrong with the request',
   },
 };
 
