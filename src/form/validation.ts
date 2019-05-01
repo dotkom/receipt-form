@@ -136,6 +136,13 @@ export const STATE_VALIDATION: StateValidators = {
       validator: ({ attachments }) => attachments.reduce<number>((total, a) => total + a.size, 0) <= FILE_SIZE_MAX,
     },
   ],
+  mode: [
+    {
+      level: ValidationLevel.REQUIRED,
+      message: 'Du må velge et støttet innsendingsmodus',
+      validator: ({ mode }) => mode === 'email' || mode === 'download',
+    },
+  ],
 };
 
 export type ExcludeFunction = (state: IState) => keyof IState;
