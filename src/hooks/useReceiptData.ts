@@ -30,11 +30,10 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
         ...action.data,
       };
     case ActionType.DOWNLOAD:
-      postReceipt(state);
+      postReceipt({ ...state, mode: 'download' });
       return state;
     case ActionType.SEND:
-      // tslint:disable-next-line no-console
-      console.log('Send action called', state);
+      postReceipt({ ...state, mode: 'email' });
       return state;
     case ActionType.RESET:
       return INITIAL_STATE;

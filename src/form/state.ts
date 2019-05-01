@@ -4,6 +4,7 @@ import { readDataUrlAsFile2 } from 'utils/readDataUrlAsFile';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 
 export type ReceiptType = 'card' | 'deposit';
+export type SendMode = 'download' | 'email';
 
 export interface IState {
   fullname: string | null;
@@ -17,6 +18,7 @@ export interface IState {
   committee: ICommittee | null;
   comments: string | null;
   attachments: File[];
+  mode: SendMode;
 }
 
 export const INITIAL_STATE: IState = {
@@ -31,6 +33,7 @@ export const INITIAL_STATE: IState = {
   committee: null,
   comments: null,
   attachments: [],
+  mode: 'download',
 };
 
 export interface IDeserializedState {
@@ -49,6 +52,7 @@ export interface IDeserializedState {
   /** Files converted to a Base64 URI string for it to be sendable as JSON */
   signature: string;
   attachments: string[];
+  mode: SendMode;
 }
 
 export const deserializeReceipt = async (state: IState): Promise<IDeserializedState> => {
