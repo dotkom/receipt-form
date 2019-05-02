@@ -1,9 +1,10 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
 
 import { Button } from 'components/Button';
 import { SeparatedFieldSet } from 'components/FieldSet';
+import { Spinner } from 'components/Spinner';
 import { colors } from 'constants/colors';
 import { InteractionContext } from 'contexts/Interaction';
 import { ReceiptContext } from 'contexts/ReceiptData';
@@ -45,6 +46,16 @@ export const Submit = () => {
   const [interacted, setInteraction] = useState(false);
   const [response, setResponse] = useState<IResultMessage | null>(null);
 
+  const [downloadLoading, setDownloadLoading] = useState(false);
+  const [mailLoading, setMailLoading] = useState(false);
+  const loading = mailLoading || downloadLoading;
+
+  useEffect(() => {
+    if (loading) {
+      setResponse(null);
+    }
+  }, [loading]);
+
   const errors = Object.values(validation)
     .flat()
     .filter((val) => val.level === ValidationLevel.REQUIRED && !val.valid);
@@ -59,9 +70,11 @@ export const Submit = () => {
 
   const handleResponse = useMemo(
     () => (res: IResultMessage | null) => {
-      if (res) {
-        setResponse(res);
-      }
+      ReactDOM.unstable_batchedUpdates(() => {
+        setResponse(res || null);
+        setDownloadLoading(false);
+        setMailLoading(false);
+      });
     },
     []
   );
@@ -69,6 +82,7 @@ export const Submit = () => {
   const send = async () => {
     handleInteraction();
     if (isValid) {
+      setMailLoading(true);
       const res = await postReceipt({ ...state, mode: 'email' });
       handleResponse(res);
     }
@@ -77,9 +91,9 @@ export const Submit = () => {
   const download = async () => {
     handleInteraction();
     if (isValid) {
+      setDownloadLoading(true);
       const res = await postReceipt({ ...state, mode: 'download' });
       handleResponse(res);
-
       /** Response status 201, signifies 'Created' */
       if (res && res.statusCode === 201) {
         /** Intent cannot be null since, a valid form is required to get here */
@@ -92,11 +106,12 @@ export const Submit = () => {
     <>
       {!isValid && interacted && <WarningMessage>{VALIDATION_COUNT(errors.length)}</WarningMessage>}
       {!!response && <ResponseMessage response={response} />}
+      {loading && <Spinner />}
       <SeparatedFieldSet>
-        <Button title="Last ned PDF til egen maskin" onClick={download}>
+        <Button title="Last ned PDF til egen maskin" onClick={download} disabled={loading}>
           Last ned PDF
         </Button>
-        <Button title="Send skjemaet direkte til Bankom" onClick={send}>
+        <Button title="Send skjemaet direkte til Bankom" onClick={send} disabled={loading}>
           Send til Bankom
         </Button>
       </SeparatedFieldSet>
