@@ -50,7 +50,7 @@ export const GENERIC_ERROR: IResultMessage = {
 export const EMAIL_SUCCESS_MESSAGE: IResultMessage = {
   statusCode: 201,
   body: {
-    message: 'E-post har blitt sendt til Bankom, med deg på kopi. Takk for at du bruker digital kvitteringsskjema!',
+    message: 'E-post har blitt sendt til Bankom, med deg på kopi. Takk for at du bruker digitalt kvitteringsskjema!',
   },
 };
 
