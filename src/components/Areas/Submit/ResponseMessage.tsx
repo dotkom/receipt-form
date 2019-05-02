@@ -12,7 +12,7 @@ export interface IMessageProps {
   statusCode: number;
 }
 
-const GOOD_STATUS_CODES = [200, 201];
+const GOOD_STATUS_CODES = [200, 201, 418];
 const BAD_STATUS_CODES = [400, 401, 403, 404, 500, 501, 502, 503, 504];
 
 const getStatusCodeColor = (code: number) => {

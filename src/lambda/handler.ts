@@ -61,6 +61,13 @@ export const EMAIL_ERROR_MESSAGE: IResultMessage = {
   },
 };
 
+export const TEAPOT_SUCCESS: IResultMessage = {
+  statusCode: 418, // I'm a teapot
+  body: {
+    message: '🍵 Jeg er en tekanne 🍵',
+  },
+};
+
 export const DOWNLOAD_SUCCESS_MESSAGE = (data: string): IResultMessage => ({
   statusCode: 201, // Created
   body: {
@@ -90,6 +97,8 @@ export const handler = async (data: IDeserializedState | null): Promise<IResultM
       } else if (state.mode === 'email') {
         const emailSuccess = await sendEmail(pdfString, state);
         return emailSuccess ? EMAIL_SUCCESS_MESSAGE : EMAIL_ERROR_MESSAGE;
+      } else if (state.mode === 'teapot') {
+        return TEAPOT_SUCCESS;
       }
     } else {
       VALIDATION_ERROR(errors);
