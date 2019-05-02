@@ -40,7 +40,7 @@ export const UserInfo = () => {
         <SeparatedFieldSet>
           <LoginButton onClick={logIn}>
             <OwButtonLogo />
-            <ButtonText>LOGG INN</ButtonText>
+            <ButtonText>HENT BRUKERDATA</ButtonText>
           </LoginButton>
         </SeparatedFieldSet>
       </InfoFieldSet>
