@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { colors } from 'constants/colors';
 
 const LOGIN_TEXT = `
-  For å automatisk fylle hente inn navn og e-post kan du logge inn via Onlineweb.
+  For å automatisk hente inn navn og e-post kan du logge inn via Onlineweb.
   Denne informasjonen vil bare fylle ut feltene, og kan overskrives i etterkant.
 `;
 
