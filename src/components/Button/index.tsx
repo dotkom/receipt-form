@@ -17,6 +17,6 @@ export const Button = styled.button`
   }
 
   :disabled {
-    background: ${colors.figmaGray};
+    background: ${colors.darkGray};
   }
 `;

@@ -13,7 +13,7 @@ export const embedText = (form: NonNullableState, outputPDF: PDFDocument, page: 
     drawText(form.email, positionText(165, 599)),
     drawText(form.committee.name, positionText(165, 571)),
     drawText(getCurrentDateString(), positionText(441, 571)),
-    drawText(form.account, positionText(165, 527)),
+    drawText(form.type === 'card' ? form.cardDetails : form.account, positionText(165, 527)),
     drawText(String(form.amount), positionText(441, 527)),
     drawText(form.intent, positionText(165, 483)),
     drawText(form.type === 'deposit' ? 'X' : '', positionText(392, 483)),

@@ -4,7 +4,7 @@ import { readDataUrlAsFile2 } from 'utils/readDataUrlAsFile';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 
 export type ReceiptType = 'card' | 'deposit';
-export type SendMode = 'download' | 'email';
+export type SendMode = 'download' | 'email' | 'teapot';
 
 export interface IState {
   fullname: string | null;

@@ -2,7 +2,6 @@ import { Dispatch, Reducer, useEffect, useReducer, useState } from 'react';
 
 import { INITIAL_STATE, IState } from 'form/state';
 import { StateValidation, validate } from 'form/validation';
-import { postReceipt } from 'utils/postReceipt';
 
 export enum ActionType {
   CHANGE,
@@ -29,12 +28,6 @@ const receiptReducer: Reducer<IState, Actions> = (state, action) => {
         ...state,
         ...action.data,
       };
-    case ActionType.DOWNLOAD:
-      postReceipt({ ...state, mode: 'download' });
-      return state;
-    case ActionType.SEND:
-      postReceipt({ ...state, mode: 'email' });
-      return state;
     case ActionType.RESET:
       return INITIAL_STATE;
   }
