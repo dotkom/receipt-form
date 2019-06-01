@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { colors } from 'constants/colors';
 import { ReceiptContext } from 'contexts/ReceiptData';
+import { FILE_SIZE_MAX, FILE_SIZE_WARN } from 'form/validation';
 import { formatBytes } from 'utils/bytes';
 import { getTotalFileSize } from 'utils/getTotalFileSize';
 
@@ -17,20 +18,27 @@ const StatusText = styled.h3`
 `;
 
 const WarningText = styled(StatusText)`
-  color: ${colors.red};
+  color: ${colors.orange};
 `;
 
-const MAX_SIZE = 19 * 1024 * 1024; // 19 MB
+const ErrorText = styled(StatusText)`
+  color: ${colors.red};
+`;
 
 export const FileSize = () => {
   const { state } = useContext(ReceiptContext);
   const totalSize = getTotalFileSize(state);
   const sizeText = formatBytes(totalSize);
+  const sizeTextMax = formatBytes(FILE_SIZE_MAX);
 
   return (
     <StatusContainer>
-      {totalSize >= MAX_SIZE ? (
-        <WarningText>{`Opplastede filer overgår tillat størrelse: ${sizeText} / ${formatBytes(MAX_SIZE)}`}</WarningText>
+      {totalSize >= FILE_SIZE_WARN ? (
+        totalSize >= FILE_SIZE_MAX ? (
+          <ErrorText>{`Opplastede filer overgår tillat størrelse: ${sizeText} / ${sizeTextMax}`}</ErrorText>
+        ) : (
+          <WarningText>{`Total størrelse på opplastede filer nærmer seg begrensningen: ${sizeText} / ${sizeTextMax}`}</WarningText>
+        )
       ) : null}
     </StatusContainer>
   );
