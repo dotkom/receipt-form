@@ -4,7 +4,7 @@ import { DESTINATION_EMAIL, SENDER_EMAIL } from 'constants/mail';
 import { IState } from 'form/state';
 
 import { NonNullableState } from './generatePDF';
-import { getCurrentDateString } from './tools/date';
+import { getFileName, getFormattedText } from './tools/format';
 import { readFileAsync } from './tools/readFileAsync';
 
 export interface IGoogleAuthFile {
@@ -60,17 +60,6 @@ const createTransporter = async (): Promise<null | ReturnType<typeof nodemailer.
   }
 };
 
-const getFormattedText = (form: NonNullableState) => `
-Type: [${form.type === 'card' ? 'Bankkort' : 'Utlegg'}]
-
-${form.fullname} har sendt inn skjema på ${form.amount} kr for:
-${form.intent}
-
-Ekstra informasjon:
-${form.comments}
-
-`;
-
 export const sendEmail = async (pdf: string, formData: IState): Promise<boolean> => {
   const form = formData as NonNullableState;
   const transporter = await createTransporter();
@@ -80,11 +69,12 @@ export const sendEmail = async (pdf: string, formData: IState): Promise<boolean>
         from: SENDER_EMAIL,
         to: DESTINATION_EMAIL,
         cc: form.email,
+        replyTo: form.email,
         subject: `[${form.committee.shortName}] ${form.intent} - ${form.fullname}`,
         text: getFormattedText(form),
         attachments: [
           {
-            filename: `[${getCurrentDateString()}]-${form.intent}-${form.amount}-kvitteringsskjema.pdf`,
+            filename: getFileName(form),
             path: pdf,
           },
         ],

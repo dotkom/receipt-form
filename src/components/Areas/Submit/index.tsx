@@ -10,8 +10,9 @@ import { InteractionContext } from 'contexts/Interaction';
 import { ReceiptContext } from 'contexts/ReceiptData';
 import { interactAll } from 'form/interaction';
 import { ValidationLevel } from 'form/validation';
+import { NonNullableState } from 'lambda/generatePDF';
 import { IResultMessage } from 'lambda/handler';
-import { getCurrentDateString } from 'lambda/tools/date';
+import { getFileName } from 'lambda/tools/format';
 import { downloadFile } from 'utils/download';
 import { postReceipt } from 'utils/postReceipt';
 import { readDataUrlAsFile } from 'utils/readDataUrlAsFile';
@@ -28,10 +29,11 @@ const WarningMessage = styled.h3`
   color: ${colors.red};
 `;
 
-const handleDownload = async (response: IResultMessage, intent: string) => {
+const handleDownload = async (response: IResultMessage, state: NonNullableState) => {
   /** Just make sure it exists, because the server may not return our pre-defined format, e.g. NGINX */
   if (response && response.body && response.body.data) {
-    const fileName = `Kvittering-${intent}-${getCurrentDateString()}.pdf`;
+    /** Use the same filename that would be generated when sending a mail */
+    const fileName = getFileName(state);
     const pdfFile = await readDataUrlAsFile(response.body.data, fileName);
     if (pdfFile) {
       downloadFile(pdfFile);
@@ -96,8 +98,8 @@ export const Submit = () => {
       handleResponse(res);
       /** Response status 201, signifies 'Created' */
       if (res && res.statusCode === 201) {
-        /** Intent cannot be null since, a valid form is required to get here */
-        handleDownload(res, state.intent || 'error');
+        /** Intent cannot be null since a valid form is required to get here. Let us just hope that is true :) */
+        handleDownload(res, state as NonNullableState);
       }
     }
   };

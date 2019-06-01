@@ -3,6 +3,7 @@ import { drawImage, drawLinesOfText, drawText, PDFDocument, PDFPage } from 'pdf-
 import { readFileAsBytes } from 'utils/readFileAsBytes';
 import { NonNullableState } from '../generatePDF';
 import { getCurrentDateString } from './date';
+import { formatAmount } from './format';
 import { scaleDims } from './scale';
 import { createMultiLine, positionText } from './text';
 
@@ -14,7 +15,7 @@ export const embedText = (form: NonNullableState, outputPDF: PDFDocument, page: 
     drawText(form.committee.name, positionText(165, 571)),
     drawText(getCurrentDateString(), positionText(441, 571)),
     drawText(form.type === 'card' ? form.cardDetails : form.account, positionText(165, 527)),
-    drawText(String(form.amount), positionText(441, 527)),
+    drawText(`${formatAmount(form.amount)} kr`, positionText(441, 527)),
     drawText(form.intent, positionText(165, 483)),
     drawText(form.type === 'deposit' ? 'X' : '', positionText(392, 483)),
     drawText(form.type === 'card' ? 'X' : '', positionText(392, 466)),
