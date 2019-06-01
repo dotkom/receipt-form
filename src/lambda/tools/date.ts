@@ -1,4 +1,5 @@
 export const getCurrentDateString = () => {
-  const date = new Date();
-  return `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+  const date = new Date(Date.now());
+  const [dateString] = date.toISOString().split('T');
+  return `${dateString}`;
 };
