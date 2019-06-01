@@ -1,4 +1,5 @@
 import { COMMITTEES } from 'models/comittees';
+import { formatBytes } from 'utils/bytes';
 
 import { IState } from './state';
 
@@ -110,12 +111,12 @@ export const STATE_VALIDATION: StateValidators = {
     },
     {
       level: ValidationLevel.WARNING,
-      message: 'Det er ikke anbefalt å legge ved filer på over 10 MB',
+      message: `Det er ikke anbefalt å legge ved filer på over ${formatBytes(FILE_SIZE_WARN)}`,
       validator: ({ signature }) => (signature !== null ? signature.size <= FILE_SIZE_WARN : true),
     },
     {
       level: ValidationLevel.REQUIRED,
-      message: 'Det er ikke mulig å legge ved enkeltfiler på over 18.9 MB',
+      message: `Det er ikke tillat å legge ved filer på over ${formatBytes(FILE_SIZE_MAX)}`,
       validator: ({ signature }) => (signature !== null ? signature.size <= FILE_SIZE_MAX : true),
     },
   ],
@@ -127,13 +128,16 @@ export const STATE_VALIDATION: StateValidators = {
     },
     {
       level: ValidationLevel.WARNING,
-      message: 'Det er ikke anbefalt å legge ved filer på over 10 MB',
-      validator: ({ attachments }) => attachments.reduce<number>((total, a) => total + a.size, 0) <= FILE_SIZE_WARN,
+      message: `Det er ikke anbefalt å legge ved filer på over ${formatBytes(FILE_SIZE_WARN)}`,
+      validator: ({ attachments, signature }) =>
+        attachments.reduce<number>((total, a) => total + a.size, 0) + (signature ? signature.size : 0) <=
+        FILE_SIZE_WARN,
     },
     {
       level: ValidationLevel.REQUIRED,
-      message: 'Det er ikke mulig å legge ved filer på over 18.9 MB',
-      validator: ({ attachments }) => attachments.reduce<number>((total, a) => total + a.size, 0) <= FILE_SIZE_MAX,
+      message: `Det er ikke tillat å legge ved filer på over ${formatBytes(FILE_SIZE_MAX)}`,
+      validator: ({ attachments, signature }) =>
+        attachments.reduce<number>((total, a) => total + a.size, 0) + (signature ? signature.size : 0) <= FILE_SIZE_MAX,
     },
   ],
   mode: [
