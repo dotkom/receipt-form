@@ -106,4 +106,10 @@ export const COMMITTEES: ICommittee[] = [
     name: 'Onlinepotten',
     email: 'hovedstyret@online.ntnu.no',
   },
+  {
+    shortName: 'Fondstyret',
+    group: 'Fond',
+    name: 'Fondstyret',
+    email: 'fond@online.ntnu.no',
+  },
 ];

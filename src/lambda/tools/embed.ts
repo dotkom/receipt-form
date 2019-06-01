@@ -18,7 +18,7 @@ export const embedText = (form: NonNullableState, outputPDF: PDFDocument, page: 
     drawText(form.intent, positionText(165, 483)),
     drawText(form.type === 'deposit' ? 'X' : '', positionText(392, 483)),
     drawText(form.type === 'card' ? 'X' : '', positionText(392, 466)),
-    drawLinesOfText(createMultiLine(form.comments), positionText(165, 440))
+    drawLinesOfText(createMultiLine(form.comments || ''), positionText(165, 440))
   );
 
   page.addContentStreams(outputPDF.register(formContentStream));

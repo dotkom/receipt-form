@@ -1,4 +1,5 @@
 import { COMMITTEES } from 'models/comittees';
+import { formatBytes } from 'utils/bytes';
 
 import { IState } from './state';
 
@@ -25,12 +26,12 @@ export type StateValidation = { [K in keyof IState]: IValidation[] };
 
 export type StateValidators = { [K in keyof IState]: IValidator[] };
 
-const ACCOUNT_NUMBER_REGEX = new RegExp(/^\d{4}\ \d{2}\ \d{5}$/);
-const COMMITTEE_EMAIL_REGEX = new RegExp(/^.{2,50}@online\.ntnu\.no$/);
-const EMAIL_REGEX = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
-const CARD_DETAIL_REGEX = new RegExp(/^.{5,30}$/);
-const FILE_SIZE_WARN = 10 * 1024 * 1024; // 10 MB
-const FILE_SIZE_MAX = 18.9 * 1024 * 1024; // 18.9 MB
+export const ACCOUNT_NUMBER_REGEX = new RegExp(/^\d{4}\ \d{2}\ \d{5}$/);
+export const COMMITTEE_EMAIL_REGEX = new RegExp(/^.{2,50}@online\.ntnu\.no$/);
+export const EMAIL_REGEX = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
+export const CARD_DETAIL_REGEX = new RegExp(/^.{5,30}$/);
+export const FILE_SIZE_WARN = 7 * 1024 * 1024; // 7 MB
+export const FILE_SIZE_MAX = 9 * 1024 * 1024; // 9 MB
 
 export const STATE_VALIDATION: StateValidators = {
   fullname: [
@@ -110,12 +111,12 @@ export const STATE_VALIDATION: StateValidators = {
     },
     {
       level: ValidationLevel.WARNING,
-      message: 'Det er ikke anbefalt å legge ved filer på over 10 MB',
+      message: `Det er ikke anbefalt å legge ved filer på over ${formatBytes(FILE_SIZE_WARN)}`,
       validator: ({ signature }) => (signature !== null ? signature.size <= FILE_SIZE_WARN : true),
     },
     {
       level: ValidationLevel.REQUIRED,
-      message: 'Det er ikke mulig å legge ved enkeltfiler på over 18.9 MB',
+      message: `Det er ikke tillat å legge ved filer på over ${formatBytes(FILE_SIZE_MAX)}`,
       validator: ({ signature }) => (signature !== null ? signature.size <= FILE_SIZE_MAX : true),
     },
   ],
@@ -127,13 +128,16 @@ export const STATE_VALIDATION: StateValidators = {
     },
     {
       level: ValidationLevel.WARNING,
-      message: 'Det er ikke anbefalt å legge ved filer på over 10 MB',
-      validator: ({ attachments }) => attachments.reduce<number>((total, a) => total + a.size, 0) <= FILE_SIZE_WARN,
+      message: `Det er ikke anbefalt å legge ved filer på over ${formatBytes(FILE_SIZE_WARN)}`,
+      validator: ({ attachments, signature }) =>
+        attachments.reduce<number>((total, a) => total + a.size, 0) + (signature ? signature.size : 0) <=
+        FILE_SIZE_WARN,
     },
     {
       level: ValidationLevel.REQUIRED,
-      message: 'Det er ikke mulig å legge ved filer på over 18.9 MB',
-      validator: ({ attachments }) => attachments.reduce<number>((total, a) => total + a.size, 0) <= FILE_SIZE_MAX,
+      message: `Det er ikke tillat å legge ved filer på over ${formatBytes(FILE_SIZE_MAX)}`,
+      validator: ({ attachments, signature }) =>
+        attachments.reduce<number>((total, a) => total + a.size, 0) + (signature ? signature.size : 0) <= FILE_SIZE_MAX,
     },
   ],
   mode: [
