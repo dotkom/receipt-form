@@ -60,10 +60,10 @@ const createTransporter = async (): Promise<null | ReturnType<typeof nodemailer.
   }
 };
 
-const getformattedText = (form: NonNullableState) => `
+const getFormattedText = (form: NonNullableState) => `
 Type: [${form.type === 'card' ? 'Bankkort' : 'Utlegg'}]
 
-${form.fullname} har sendt inn skjema på ${form.amount} for:
+${form.fullname} har sendt inn skjema på ${form.amount} kr for:
 ${form.intent}
 
 Ekstra informasjon:
@@ -81,7 +81,7 @@ export const sendEmail = async (pdf: string, formData: IState): Promise<boolean>
         to: DESTINATION_EMAIL,
         cc: form.email,
         subject: `[${form.committee.shortName}] ${form.intent} - ${form.fullname}`,
-        text: getformattedText(form),
+        text: getFormattedText(form),
         attachments: [
           {
             filename: `[${getCurrentDateString()}]-${form.intent}-${form.amount}-kvitteringsskjema.pdf`,
