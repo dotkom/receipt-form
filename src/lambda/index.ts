@@ -1,15 +1,26 @@
+import * as Sentry from '@sentry/node';
 import bodyParser from 'body-parser';
 import express from 'express';
+import SourceMapSupport from 'source-map-support';
 
+import { SENTRY_DSN } from 'constants/sentry';
 import { IDeserializedState } from 'form/state';
 
 import { handler } from './handler';
 import { AUTH_FILE_PATH, getAuthFile } from './sendEmail';
 
+/* Install support for using TypeScript source maps in the back-end */
+SourceMapSupport.install();
+
 const PORT = 8081;
 const HOST = '0.0.0.0';
 
 const app = express();
+
+/* Init Sentry error handling for the server */
+Sentry.init({ dsn: SENTRY_DSN });
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.errorHandler());
 
 app.use(bodyParser.json({ limit: '25MB' }));
 
