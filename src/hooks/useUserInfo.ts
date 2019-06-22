@@ -126,7 +126,7 @@ export const useUserInfo = () => {
 
   useEffect(() => {
     catchCallback();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { logIn };
 };

@@ -26,7 +26,7 @@ export type StateValidation = { [K in keyof IState]: IValidation[] };
 
 export type StateValidators = { [K in keyof IState]: IValidator[] };
 
-export const ACCOUNT_NUMBER_REGEX = new RegExp(/^\d{4}\ \d{2}\ \d{5}$/);
+export const ACCOUNT_NUMBER_REGEX = new RegExp(/^\d{4} \d{2} \d{5}$/);
 export const COMMITTEE_EMAIL_REGEX = new RegExp(/^.{2,50}@online\.ntnu\.no$/);
 export const EMAIL_REGEX = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 export const CARD_DETAIL_REGEX = new RegExp(/^.{5,30}$/);
