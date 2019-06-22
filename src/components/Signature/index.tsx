@@ -73,15 +73,17 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
 
   useEffect(() => {
     createSignaturePad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasRef.current, canvasRef]);
 
   useEffect(() => {
     resizeCanvas();
-  }, [signaturePad]);
+  }, [signaturePad]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     window.addEventListener('resize', resizeCanvas);
     return () => window.removeEventListener('resize', resizeCanvas);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canvasRef.current, canvasRef, signaturePad]);
 
   return (

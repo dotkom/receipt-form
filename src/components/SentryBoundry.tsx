@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser';
-import { Component, ErrorInfo, FC } from 'react';
+import React, { Component, ErrorInfo, FC } from 'react';
 import styled from 'styled-components';
 
 import { colors } from 'constants/colors';

@@ -69,7 +69,7 @@ export const useReceiptData = (): ReceiptData => {
     } else {
       replaceTrigger();
     }
-  }, [state]);
+  }, [state]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return [state, dispatch, validation];
 };

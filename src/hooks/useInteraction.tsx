@@ -7,5 +7,6 @@ export const useInteraction = (field: keyof FieldInteractions) => {
   const { setInteracted: set, interaction, ...rest } = useContext(InteractionContext);
   const setInteracted = () => set(field);
   const interacted = interaction[field];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return useMemo(() => ({ ...rest, interacted, setInteracted }), [field, interaction]);
 };
