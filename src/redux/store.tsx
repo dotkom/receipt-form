@@ -7,13 +7,17 @@ import { formValidatorMiddleware } from './middleware/validationMiddleware';
 import { rootReducer } from './reducers';
 import { Action, State } from './types';
 
+const reduxDevToolsHook = window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : (x: any) => x; // tslint:disable-line no-any
+
+const thunkMiddleware = thunk as ThunkMiddleware<State, Action>;
+
 export const initStore = (initialState?: State) =>
   createStore(
     rootReducer,
     initialState,
     compose(
-      applyMiddleware(thunk as ThunkMiddleware<State, Action>, formValidatorMiddleware),
-      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+      applyMiddleware(thunkMiddleware, formValidatorMiddleware),
+      reduxDevToolsHook
     )
   );
 
