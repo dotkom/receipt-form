@@ -1,12 +1,21 @@
-import { useContext, useMemo } from 'react';
+import { useCallback } from 'react';
 
-import { InteractionContext } from 'contexts/Interaction';
 import { FieldInteractions } from 'form/interaction';
+import { useDispatch, useSelector } from 'redux/hooks';
+import { ActionType } from 'redux/reducers/interactionReducer';
 
 export const useInteraction = (field: keyof FieldInteractions) => {
-  const { setInteracted: set, interaction, ...rest } = useContext(InteractionContext);
-  const setInteracted = () => set(field);
-  const interacted = interaction[field];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useMemo(() => ({ ...rest, interacted, setInteracted }), [field, interaction]);
+  const dispatch = useDispatch();
+  const interacted = useSelector((state) => state.interaction[field]);
+
+  const setInteracted = useCallback(() => {
+    dispatch({
+      type: ActionType.SET_INTERACTED,
+      data: {
+        [field]: true,
+      },
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return { interacted, setInteracted };
 };
