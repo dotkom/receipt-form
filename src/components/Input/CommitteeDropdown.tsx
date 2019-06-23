@@ -1,11 +1,11 @@
-import React, { ChangeEvent, FC, useContext } from 'react';
+import React, { ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
 
-import { ReceiptContext } from 'contexts/ReceiptData';
 import { useInteraction } from 'hooks/useInteraction';
-import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
 import { COMMITTEES } from 'models/comittees';
+import { useDispatch } from 'redux/hooks';
+import { ActionType } from 'redux/reducers/formReducer';
 
 import { Label } from './Base';
 import { Select } from './Dropdown';
@@ -21,7 +21,7 @@ const SelectContainer = styled.div`
 `;
 
 export const CommitteeDropdown: FC = () => {
-  const { dispatch } = useContext(ReceiptContext);
+  const dispatch = useDispatch();
   const { interacted, setInteracted } = useInteraction('committee');
   const { validation, level } = useValidation('committee');
 

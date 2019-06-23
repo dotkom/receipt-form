@@ -1,10 +1,10 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 
-import { ReceiptContext } from 'contexts/ReceiptData';
 import { IState } from 'form/state';
 import { useInteraction } from 'hooks/useInteraction';
-import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
+import { useDispatch, useSelector } from 'redux/hooks';
+import { ActionType } from 'redux/reducers/formReducer';
 
 import { Input } from './Base';
 
@@ -15,7 +15,8 @@ export interface IProps {
 }
 
 export const ReceiptNumberField: FC<IProps> = ({ field, ...props }) => {
-  const { state, dispatch } = useContext(ReceiptContext);
+  const dispatch = useDispatch();
+  const value = useSelector((state) => state.form[field]);
 
   const change = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({
@@ -26,7 +27,6 @@ export const ReceiptNumberField: FC<IProps> = ({ field, ...props }) => {
     });
   };
 
-  const value = state[field];
   if (!!value && typeof value !== 'number') {
     throw new Error('ReceiptTextField supplied field value is not a number');
   }
