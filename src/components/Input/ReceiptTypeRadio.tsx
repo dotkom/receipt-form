@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React, { FC } from 'react';
 
-import { ReceiptContext } from 'contexts/ReceiptData';
 import { ReceiptType } from 'form/state';
-import { ActionType } from 'hooks/useReceiptData';
+import { useDispatch, useSelector } from 'redux/hooks';
+import { ActionType } from 'redux/reducers/formReducer';
 
 import { RadioButton } from './RadioButton';
 
@@ -12,8 +12,9 @@ export interface IProps {
   tooltip: string;
 }
 
-export const ReceiptTypeRadio = (props: IProps) => {
-  const { state, dispatch } = useContext(ReceiptContext);
+export const ReceiptTypeRadio: FC<IProps> = (props) => {
+  const dispatch = useDispatch();
+  const type = useSelector((state) => state.form.type);
 
   const handleClick = () => {
     dispatch({
@@ -22,6 +23,6 @@ export const ReceiptTypeRadio = (props: IProps) => {
     });
   };
 
-  const checked = state.type === props.value;
+  const checked = type === props.value;
   return <RadioButton checked={checked} onClick={handleClick} onChange={handleClick} {...props} />;
 };

@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { colors } from 'constants/colors';
-import { ReceiptContext } from 'contexts/ReceiptData';
 import { FILE_SIZE_MAX, FILE_SIZE_WARN } from 'form/validation';
+import { useSelector } from 'redux/hooks';
 import { formatBytes } from 'utils/bytes';
 import { getTotalFileSize } from 'utils/getTotalFileSize';
 
@@ -26,8 +26,7 @@ const ErrorText = styled(StatusText)`
 `;
 
 export const FileSize = () => {
-  const { state } = useContext(ReceiptContext);
-  const totalSize = getTotalFileSize(state);
+  const totalSize = useSelector((state) => getTotalFileSize(state.form));
   const sizeText = formatBytes(totalSize);
   const sizeTextMax = formatBytes(FILE_SIZE_MAX);
 

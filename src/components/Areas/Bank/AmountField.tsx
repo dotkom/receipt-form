@@ -1,11 +1,12 @@
-import React, { ChangeEvent, useContext } from 'react';
+import React, { ChangeEvent } from 'react';
 
 import { Input } from 'components/Input';
-import { ReceiptContext } from 'contexts/ReceiptData';
-import { ActionType } from 'hooks/useReceiptData';
+import { useDispatch, useSelector } from 'redux/hooks';
+import { ActionType } from 'redux/reducers/formReducer';
 
 export const AmountField = () => {
-  const { state, dispatch } = useContext(ReceiptContext);
+  const dispatch = useDispatch();
+  const amount = useSelector((state) => state.form.amount);
 
   const change = (event: ChangeEvent<HTMLInputElement>) => {
     dispatch({
@@ -16,5 +17,5 @@ export const AmountField = () => {
     });
   };
 
-  return <Input label="Beløp" type="number" value={state.amount || 0} onChange={change} />;
+  return <Input label="Beløp" type="number" value={amount || 0} onChange={change} />;
 };

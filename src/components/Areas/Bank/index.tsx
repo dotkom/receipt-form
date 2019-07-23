@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { FieldSet } from 'components/FieldSet';
@@ -6,7 +6,7 @@ import { CommitteeDropdown } from 'components/Input/CommitteeDropdown';
 import { ReceiptNumberField } from 'components/Input/ReceiptNumberField';
 import { ReceiptTextField } from 'components/Input/ReceiptTextField';
 import { ReceiptTypeRadio } from 'components/Input/ReceiptTypeRadio';
-import { ReceiptContext } from 'contexts/ReceiptData';
+import { useSelector } from 'redux/hooks';
 
 import { AccountField } from './AccountField';
 
@@ -31,8 +31,7 @@ const ContentFieldSet = styled.div`
 `;
 
 export const BankInfo = () => {
-  const { state } = useContext(ReceiptContext);
-
+  const type = useSelector((state) => state.form.type);
   return (
     <>
       <ContentFieldSet>
@@ -48,8 +47,8 @@ export const BankInfo = () => {
         </div>
       </ContentFieldSet>
       <FieldSet>
-        {state.type === 'deposit' && <AccountField />}
-        {state.type === 'card' && (
+        {type === 'deposit' && <AccountField />}
+        {type === 'card' && (
           <ReceiptTextField
             field="cardDetails"
             label="Kortinformasjon"

@@ -1,18 +1,24 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 
 import { Edit } from 'components/Icons/Edit';
 import { FileInput } from 'components/Input';
-import { ReceiptContext } from 'contexts/ReceiptData';
 import { useInteraction } from 'hooks/useInteraction';
-import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
+import { useDispatch, useSelector } from 'redux/hooks';
+import { ActionType } from 'redux/reducers/formReducer';
+import { isFileEqual } from 'utils/file';
 
 export interface IProps {
   editClick: () => void;
 }
 
+const isSignatureEqual = (prev: File | null, next: File | null) => {
+  return prev === next || (prev && next ? isFileEqual(prev, next) : false);
+};
+
 export const SignatureInput: FC<IProps> = ({ editClick }) => {
-  const { state, dispatch } = useContext(ReceiptContext);
+  const dispatch = useDispatch();
+  const signature = useSelector((state) => state.form.signature, isSignatureEqual);
 
   const removeFile = () => {
     dispatch({
@@ -40,7 +46,7 @@ export const SignatureInput: FC<IProps> = ({ editClick }) => {
       label="Signatur"
       onUpload={handleFileChange}
       onRemove={removeFile}
-      file={state.signature || undefined}
+      file={signature || undefined}
       validation={validation}
       validationLevel={level}
       buttons={<Edit onClick={editClick} title="Tegn signatur" />}

@@ -1,15 +1,15 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
 
 import { Signature } from 'components/Signature';
-import { ReceiptContext } from 'contexts/ReceiptData';
-import { ActionType } from 'hooks/useReceiptData';
+import { useDispatch } from 'redux/hooks';
+import { ActionType } from 'redux/reducers/formReducer';
 
 export interface IProps {
   editClick: () => void;
 }
 
 export const CreateSignature: FC<IProps> = ({ editClick }) => {
-  const { dispatch } = useContext(ReceiptContext);
+  const dispatch = useDispatch();
 
   const onSave = (signature: File) => {
     dispatch({

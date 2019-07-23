@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
-import { Interaction } from 'contexts/Interaction';
-import { ReceiptData } from 'contexts/ReceiptData';
+import { StoreProvider } from 'redux/store';
+
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Main } from './components/Main';
@@ -13,23 +13,15 @@ const AppStyle = styled.div`
   height: 100vh;
 `;
 
-const Contexts: FC = ({ children }) => {
+export const App: FC = () => {
   return (
-    <Interaction>
-      <ReceiptData>{children}</ReceiptData>
-    </Interaction>
-  );
-};
-
-export const App = () => {
-  return (
-    <Contexts>
+    <StoreProvider>
       <AppStyle>
         <Header />
         <Main />
         <Footer />
       </AppStyle>
-    </Contexts>
+    </StoreProvider>
   );
 };
 

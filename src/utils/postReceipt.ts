@@ -12,7 +12,7 @@ export const postReceipt = async (state: IState) => {
 const FETCH_ERROR: IResultMessage = {
   statusCode: 500,
   body: {
-    message: 'Det var ikke mulig å oprette kontakt med serveren, ta kontakt med Dotkom.',
+    message: 'Det var ikke mulig å opprette kontakt med serveren, ta kontakt med Dotkom.',
   },
 };
 

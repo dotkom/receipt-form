@@ -1,21 +1,17 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useEffect, useState } from 'react';
+import { batch } from 'react-redux';
 import styled from 'styled-components';
 
 import { Button } from 'components/Button';
 import { SeparatedFieldSet } from 'components/FieldSet';
 import { Spinner } from 'components/Spinner';
 import { colors } from 'constants/colors';
-import { InteractionContext } from 'contexts/Interaction';
-import { ReceiptContext } from 'contexts/ReceiptData';
-import { interactAll } from 'form/interaction';
 import { ValidationLevel } from 'form/validation';
-import { NonNullableState } from 'lambda/generatePDF';
-import { IResultMessage } from 'lambda/handler';
-import { getFileName } from 'lambda/tools/format';
-import { downloadFile } from 'utils/download';
-import { postReceipt } from 'utils/postReceipt';
-import { readDataUrlAsFile } from 'utils/readDataUrlAsFile';
+import { downloadFormAction, emailFormAction } from 'redux/actions/submitActions';
+import { useDispatch, useSelector, useThunk } from 'redux/hooks';
+import { ActionType as InteractionActionType } from 'redux/reducers/interactionReducer';
+import { ActionType as StatusActionType } from 'redux/reducers/statusReducer';
+import { State } from 'redux/types';
 
 import { ResponseMessage } from './ResponseMessage';
 
@@ -29,84 +25,56 @@ const WarningMessage = styled.h3`
   color: ${colors.red};
 `;
 
-const handleDownload = async (response: IResultMessage, state: NonNullableState) => {
-  /** Just make sure it exists, because the server may not return our pre-defined format, e.g. NGINX */
-  if (response && response.body && response.body.data) {
-    /** Use the same filename that would be generated when sending a mail */
-    const fileName = getFileName(state);
-    const pdfFile = await readDataUrlAsFile(response.body.data, fileName);
-    if (pdfFile) {
-      downloadFile(pdfFile);
-    }
-  }
+const selectErrorCount = (state: State): number => {
+  const errors = Object.values(state.validation)
+    .flat()
+    .filter((val) => val.level === ValidationLevel.REQUIRED && !val.valid);
+  return errors.length;
 };
 
 export const Submit = () => {
-  const { validation, state } = useContext(ReceiptContext);
-  const { updateInteraction } = useContext(InteractionContext);
+  const dispatch = useDispatch();
+  const errorCount = useSelector(selectErrorCount);
+  const isValid = errorCount === 0;
+  const downloadLoading = useSelector((state) => state.status.isDownloading);
+  const mailLoading = useSelector((state) => state.status.isDownloading);
+  const response = useSelector((state) => state.status.responseMessage);
+  const loading = mailLoading || downloadLoading;
+  const initDownload = useThunk(downloadFormAction());
+  const initSendMail = useThunk(emailFormAction());
 
   const [interacted, setInteraction] = useState(false);
-  const [response, setResponse] = useState<IResultMessage | null>(null);
-
-  const [downloadLoading, setDownloadLoading] = useState(false);
-  const [mailLoading, setMailLoading] = useState(false);
-  const loading = mailLoading || downloadLoading;
 
   useEffect(() => {
     if (loading) {
-      setResponse(null);
+      dispatch({ type: StatusActionType.SET_RESPONSE_MESSAGE, data: null });
     }
-  }, [loading]);
-
-  const errors = Object.values(validation)
-    .flat()
-    .filter((val) => val.level === ValidationLevel.REQUIRED && !val.valid);
-  const isValid = errors.length === 0;
+  }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInteraction = () => {
-    ReactDOM.unstable_batchedUpdates(() => {
-      updateInteraction(interactAll());
+    batch(() => {
+      dispatch({ type: InteractionActionType.SET_ALL_INTERACTED });
       setInteraction(true);
     });
   };
 
-  const handleResponse = useMemo(
-    () => (res: IResultMessage | null) => {
-      ReactDOM.unstable_batchedUpdates(() => {
-        setResponse(res || null);
-        setDownloadLoading(false);
-        setMailLoading(false);
-      });
-    },
-    []
-  );
-
   const send = async () => {
     handleInteraction();
     if (isValid) {
-      setMailLoading(true);
-      const res = await postReceipt({ ...state, mode: 'email' });
-      handleResponse(res);
+      initDownload();
     }
   };
 
   const download = async () => {
     handleInteraction();
     if (isValid) {
-      setDownloadLoading(true);
-      const res = await postReceipt({ ...state, mode: 'download' });
-      handleResponse(res);
-      /** Response status 201, signifies 'Created' */
-      if (res && res.statusCode === 201) {
-        /** Intent cannot be null since a valid form is required to get here. Let us just hope that is true :) */
-        handleDownload(res, state as NonNullableState);
-      }
+      initSendMail();
     }
   };
 
   return (
     <>
-      {!isValid && interacted && <WarningMessage>{VALIDATION_COUNT(errors.length)}</WarningMessage>}
+      {!isValid && interacted && <WarningMessage>{VALIDATION_COUNT(errorCount)}</WarningMessage>}
       {!!response && <ResponseMessage response={response} />}
       {loading && <Spinner />}
       <SeparatedFieldSet>

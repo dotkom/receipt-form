@@ -1,39 +1,41 @@
-import React, { useContext } from 'react';
+import React, { FC } from 'react';
 
 import { FileInput } from 'components/Input';
-import { ReceiptContext } from 'contexts/ReceiptData';
 import { useInteraction } from 'hooks/useInteraction';
-import { ActionType } from 'hooks/useReceiptData';
 import { useValidation } from 'hooks/useValidation';
+import { useDispatch, useSelector } from 'redux/hooks';
+import { ActionType } from 'redux/reducers/formReducer';
+import { areFilesEqual } from 'utils/file';
 
-export const AttachmentsInputs = () => {
-  const { state, dispatch } = useContext(ReceiptContext);
+export const AttachmentsInputs: FC = () => {
+  const dispatch = useDispatch();
+  const attachments = useSelector((state) => state.form.attachments, areFilesEqual);
   const { interacted, setInteracted } = useInteraction('attachments');
   const { validation, level } = useValidation('attachments');
 
   const removeFile = (index: number) => {
-    const attachments = state.attachments.filter((_, i) => i !== index);
+    const newAttachments = attachments.filter((_, i) => i !== index);
     dispatch({
       type: ActionType.CHANGE,
-      data: { attachments },
+      data: { attachments: newAttachments },
     });
   };
 
   const handleFileChange = (file: File) => {
-    const attachments = [...state.attachments, file];
+    const newAttachments = [...attachments, file];
     dispatch({
       type: ActionType.CHANGE,
-      data: { attachments },
+      data: { attachments: newAttachments },
     });
     setInteracted();
   };
 
-  const length = state.attachments && state.attachments.length;
+  const length = attachments && attachments.length;
   const count = length === 0 ? '' : length + 1;
 
   return (
     <>
-      {state.attachments.map((attachment, i) => (
+      {attachments.map((attachment, i) => (
         <FileInput
           key={`Vedlegg ${i + 1}`}
           label={`Vedlegg ${i + 1}`}
@@ -51,7 +53,7 @@ export const AttachmentsInputs = () => {
         onBlur={setInteracted}
         validationLevel={level}
         validation={validation}
-        interacted={state.attachments.length === 0 && interacted}
+        interacted={attachments.length === 0 && interacted}
       />
     </>
   );
