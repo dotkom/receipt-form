@@ -58,14 +58,14 @@ export const Submit = () => {
     });
   };
 
-  const send = async () => {
+  const download = async () => {
     handleInteraction();
     if (isValid) {
       initDownload();
     }
   };
 
-  const download = async () => {
+  const send = async () => {
     handleInteraction();
     if (isValid) {
       initSendMail();
