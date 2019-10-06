@@ -8,21 +8,33 @@ import { Edit } from 'components/Icons/Edit';
 import { Undo } from 'components/Icons/Undo';
 import { BaseInputStyle, InputContainer } from 'components/Input';
 import { FileLabels } from 'components/Input/FileLabels';
+import { getValidationLevelColor, IValidationMessageProps } from 'components/Input/ValidationMessages';
 import { colors } from 'constants/colors';
+import { ValidationLevel } from 'form/validation';
 import { readDataUrlAsFile } from 'utils/readDataUrlAsFile';
 
-const Canvas = styled.canvas`
+const Canvas = styled.canvas<IValidationMessageProps>`
   ${BaseInputStyle}
   padding: 0;
   min-height: 8rem;
+
+  ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
+
+  ${({ highlight }) => highlight && `border-color: ${colors.blue};`}
+
+  :focus {
+    ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
+  }
 `;
 
 export interface IProps {
   saveClick: (image: File) => void;
   editClick: () => void;
+  interacted?: boolean;
+  validationLevel?: ValidationLevel;
 }
 
-export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
+export const Signature: FC<IProps> = ({ saveClick, editClick, interacted, validationLevel }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [signaturePad, setSignaturePad] = useState<SignaturePad | null>(null);
   const resizeCanvas = () => {
@@ -94,7 +106,7 @@ export const Signature: FC<IProps> = ({ saveClick, editClick }) => {
         <Cross onClick={clear} title="Start signeringen på nytt" />
         <Edit onClick={editClick} title="Avslutt uten å lagre" />
       </FileLabels>
-      <Canvas ref={canvasRef} />
+      <Canvas level={interacted ? validationLevel : undefined} ref={canvasRef} />
     </InputContainer>
   );
 };
