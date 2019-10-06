@@ -1,11 +1,13 @@
 import nodemailer from 'nodemailer';
 
-import { DESTINATION_EMAIL, SENDER_EMAIL } from 'constants/mail';
+import { DESTINATION_EMAIL, EXTRA_CC_EMAILS, SENDER_EMAIL } from 'constants/mail';
 import { IState } from 'form/state';
 
 import { NonNullableState } from './generatePDF';
 import { getFileName, getFormattedText } from './tools/format';
 import { readFileAsync } from './tools/readFileAsync';
+
+const extraEmails = EXTRA_CC_EMAILS.split(',');
 
 export interface IGoogleAuthFile {
   type: string;
@@ -68,7 +70,7 @@ export const sendEmail = async (pdf: string, formData: IState): Promise<boolean>
       await transporter.sendMail({
         from: SENDER_EMAIL,
         to: DESTINATION_EMAIL,
-        cc: form.email,
+        cc: [form.email, ...extraEmails],
         replyTo: form.email,
         subject: `[${form.committee.shortName}] ${form.intent} - ${form.fullname}`,
         text: getFormattedText(form),
