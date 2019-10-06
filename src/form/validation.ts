@@ -106,7 +106,7 @@ export const STATE_VALIDATION: StateValidators = {
   signature: [
     {
       level: ValidationLevel.REQUIRED,
-      message: 'Du må legge ved en signatur for kvitteringen din',
+      message: 'Du må legge ved en signatur for kvitteringen din. Husk å lagre signaturen ved å trykke på ✔️!',
       validator: ({ signature }) => signature !== null,
     },
     {
