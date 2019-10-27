@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser';
-import React from 'react';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 
 import { SentryBoundry } from 'components/SentryBoundry';
@@ -13,11 +13,14 @@ Sentry.init({
   dsn: SENTRY_DSN,
 });
 
-ReactDOM.render(
-  <SentryBoundry>
-    <App />
-  </SentryBoundry>,
-  document.getElementById('root')
+const root = document.getElementById('root');
+// @ts-ignore
+ReactDOM.createRoot(root).render(
+  <StrictMode>
+    <SentryBoundry>
+      <App />
+    </SentryBoundry>
+  </StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change
