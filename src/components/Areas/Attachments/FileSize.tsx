@@ -18,11 +18,11 @@ const StatusText = styled.h3`
 `;
 
 const WarningText = styled(StatusText)`
-  color: ${colors.orange};
+  color: ${colors.accent};
 `;
 
 const ErrorText = styled(StatusText)`
-  color: ${colors.red};
+  color: ${colors.validationError};
 `;
 
 export const FileSize = () => {

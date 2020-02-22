@@ -4,21 +4,23 @@
   "description": "Kvitteringsskjema for Linjeforeningen Online",
   "icons": [
     {
-        "src": "receipt-logo-192.png",
-        "sizes": "192x192",
-        "type": "image/png"
-    }, {
-        "src": "receipt-logo-256.png",
-        "sizes": "256x256",
-        "type": "image/png"
-    }, {
-        "src": "receipt-logo-512.png",
-        "sizes": "512x512",
-        "type": "image/png"
+      "src": "receipt-logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "receipt-logo-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "receipt-logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-],
+  ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#0060a3",
+  "theme_color": "#0d5474",
   "background_color": "#ffffff"
 }

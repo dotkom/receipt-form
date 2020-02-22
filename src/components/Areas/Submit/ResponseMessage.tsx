@@ -17,11 +17,11 @@ const BAD_STATUS_CODES = [400, 401, 403, 404, 500, 501, 502, 503, 504];
 
 const getStatusCodeColor = (code: number) => {
   if (GOOD_STATUS_CODES.includes(code)) {
-    return colors.green;
+    return colors.validationSuccess;
   } else if (BAD_STATUS_CODES.includes(code)) {
-    return colors.red;
+    return colors.validationError;
   } else {
-    return colors.orange;
+    return colors.validationWarning;
   }
 };
 

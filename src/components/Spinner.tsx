@@ -55,8 +55,8 @@ export const Spinner: FC = () => {
   return (
     <Container>
       <SpinnerSVG version="1.1" x="0px" y="0px" viewBox="0 0 50 50">
-        <SpinnerPath time={1.4} start={5} end={5} color="orange" />
-        <SpinnerPath time={1.2} start={0} end={360} color="blue" />
+        <SpinnerPath time={1.4} start={5} end={5} color="accent" />
+        <SpinnerPath time={1.2} start={0} end={360} color="primary" />
       </SpinnerSVG>
     </Container>
   );

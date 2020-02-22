@@ -22,7 +22,7 @@ const VALIDATION_COUNT = (count: number) => `
 `;
 
 const WarningMessage = styled.h3`
-  color: ${colors.red};
+  color: ${colors.validationError};
 `;
 
 const selectErrorCount = (state: State): number => {

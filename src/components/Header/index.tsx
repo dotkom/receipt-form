@@ -6,7 +6,7 @@ import { colors } from 'constants/colors';
 import logo from './online-logo.png';
 
 const HeaderStyle = styled.header`
-  background-color: ${colors.blue};
+  background-color: ${colors.primary};
   display: grid;
   justify-content: center;
   box-sizing: border-box;
