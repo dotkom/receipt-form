@@ -16,11 +16,11 @@ export const getValidationLevelColor = (level?: ValidationLevel) => {
     case ValidationLevel.NONE:
       return colors.darkGray;
     case ValidationLevel.WARNING:
-      return colors.orange;
+      return colors.validationWarning;
     case ValidationLevel.REQUIRED:
-      return colors.red;
+      return colors.validationError;
     case ValidationLevel.VALID:
-      return colors.green;
+      return colors.validationSuccess;
   }
 };
 

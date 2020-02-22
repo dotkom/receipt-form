@@ -10,7 +10,7 @@ const FooterStyle = styled.footer`
 `;
 
 const Link = styled.a`
-  color: ${colors.blue};
+  color: ${colors.primary};
   text-decoration-line: none;
 `;
 

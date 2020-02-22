@@ -24,7 +24,7 @@ const Canvas = styled.canvas<IValidationMessageProps>`
 
   ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
 
-  ${({ highlight }) => highlight && `border-color: ${colors.blue};`}
+  ${({ highlight }) => highlight && `border-color: ${colors.primary};`}
 
   :focus {
     ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}

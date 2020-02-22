@@ -22,7 +22,7 @@ export const BaseInputStyle = css`
 
   :focus {
     outline: none;
-    border-color: ${colors.blue};
+    border-color: ${colors.primary};
   }
 
   ::placeholder {
@@ -34,7 +34,7 @@ export const StyledInput = React.memo(styled.input<IValidationMessageProps>`
   ${BaseInputStyle}
   ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}
 
-  ${({ highlight }) => highlight && `border-color: ${colors.blue};`}
+  ${({ highlight }) => highlight && `border-color: ${colors.primary};`}
 
   :focus {
     ${({ level }) => level && `border-color: ${getValidationLevelColor(level)};`}

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { colors } from 'constants/colors';
 
 export const Button = styled.button`
-  background: ${colors.blue};
+  background: ${colors.primary};
   color: ${colors.white};
   border-radius: 4px;
   padding: 0.8rem;
@@ -13,7 +13,7 @@ export const Button = styled.button`
 
   :focus {
     outline: none;
-    box-shadow: inset 0px 0px 0px 2px ${colors.orange};
+    box-shadow: inset 0px 0px 0px 2px ${colors.accent};
   }
 
   :disabled {

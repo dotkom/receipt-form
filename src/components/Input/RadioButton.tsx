@@ -41,7 +41,7 @@ const StyledRadio = styled.div`
   align-content: center;
 
   :focus {
-    border-color: ${colors.blue};
+    border-color: ${colors.primary};
   }
 `;
 
@@ -51,7 +51,7 @@ const RadioContainer = styled.div`
 `;
 
 const Checked = styled.div`
-  background: ${colors.blue};
+  background: ${colors.primary};
   width: 10px;
   height: 10px;
   border-radius: 10px;
