@@ -11,15 +11,31 @@ const MAX_CHAR_LENGTH = 65;
 /**
  * Converts a single line string to array of strings of maxCharLength
  */
-export const createMultiLine = (str: string) => {
-  const multiLine = [str];
+export const createMultiLine = (text: string) => {
+  const multiLine = [];
 
-  while (multiLine[multiLine.length - 1].length > MAX_CHAR_LENGTH) {
-    const lastString = multiLine[multiLine.length - 1];
-    const endOfLastWord = lastString.slice(0, MAX_CHAR_LENGTH).lastIndexOf(' ');
-    multiLine[multiLine.length - 1] = lastString.slice(0, endOfLastWord);
-    multiLine.push(lastString.slice(endOfLastWord + 1));
+  /* Break each of the original lines by themselves */
+  const lines = text.split('\n');
+  for (const line of lines) {
+    let currentLine = '';
+    /* Assemble each word from the line if they still fit */
+    const words = line.split(' ');
+    for (const word of words) {
+      /* In case a word is longer we treat it as its own line */
+      if (word.length >= MAX_CHAR_LENGTH) {
+        multiLine.push(currentLine);
+        currentLine = '';
+        multiLine.push(word);
+      } else {
+        if (currentLine.length + word.length < MAX_CHAR_LENGTH) {
+          currentLine += currentLine === '' ? word : ` ${word}`;
+        } else {
+          multiLine.push(currentLine);
+          currentLine = word;
+        }
+      }
+    }
+    multiLine.push(currentLine);
   }
-
   return multiLine;
 };
