@@ -1,4 +1,6 @@
+import * as path from 'path';
 import { PDFDocumentFactory, PDFDocumentWriter, StandardFonts } from 'pdf-lib';
+import getConfig from 'next/config';
 
 import { IState } from 'form/state';
 import { readFileAsBytes } from 'utils/readFileAsBytes';
@@ -6,6 +8,8 @@ import { readFileAsBytes } from 'utils/readFileAsBytes';
 import { attachJPG, attachPDF, attachPNG } from './tools/attachments';
 import { embedSignature, embedText } from './tools/embed';
 import { readFileAsync } from './tools/readFileAsync';
+
+const { serverRuntimeConfig } = getConfig();
 
 export type NonNullableState = { [K in keyof IState]: NonNullable<IState[K]> };
 
@@ -18,7 +22,8 @@ export const pdfGenerator = async (inputForm: IState) => {
     const form = inputForm as NonNullableState;
 
     /** Initialize template from file */
-    const templateFile = await readFileAsync(__dirname + '/assets/template.pdf');
+    const templatePath = path.join(serverRuntimeConfig.PROJECT_ROOT, './src/lambda/assets/template.pdf');
+    const templateFile = await readFileAsync(templatePath);
     const template = PDFDocumentFactory.load(templateFile);
 
     /** Initialize a new PDF document as output */
