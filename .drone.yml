@@ -19,18 +19,14 @@ steps:
       - name: cache
         path: /tmp/cache
     environment:
-      REACT_APP_AUTH_CALLBACK:
+      NEXT_PUBLIC_AUTH_CALLBACK:
         from_secret: auth_callback
-      REACT_APP_AUTH_CLIENT_ID:
+      NEXT_PUBLIC_AUTH_CLIENT_ID:
         from_secret: auth_client_id
-      REACT_APP_AUTH_ENDPOINT:
+      NEXT_PUBLIC_AUTH_ENDPOINT:
         from_secret: auth_endpoint
-      REACT_APP_SENTRY_DSN:
+      NEXT_PUBLIC_SENTRY_DSN:
         from_secret: sentry_dsn
-      REACT_APP_LAMBDA_ENDPOINT:
-        from_secret: lambda_endpoint
-      REACT_APP_LAMBDA_KEY:
-        from_secret: lambda_key
     when:
       event: [push, pull_request, tag, deployment]
     commands:
