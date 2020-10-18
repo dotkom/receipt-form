@@ -3,6 +3,8 @@ name: Deploy
 
 on:
   push:
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
@@ -10,6 +12,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
 
       - name: Publish docker image
         uses: elgohr/Publish-Docker-Github-Action@master
