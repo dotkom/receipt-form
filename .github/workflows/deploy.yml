@@ -1,0 +1,43 @@
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Publish docker image
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          NEXT_PUBLIC_AUTH_ENDPOINT: ${{ secrets.NEXT_PUBLIC_AUTH_ENDPOINT }}
+          NEXT_PUBLIC_AUTH_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_AUTH_CLIENT_ID }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+        with:
+          name: receipt-form
+          dockerfile: prod.dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: registry.online.ntnu.no
+          tag_semver: true
+          buildargs:
+            NEXT_PUBLIC_AUTH_ENDPOINT
+            NEXT_PUBLIC_AUTH_CLIENT_ID
+            NEXT_PUBLIC_SENTRY_DSN
+
+      - name: Trigger deploy.sh remotely
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: source ${{ secrets.DEPLOY_SCRIPT_LOCATION }}
+          timout: 600s
