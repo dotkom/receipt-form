@@ -19,7 +19,7 @@ jobs:
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
         with:
           name: receipt-form
-          dockerfile: Dockerfile
+          dockerfile: prod.dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: registry.online.ntnu.no
