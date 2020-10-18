@@ -1,4 +1,6 @@
+import * as path from 'path';
 import nodemailer from 'nodemailer';
+import getConfig from 'next/config';
 
 import { DESTINATION_EMAIL, EXTRA_CC_EMAILS, SENDER_EMAIL } from 'constants/mail';
 import { IState } from 'form/state';
@@ -6,6 +8,8 @@ import { IState } from 'form/state';
 import { NonNullableState } from './generatePDF';
 import { getFileName, getFormattedText } from './tools/format';
 import { readFileAsync } from './tools/readFileAsync';
+
+const { serverRuntimeConfig } = getConfig();
 
 const extraEmails = EXTRA_CC_EMAILS.split(',');
 
@@ -22,14 +26,13 @@ export interface IGoogleAuthFile {
   client_x509_cert_url: string;
 }
 
-export const AUTH_FILE_PATH = __dirname + '/../../keys/gsuite.json';
+export const AUTH_FILE_PATH = path.join(serverRuntimeConfig.PROJECT_ROOT, './keys/gsuite.json');
 
 export const getAuthFile = async (): Promise<null | IGoogleAuthFile> => {
   try {
     const file = await readFileAsync(AUTH_FILE_PATH);
     return JSON.parse(file.toString()) as IGoogleAuthFile;
   } catch (err) {
-    // tslint:disable-next-line no-console
     console.error(err);
     return null;
   }
@@ -53,7 +56,6 @@ const createTransporter = async (): Promise<null | ReturnType<typeof nodemailer.
       await transporter.verify();
       return transporter;
     } catch (err) {
-      // tslint:disable-next-line no-console
       console.error(err);
       return null;
     }
@@ -64,6 +66,10 @@ const createTransporter = async (): Promise<null | ReturnType<typeof nodemailer.
 
 export const sendEmail = async (pdf: string, formData: IState): Promise<boolean> => {
   const form = formData as NonNullableState;
+  const authFile = await getAuthFile();
+  if (!authFile) {
+    throw new Error(`Gsuite authentcation file at ${AUTH_FILE_PATH} was not found, or is incorrect.`);
+  }
   const transporter = await createTransporter();
   if (transporter) {
     try {
@@ -83,7 +89,6 @@ export const sendEmail = async (pdf: string, formData: IState): Promise<boolean>
       });
       return true;
     } catch (err) {
-      // tslint:disable-next-line no-console
       console.error(err);
       return false;
     }

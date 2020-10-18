@@ -6,7 +6,7 @@ import { ActionType } from 'redux/reducers/formReducer';
 
 import { RadioButton } from './RadioButton';
 
-export interface IProps {
+interface IProps {
   label: string;
   value: ReceiptType;
   tooltip: string;

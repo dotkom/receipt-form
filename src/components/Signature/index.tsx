@@ -31,7 +31,7 @@ const Canvas = styled.canvas<IValidationMessageProps>`
   }
 `;
 
-export interface IProps {
+interface IProps {
   saveClick: (image: File) => void;
   editClick: () => void;
   interacted?: boolean;

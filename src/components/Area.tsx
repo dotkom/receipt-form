@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { colors } from 'constants/colors';
 
-export interface IAreaProps {
+interface IAreaProps {
   color?: string;
   header?: string;
 }
