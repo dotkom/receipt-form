@@ -33,8 +33,8 @@ export const FileInput: FC<IFileInputProps> = ({
   validationLevel = ValidationLevel.NONE,
   buttons,
   interacted,
-  ref,
-  as,
+  ref, // eslint-disable-line @typescript-eslint/no-unused-vars
+  as, // eslint-disable-line @typescript-eslint/no-unused-vars
   allowedTypes = DEFAULT_ALLOWED_TYPES,
   ...props
 }) => {

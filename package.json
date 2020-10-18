@@ -50,9 +50,6 @@
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
     "tsc": "tsc --noEmit"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": [
     "> 1% in NO",
     "not ie 11"
@@ -64,6 +61,7 @@
     "eslint-config-prettier": "^6.13.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.4",
+    "eslint-plugin-react-hooks": "^4.1.2",
     "prettier": "^2.1.2"
   }
 }

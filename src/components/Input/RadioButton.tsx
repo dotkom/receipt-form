@@ -78,6 +78,7 @@ export interface IRadioProps extends HTMLProps<HTMLInputElement> {
 
 export const RadioButton: FC<IRadioProps> = ({ className, label, checked = false, onClick, ...rest }) => {
   /** Extract 'ref', 'type' and 'as' from props as styled-components types mismatch with React */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { ref, type, as, tooltip, ...props } = rest;
   return (
     <Container>

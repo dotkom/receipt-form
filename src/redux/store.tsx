@@ -10,7 +10,7 @@ import { Action, State } from './types';
 const reduxDevToolsHook =
   typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__
     ? window.__REDUX_DEVTOOLS_EXTENSION__()
-    : (x: any) => x; // tslint:disable-line no-any
+    : (x: any) => x; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 const thunkMiddleware = thunk as ThunkMiddleware<State, Action>;
 
@@ -18,10 +18,7 @@ export const initStore = (initialState?: State) =>
   createStore(
     rootReducer,
     initialState,
-    compose(
-      applyMiddleware(thunkMiddleware, formValidatorMiddleware),
-      reduxDevToolsHook
-    )
+    compose(applyMiddleware(thunkMiddleware, formValidatorMiddleware), reduxDevToolsHook)
   );
 
 export const store = initStore();

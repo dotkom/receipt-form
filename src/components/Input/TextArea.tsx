@@ -36,8 +36,8 @@ export const TextArea: FC<ITextAreaProps> = ({
   validationLevel = ValidationLevel.NONE,
   validation = [],
   interacted,
-  ref,
-  as,
+  ref, // eslint-disable-line @typescript-eslint/no-unused-vars
+  as, // eslint-disable-line @typescript-eslint/no-unused-vars
   ...props
 }) => {
   return (

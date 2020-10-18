@@ -73,6 +73,7 @@ export interface IInputProps extends HTMLProps<HTMLInputElement> {
 export const Input: FC<IInputProps> = React.memo(
   ({ label, validation = [], validationLevel = ValidationLevel.NONE, interacted, ...rest }) => {
     /** Extract 'ref' and 'as' from props as styled-components types mismatch with React */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { ref, as, ...props } = rest;
 
     return (
@@ -84,3 +85,5 @@ export const Input: FC<IInputProps> = React.memo(
     );
   }
 );
+
+Input.displayName = 'Input';

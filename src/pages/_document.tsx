@@ -31,6 +31,7 @@ const getInitialProps = async (ctx: DocumentContext): Promise<DocumentInitialPro
 
 type DocumentProps = ComponentProps<typeof Document>;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CustomDocument = (_: DocumentProps): JSX.Element => {
   return (
     <Html lang="nb">
