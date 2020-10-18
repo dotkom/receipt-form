@@ -11,16 +11,17 @@ import { Dispatch, Thunk } from 'redux/types';
 import { getTotalFileSize } from 'utils/getTotalFileSize';
 import { getProfile, IProfile } from 'utils/profile';
 
-const MANAGER = new UserManager({
-  authority: AUTH_ENDPOINT,
-  client_id: AUTH_CLIENT_ID,
-  redirect_uri: AUTH_CALLBACK,
-  post_logout_redirect_uri: AUTH_CALLBACK,
-  response_type: 'id_token token',
-  scope: 'openid profile email onlineweb4',
-  filterProtocolClaims: true,
-  loadUserInfo: true,
-});
+const getManager = () =>
+  new UserManager({
+    authority: AUTH_ENDPOINT,
+    client_id: AUTH_CLIENT_ID,
+    redirect_uri: AUTH_CALLBACK,
+    post_logout_redirect_uri: AUTH_CALLBACK,
+    response_type: 'id_token token',
+    scope: 'openid profile email onlineweb4',
+    filterProtocolClaims: true,
+    loadUserInfo: true,
+  });
 
 /** Prefer committee/Online mail is the user has one */
 const getEmail = (email: string, profile?: IProfile) => {
@@ -35,7 +36,7 @@ const logInRedirect = async (state: IState) => {
   if (totalSize < MAX_STORAGE_SIZE) {
     window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(await deserializeReceipt(state)));
   }
-  await MANAGER.signinRedirect();
+  await getManager().signinRedirect();
 };
 
 const processUser = async (user: User, state: IState): Promise<IState> => {
@@ -65,7 +66,7 @@ const updateForm = (dispatch: Dispatch, form: IState) => {
 export const loginAction: Thunk = () => async (dispatch, getState) => {
   const { form } = getState();
   try {
-    const user: User | null = await MANAGER.getUser();
+    const user: User | null = await getManager().getUser();
     if (user) {
       const newForm = await processUser(user, form);
       updateForm(dispatch, newForm);
@@ -80,7 +81,7 @@ export const loginAction: Thunk = () => async (dispatch, getState) => {
 export const catchCallbackAction: Thunk = () => async (dispatch, getState) => {
   const { form } = getState();
   try {
-    const user = await MANAGER.signinRedirectCallback();
+    const user = await getManager().signinRedirectCallback();
     const storedStateString = window.sessionStorage.getItem(STORAGE_KEY);
     if (storedStateString) {
       const storedState = await serializeReceipt(JSON.parse(storedStateString) as IDeserializedState);
