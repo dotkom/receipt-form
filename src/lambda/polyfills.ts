@@ -1,14 +1,15 @@
 import 'core-js/stable/array/flat';
 import 'core-js/stable/array/flat-map';
 import { JSDOM } from 'jsdom';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import FileReaderImpl from 'jsdom/lib/jsdom/living/generated/FileReader';
 
 const dom = new JSDOM();
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
-    // tslint:disable-next-line interface-name
     interface Global {
       File: typeof dom.window.File;
       Blob: typeof dom.window.Blob;

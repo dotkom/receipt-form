@@ -104,7 +104,6 @@ export const handler = async (data: IDeserializedState | null): Promise<IResultM
       VALIDATION_ERROR(errors);
     }
   } catch (err) {
-    // tslint:disable-next-line no-console
     console.error(err);
     return GENERIC_ERROR;
   }

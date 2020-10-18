@@ -26,7 +26,7 @@ const IconContainer = styled.div`
   }
 `;
 
-export interface IFileLabelsProps {
+interface IFileLabelsProps {
   label: string;
 }
 

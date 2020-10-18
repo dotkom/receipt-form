@@ -16,7 +16,7 @@ import { ValidationMessages } from './ValidationMessages';
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
 const DEFAULT_ALLOWED_TYPES = [...IMAGE_TYPES, 'application/pdf', '.pdf'];
 
-export interface IFileInputProps extends IInputProps {
+interface IFileInputProps extends IInputProps {
   file?: File;
   onUpload: (file: File) => void;
   onRemove?: () => void;
@@ -33,8 +33,8 @@ export const FileInput: FC<IFileInputProps> = ({
   validationLevel = ValidationLevel.NONE,
   buttons,
   interacted,
-  ref,
-  as,
+  ref, // eslint-disable-line @typescript-eslint/no-unused-vars
+  as, // eslint-disable-line @typescript-eslint/no-unused-vars
   allowedTypes = DEFAULT_ALLOWED_TYPES,
   ...props
 }) => {

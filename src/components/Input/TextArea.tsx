@@ -6,14 +6,14 @@ import { IValidation, ValidationLevel } from 'form/validation';
 import { BaseInputStyle, InputContainer, Label } from './Base';
 import { getValidationLevelColor, ValidationMessages } from './ValidationMessages';
 
-export interface ITextAreaProps extends HTMLProps<HTMLTextAreaElement> {
+interface ITextAreaProps extends HTMLProps<HTMLTextAreaElement> {
   label: string;
   validation?: IValidation[];
   validationLevel?: ValidationLevel;
   interacted?: boolean;
 }
 
-export interface IMultiLineInputProps {
+interface IMultiLineInputProps {
   level?: ValidationLevel;
 }
 
@@ -36,8 +36,8 @@ export const TextArea: FC<ITextAreaProps> = ({
   validationLevel = ValidationLevel.NONE,
   validation = [],
   interacted,
-  ref,
-  as,
+  ref, // eslint-disable-line @typescript-eslint/no-unused-vars
+  as, // eslint-disable-line @typescript-eslint/no-unused-vars
   ...props
 }) => {
   return (

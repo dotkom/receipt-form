@@ -1,0 +1,40 @@
+name: Push
+on:
+  push:
+
+jobs:
+  run-linters:
+    name: Run linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Typescript compile
+        run: yarn tsc
+      - name: Run linters
+        uses: wearerequired/lint-action@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          # Eslint
+          eslint: true
+          eslint_dir: src/
+          eslint_extensions: js,jsx,ts,tsx
+          # Prettier
+          prettier: true
+          prettier_dir: src/

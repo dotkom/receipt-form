@@ -33,7 +33,6 @@ export const getAuthFile = async (): Promise<null | IGoogleAuthFile> => {
     const file = await readFileAsync(AUTH_FILE_PATH);
     return JSON.parse(file.toString()) as IGoogleAuthFile;
   } catch (err) {
-    // tslint:disable-next-line no-console
     console.error(err);
     return null;
   }
@@ -57,7 +56,6 @@ const createTransporter = async (): Promise<null | ReturnType<typeof nodemailer.
       await transporter.verify();
       return transporter;
     } catch (err) {
-      // tslint:disable-next-line no-console
       console.error(err);
       return null;
     }
@@ -91,7 +89,6 @@ export const sendEmail = async (pdf: string, formData: IState): Promise<boolean>
       });
       return true;
     } catch (err) {
-      // tslint:disable-next-line no-console
       console.error(err);
       return false;
     }

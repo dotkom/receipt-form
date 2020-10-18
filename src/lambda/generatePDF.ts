@@ -59,7 +59,6 @@ export const pdfGenerator = async (inputForm: IState) => {
     return pdfBytes;
   } catch (err) {
     if (err.code === 'ENOENT') {
-      // tslint:disable-next-line no-console
       console.error(err);
       return;
     }

@@ -11,7 +11,7 @@ const FileName = styled.p`
   color: ${colors.darkGray};
 `;
 
-export interface IFileDisplayProps {
+interface IFileDisplayProps {
   file: File;
   image: string | null;
   level?: ValidationLevel;
