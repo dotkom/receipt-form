@@ -17,7 +17,7 @@ const FileSize = styled.p`
   margin: 0.4rem 0 0.4rem 0.8rem;
 `;
 
-export interface IFileInfoProps {
+interface IFileInfoProps {
   file?: File | null;
 }
 

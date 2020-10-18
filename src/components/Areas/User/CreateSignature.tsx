@@ -6,7 +6,7 @@ import { useValidation } from 'hooks/useValidation';
 import { useDispatch } from 'redux/hooks';
 import { ActionType } from 'redux/reducers/formReducer';
 
-export interface IProps {
+interface IProps {
   editClick: () => void;
 }
 

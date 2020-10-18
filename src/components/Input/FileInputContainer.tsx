@@ -48,7 +48,7 @@ const DEFAULT_PLACEHOLDER = `Klikk på dette feltet, eller dra en fil hit for å
 
 /** Copy props from StyledInput */
 export type StyledInputProps = Parameters<typeof StyledInput>[0];
-export interface IProps extends StyledInputProps {
+interface IProps extends StyledInputProps {
   inputRef: React.RefObject<HTMLInputElement>;
 }
 

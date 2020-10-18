@@ -30,7 +30,7 @@ export const ValidationMessage = React.memo(styled.p<IValidationMessageProps>`
   transition: opacity 1s linear;
 `);
 
-export interface IProps {
+interface IProps {
   display: boolean;
   validation: IValidation[];
 }

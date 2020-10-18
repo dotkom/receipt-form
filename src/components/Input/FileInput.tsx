@@ -16,7 +16,7 @@ import { ValidationMessages } from './ValidationMessages';
 const IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
 const DEFAULT_ALLOWED_TYPES = [...IMAGE_TYPES, 'application/pdf', '.pdf'];
 
-export interface IFileInputProps extends IInputProps {
+interface IFileInputProps extends IInputProps {
   file?: File;
   onUpload: (file: File) => void;
   onRemove?: () => void;

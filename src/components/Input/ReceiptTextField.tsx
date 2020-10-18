@@ -8,7 +8,7 @@ import { ActionType } from 'redux/reducers/formReducer';
 
 import { Input } from './Base';
 
-export interface IProps {
+interface IProps {
   field: keyof IState;
   label: string;
   disabled?: boolean;

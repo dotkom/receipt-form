@@ -2,11 +2,6 @@ import React, { HTMLProps } from 'react';
 
 import { colors } from 'constants/colors';
 
-export interface IProps extends HTMLProps<SVGSVGElement> {
-  color?: string;
-  title?: string;
-}
-
 export const Undo = ({ color, title, ...props }: HTMLProps<SVGSVGElement>) => {
   return (
     <svg width="100%" height="100%" viewBox="0 0 11 11" {...props}>

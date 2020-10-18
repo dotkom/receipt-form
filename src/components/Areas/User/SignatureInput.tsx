@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'redux/hooks';
 import { ActionType } from 'redux/reducers/formReducer';
 import { isFileEqual } from 'utils/file';
 
-export interface IProps {
+interface IProps {
   editClick: () => void;
 }
 

@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { colors } from 'constants/colors';
 import { IResultMessage } from 'lambda/handler';
 
-export interface IProps {
+interface IProps {
   response: IResultMessage;
 }
 
-export interface IMessageProps {
+interface IMessageProps {
   statusCode: number;
 }
 

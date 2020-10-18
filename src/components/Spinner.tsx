@@ -14,7 +14,7 @@ const SpinnerSVG = styled.svg`
   margin-left: -25px;
 `;
 
-export interface ISpinnerProps {
+interface ISpinnerProps {
   /** Animation timer in seconds */
   time: number;
   /** Starting point of animation in degrees */

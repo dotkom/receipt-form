@@ -71,7 +71,7 @@ const Tooltip = styled.p`
   color: ${colors.darkGray};
 `;
 
-export interface IRadioProps extends HTMLProps<HTMLInputElement> {
+interface IRadioProps extends HTMLProps<HTMLInputElement> {
   label: string;
   tooltip: string;
 }
