@@ -4,7 +4,7 @@ import { IState } from 'form/state';
 import { useInteraction } from 'hooks/useInteraction';
 import { useValidation } from 'hooks/useValidation';
 import { useDispatch, useSelector } from 'redux/hooks';
-import { ActionType } from 'redux/reducers/formReducer';
+import { formDataUpdated } from 'redux/reducers/formReducer';
 
 import { TextArea } from './TextArea';
 
@@ -20,12 +20,11 @@ export const ReceiptTextArea: FC<IProps> = ({ field, ...props }) => {
   const value = useSelector((state) => state.form[field] || '');
 
   const change = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch({
-      type: ActionType.CHANGE,
-      data: {
+    dispatch(
+      formDataUpdated({
         [field]: event.target.value,
-      },
-    });
+      })
+    );
   };
 
   if (typeof value !== 'string') {

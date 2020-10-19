@@ -1,15 +1,16 @@
 import { User, UserManager } from 'oidc-client';
 import { batch } from 'react-redux';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { AUTH_CALLBACK, AUTH_CLIENT_ID, AUTH_ENDPOINT } from 'constants/auth';
 import { calculateInteractions } from 'form/interaction';
 import { deserializeReceipt, IDeserializedState, IState, serializeReceipt } from 'form/state';
-import { ActionType as FormActionType } from 'redux/reducers/formReducer';
-import { ActionType as InteractionActionType } from 'redux/reducers/interactionReducer';
 import { IAuthProfile } from 'redux/reducers/userReducer';
-import { Dispatch, Thunk } from 'redux/types';
 import { getTotalFileSize } from 'utils/getTotalFileSize';
 import { getProfile, IProfile } from 'utils/profile';
+import { Dispatch, State } from 'redux/store';
+import { formDataUpdated } from 'redux/reducers/formReducer';
+import { setInteraction } from 'redux/reducers/interactionReducer';
 
 const getManager = () =>
   new UserManager({
@@ -52,19 +53,13 @@ const processUser = async (user: User, state: IState): Promise<IState> => {
 
 const updateForm = (dispatch: Dispatch, form: IState) => {
   batch(() => {
-    dispatch({
-      type: FormActionType.CHANGE,
-      data: form,
-    });
-    dispatch({
-      type: InteractionActionType.SET_INTERACTED,
-      data: calculateInteractions(form),
-    });
+    dispatch(formDataUpdated(form));
+    dispatch(setInteraction(calculateInteractions(form)));
   });
 };
 
-export const loginAction: Thunk = () => async (dispatch, getState) => {
-  const { form } = getState();
+export const loginAction = createAsyncThunk('user/login', async (_, { dispatch, getState }) => {
+  const { form } = getState() as State;
   try {
     const user: User | null = await getManager().getUser();
     if (user) {
@@ -76,10 +71,10 @@ export const loginAction: Thunk = () => async (dispatch, getState) => {
   } catch (err) {
     logInRedirect(form);
   }
-};
+});
 
-export const catchCallbackAction: Thunk = () => async (dispatch, getState) => {
-  const { form } = getState();
+export const catchCallbackAction = createAsyncThunk('user/catchCallback', async (_, { dispatch, getState }) => {
+  const { form } = getState() as State;
   try {
     const user = await getManager().signinRedirectCallback();
     const storedStateString = window.sessionStorage.getItem(STORAGE_KEY);
@@ -98,4 +93,4 @@ export const catchCallbackAction: Thunk = () => async (dispatch, getState) => {
     /** Do nothing if no user data is present */
     return;
   }
-};
+});

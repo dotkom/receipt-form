@@ -4,8 +4,8 @@ import { FileInput } from 'components/Input';
 import { useInteraction } from 'hooks/useInteraction';
 import { useValidation } from 'hooks/useValidation';
 import { useDispatch, useSelector } from 'redux/hooks';
-import { ActionType } from 'redux/reducers/formReducer';
 import { areFilesEqual } from 'utils/file';
+import { formDataUpdated } from 'redux/reducers/formReducer';
 
 export const AttachmentsInputs: FC = () => {
   const dispatch = useDispatch();
@@ -15,18 +15,12 @@ export const AttachmentsInputs: FC = () => {
 
   const removeFile = (index: number) => {
     const newAttachments = attachments.filter((_, i) => i !== index);
-    dispatch({
-      type: ActionType.CHANGE,
-      data: { attachments: newAttachments },
-    });
+    dispatch(formDataUpdated({ attachments: newAttachments }));
   };
 
   const handleFileChange = (file: File) => {
     const newAttachments = [...attachments, file];
-    dispatch({
-      type: ActionType.CHANGE,
-      data: { attachments: newAttachments },
-    });
+    dispatch(formDataUpdated({ attachments: newAttachments }));
     setInteracted();
   };
 

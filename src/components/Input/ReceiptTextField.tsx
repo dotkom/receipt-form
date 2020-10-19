@@ -4,7 +4,7 @@ import { IState } from 'form/state';
 import { useInteraction } from 'hooks/useInteraction';
 import { useValidation } from 'hooks/useValidation';
 import { useDispatch, useSelector } from 'redux/hooks';
-import { ActionType } from 'redux/reducers/formReducer';
+import { formDataUpdated } from 'redux/reducers/formReducer';
 
 import { Input } from './Base';
 
@@ -22,12 +22,11 @@ export const ReceiptTextField: FC<IProps> = ({ field, format, ...props }) => {
 
   const change = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = format ? format(event.target.value) : event.target.value;
-    dispatch({
-      type: ActionType.CHANGE,
-      data: {
+    dispatch(
+      formDataUpdated({
         [field]: val,
-      },
-    });
+      })
+    );
   };
 
   if (typeof value !== 'string') {

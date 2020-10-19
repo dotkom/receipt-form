@@ -1,28 +1,39 @@
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
-import { applyMiddleware, compose, createStore } from 'redux';
-import thunk, { ThunkMiddleware } from 'redux-thunk';
 
+import { configureStore } from '@reduxjs/toolkit';
+
+import { formReducer } from './reducers/formReducer';
+import { interactionReducer } from './reducers/interactionReducer';
+import { statusReducer } from './reducers/statusReducer';
+import { userReducer } from './reducers/userReducer';
+import { validationReducer } from './reducers/validationReducer';
 import { formValidatorMiddleware } from './middleware/validationMiddleware';
-import { rootReducer } from './reducers';
-import { Action, State } from './types';
 
-const reduxDevToolsHook =
-  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__
-    ? window.__REDUX_DEVTOOLS_EXTENSION__()
-    : (x: any) => x; // eslint-disable-line @typescript-eslint/no-explicit-any
-
-const thunkMiddleware = thunk as ThunkMiddleware<State, Action>;
-
-export const initStore = (initialState?: State) =>
-  createStore(
-    rootReducer,
-    initialState,
-    compose(applyMiddleware(thunkMiddleware, formValidatorMiddleware), reduxDevToolsHook)
-  );
+export const initStore = (initialState: {} = {}) => {
+  const _store = configureStore({
+    preloadedState: initialState,
+    /* eslint sort-keys: "error" */
+    reducer: {
+      form: formReducer,
+      validation: validationReducer,
+      interaction: interactionReducer,
+      userData: userReducer,
+      status: statusReducer,
+    },
+    /* eslint sort-keys: "off" */
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ serializableCheck: false, immutableCheck: false }).concat(formValidatorMiddleware),
+  });
+  return _store;
+};
 
 export const store = initStore();
 
 export const StoreProvider: FC = (props) => {
   return <Provider {...props} store={store} />;
 };
+
+export type State = ReturnType<typeof store.getState>;
+export type Dispatch = typeof store.dispatch;
+export type Store = typeof store;

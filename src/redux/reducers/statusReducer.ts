@@ -1,4 +1,4 @@
-import { Reducer } from 'redux';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IResultMessage } from 'lambda/handler';
 
@@ -14,52 +14,29 @@ const INITIAL_STATUS_STATE: IStatusState = {
   responseMessage: null,
 };
 
-export enum ActionType {
-  SET_LOADING_DONE = 'SET_LOADING_DONE',
-  SET_IS_DOWNLOADING = 'SET_IS_DOWNLOADING',
-  SET_IS_SENDING_MAIL = 'SET_IS_SENDING_MAIL',
-  SET_RESPONSE_MESSAGE = 'SET_RESPONSE_MESSAGE',
-  RESET = 'RESET_RESPONSE',
-}
-
-export interface IAction<K extends ActionType, T = undefined> {
-  type: K;
-  data: T;
-}
-
-export type Actions =
-  | IAction<ActionType.SET_LOADING_DONE>
-  | IAction<ActionType.SET_IS_DOWNLOADING, boolean>
-  | IAction<ActionType.SET_IS_SENDING_MAIL, boolean>
-  | IAction<ActionType.SET_RESPONSE_MESSAGE, IResultMessage | null>
-  | IAction<ActionType.RESET>;
-
-export const statusReducer: Reducer<IStatusState, Actions> = (state = INITIAL_STATUS_STATE, action) => {
-  switch (action.type) {
-    case ActionType.SET_LOADING_DONE:
-      return {
-        ...state,
-        isDownloading: false,
-        isSendingMail: false,
-      };
-    case ActionType.SET_IS_DOWNLOADING:
-      return {
-        ...state,
-        isDownloading: action.data,
-      };
-    case ActionType.SET_IS_SENDING_MAIL:
-      return {
-        ...state,
-        isSendingMail: action.data,
-      };
-    case ActionType.SET_RESPONSE_MESSAGE:
-      return {
-        ...state,
-        responseMessage: action.data,
-      };
-    case ActionType.RESET:
+export const statusSlice = createSlice({
+  name: 'status',
+  initialState: INITIAL_STATUS_STATE,
+  reducers: {
+    loadingDone(state) {
+      state.isDownloading = false;
+      state.isSendingMail = false;
+    },
+    downloadStarted(state) {
+      state.isDownloading = true;
+    },
+    downloadFinished(state) {
+      state.isDownloading = false;
+    },
+    setResponse(state, action: PayloadAction<IResultMessage | null>) {
+      state.responseMessage = action.payload;
+    },
+    resetStatus() {
       return INITIAL_STATUS_STATE;
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
+
+export const { downloadFinished, downloadStarted, loadingDone, resetStatus, setResponse } = statusSlice.actions;
+
+export const statusReducer = statusSlice.reducer;

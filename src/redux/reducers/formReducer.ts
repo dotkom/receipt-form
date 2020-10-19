@@ -1,35 +1,23 @@
-import { Reducer } from 'redux';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { INITIAL_STATE, IState } from 'form/state';
 
-export enum ActionType {
-  CHANGE = 'CHANGE_FORM',
-  RESET = 'RESET_FORM',
-  SEND = 'SEND_FORM',
-  DOWNLOAD = 'DOWNLOAD_FORM',
-}
-
-export interface IAction<K extends ActionType, T = undefined> {
-  type: K;
-  data: T;
-}
-
-export type Actions =
-  | IAction<ActionType.CHANGE, Partial<IState>>
-  | IAction<ActionType.DOWNLOAD>
-  | IAction<ActionType.RESET>
-  | IAction<ActionType.SEND>;
-
-export const formReducer: Reducer<IState, Actions> = (state = INITIAL_STATE, action) => {
-  switch (action.type) {
-    case ActionType.CHANGE:
+export const formSlice = createSlice({
+  name: 'form',
+  initialState: INITIAL_STATE,
+  reducers: {
+    formDataUpdated(state, action: PayloadAction<Partial<IState>>) {
       return {
         ...state,
-        ...action.data,
+        ...action.payload,
       };
-    case ActionType.RESET:
+    },
+    resetForm() {
       return INITIAL_STATE;
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
+
+export const { resetForm, formDataUpdated } = formSlice.actions;
+
+export const formReducer = formSlice.reducer;
