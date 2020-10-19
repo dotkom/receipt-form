@@ -76,7 +76,7 @@ export const DOWNLOAD_SUCCESS_MESSAGE = (data: string): IResultMessage => ({
   },
 });
 
-export const handler = async (data: IDeserializedState | null): Promise<IResultMessage> => {
+export const generateReceipt = async (data: IDeserializedState | null): Promise<IResultMessage> => {
   if (!data) {
     return MISSING_BODY;
   }
