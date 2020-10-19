@@ -32,6 +32,7 @@ WORKDIR $WORKDIR
 
 COPY --from=builder $WORKDIR/node_modules ./node_modules
 COPY --from=builder $WORKDIR/.next ./.next
+COPY --from=builder $WORKDIR/src ./src
 COPY --from=builder $WORKDIR/public ./public
 COPY --from=builder $WORKDIR/next.config.js ./next.config.js
 COPY --from=builder $WORKDIR/package.json ./package.json
