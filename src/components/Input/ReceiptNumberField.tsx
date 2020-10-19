@@ -4,7 +4,7 @@ import { IState } from 'form/state';
 import { useInteraction } from 'hooks/useInteraction';
 import { useValidation } from 'hooks/useValidation';
 import { useDispatch, useSelector } from 'redux/hooks';
-import { ActionType } from 'redux/reducers/formReducer';
+import { formDataUpdated } from 'redux/reducers/formReducer';
 
 import { Input } from './Base';
 
@@ -19,12 +19,11 @@ export const ReceiptNumberField: FC<IProps> = ({ field, ...props }) => {
   const value = useSelector((state) => state.form[field]);
 
   const change = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: ActionType.CHANGE,
-      data: {
+    dispatch(
+      formDataUpdated({
         [field]: Number(event.target.value),
-      },
-    });
+      })
+    );
   };
 
   if (!!value && typeof value !== 'number') {

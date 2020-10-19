@@ -8,10 +8,10 @@ import { Spinner } from 'components/Spinner';
 import { colors } from 'constants/colors';
 import { ValidationLevel } from 'form/validation';
 import { downloadFormAction, emailFormAction } from 'redux/actions/submitActions';
-import { useDispatch, useSelector, useThunk } from 'redux/hooks';
-import { ActionType as InteractionActionType } from 'redux/reducers/interactionReducer';
-import { ActionType as StatusActionType } from 'redux/reducers/statusReducer';
-import { State } from 'redux/types';
+import { useDispatch, useSelector } from 'redux/hooks';
+import { setAllInteracted } from 'redux/reducers/interactionReducer';
+import { setResponse } from 'redux/reducers/statusReducer';
+import { State } from 'redux/store';
 
 import { ResponseMessage } from './ResponseMessage';
 
@@ -40,20 +40,18 @@ export const Submit = () => {
   const mailLoading = useSelector((state) => state.status.isDownloading);
   const response = useSelector((state) => state.status.responseMessage);
   const loading = mailLoading || downloadLoading;
-  const initDownload = useThunk(downloadFormAction());
-  const initSendMail = useThunk(emailFormAction());
 
   const [interacted, setInteraction] = useState(false);
 
   useEffect(() => {
     if (loading) {
-      dispatch({ type: StatusActionType.SET_RESPONSE_MESSAGE, data: null });
+      dispatch(setResponse(null));
     }
-  }, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [loading, dispatch]);
 
   const handleInteraction = () => {
     batch(() => {
-      dispatch({ type: InteractionActionType.SET_ALL_INTERACTED });
+      dispatch(setAllInteracted());
       setInteraction(true);
     });
   };
@@ -61,14 +59,14 @@ export const Submit = () => {
   const download = async () => {
     handleInteraction();
     if (isValid) {
-      initDownload();
+      dispatch(downloadFormAction());
     }
   };
 
   const send = async () => {
     handleInteraction();
     if (isValid) {
-      initSendMail();
+      dispatch(emailFormAction());
     }
   };
 

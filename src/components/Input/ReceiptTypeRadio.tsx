@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 
 import { ReceiptType } from 'form/state';
 import { useDispatch, useSelector } from 'redux/hooks';
-import { ActionType } from 'redux/reducers/formReducer';
 
 import { RadioButton } from './RadioButton';
+import { formDataUpdated } from 'redux/reducers/formReducer';
 
 interface IProps {
   label: string;
@@ -17,10 +17,7 @@ export const ReceiptTypeRadio: FC<IProps> = (props) => {
   const type = useSelector((state) => state.form.type);
 
   const handleClick = () => {
-    dispatch({
-      type: ActionType.CHANGE,
-      data: { type: props.value },
-    });
+    dispatch(formDataUpdated({ type: props.value }));
   };
 
   const checked = type === props.value;

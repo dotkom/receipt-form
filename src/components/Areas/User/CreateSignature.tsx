@@ -4,7 +4,7 @@ import { Signature } from 'components/Signature';
 import { useInteraction } from 'hooks/useInteraction';
 import { useValidation } from 'hooks/useValidation';
 import { useDispatch } from 'redux/hooks';
-import { ActionType } from 'redux/reducers/formReducer';
+import { formDataUpdated } from 'redux/reducers/formReducer';
 
 interface IProps {
   editClick: () => void;
@@ -16,10 +16,11 @@ export const CreateSignature: FC<IProps> = ({ editClick }) => {
   const { interacted } = useInteraction('signature');
 
   const onSave = (signature: File) => {
-    dispatch({
-      type: ActionType.CHANGE,
-      data: { signature },
-    });
+    dispatch(
+      formDataUpdated({
+        signature,
+      })
+    );
   };
 
   return (

@@ -48,11 +48,11 @@ const DEFAULT_PLACEHOLDER = `Klikk på dette feltet, eller dra en fil hit for å
 
 /** Copy props from StyledInput */
 export type StyledInputProps = Parameters<typeof StyledInput>[0];
-interface IProps extends StyledInputProps {
+type Props = StyledInputProps & {
   inputRef: React.RefObject<HTMLInputElement>;
-}
+};
 
-export const FileInputContainer: FC<IProps> = ({
+export const FileInputContainer: FC<Props> = ({
   level,
   highlight,
   placeholder = DEFAULT_PLACEHOLDER,

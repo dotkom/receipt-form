@@ -1,4 +1,4 @@
-import { Reducer } from 'redux';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IProfile } from 'utils/profile';
 
 /**
@@ -26,47 +26,34 @@ export interface IAuthProfile {
   email: string;
 }
 
-export interface IUserState {
+interface IState {
   user: IAuthProfile | null;
   profile: IProfile | null;
 }
 
-export const INITIAL_USER_STATE: IUserState = {
+const INITIAL_USER_STATE: IState = {
   user: null,
   profile: null,
 };
 
-export enum ActionType {
-  SET_PROFILE = 'SET_PROFILE_DATA',
-  SET_USER = 'SET_USER_DATA',
-  RESET = 'RESET_USER_DATA',
-}
-
-export interface IAction<K extends ActionType, T = undefined> {
-  type: K;
-  data: T;
-}
-
-export type Actions =
-  | IAction<ActionType.SET_PROFILE, IProfile>
-  | IAction<ActionType.SET_USER, IAuthProfile>
-  | IAction<ActionType.RESET>;
-
-export const userReducer: Reducer<IUserState, Actions> = (state = INITIAL_USER_STATE, action) => {
-  switch (action.type) {
-    case ActionType.SET_USER:
-      return {
-        ...state,
-        user: action.data,
-      };
-    case ActionType.SET_PROFILE:
-      return {
-        ...state,
-        profile: action.data,
-      };
-    case ActionType.RESET:
+export const userSlice = createSlice({
+  name: 'user',
+  initialState: INITIAL_USER_STATE,
+  reducers: {
+    setUser(state, action: PayloadAction<IAuthProfile>) {
+      const user = action.payload;
+      state.user = user;
+    },
+    setProfile(state, action: PayloadAction<IProfile>) {
+      const profile = action.payload;
+      state.profile = profile;
+    },
+    resetUser() {
       return INITIAL_USER_STATE;
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
+
+export const { resetUser, setProfile, setUser } = userSlice.actions;
+
+export const userReducer = userSlice.reducer;

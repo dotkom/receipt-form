@@ -4,7 +4,7 @@ import './polyfills';
 import { IDeserializedState, serializeReceipt } from 'form/state';
 import { getIsValid, IValidation } from 'form/validation';
 
-import { pdfGenerator } from './generatePDF';
+import { NonNullableState, pdfGenerator } from './generatePDF';
 
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { sendEmail } from './sendEmail';
@@ -76,7 +76,7 @@ export const DOWNLOAD_SUCCESS_MESSAGE = (data: string): IResultMessage => ({
   },
 });
 
-export const handler = async (data: IDeserializedState | null): Promise<IResultMessage> => {
+export const generateReceipt = async (data: IDeserializedState | null): Promise<IResultMessage> => {
   if (!data) {
     return MISSING_BODY;
   }
@@ -85,7 +85,8 @@ export const handler = async (data: IDeserializedState | null): Promise<IResultM
     const state = await serializeReceipt(data);
     const [isValid, errors] = getIsValid(state);
     if (isValid) {
-      const pdf = await pdfGenerator(state);
+      const validState = state as NonNullableState;
+      const pdf = await pdfGenerator(validState);
       if (!pdf) {
         return MISSING_PDF;
       }

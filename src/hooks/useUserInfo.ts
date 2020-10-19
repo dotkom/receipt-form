@@ -1,15 +1,18 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { catchCallbackAction, loginAction } from 'redux/actions/authActions';
-import { useThunk } from 'redux/hooks';
+import { useDispatch } from 'redux/hooks';
 
 export const useUserInfo = () => {
-  const logIn = useThunk(loginAction());
-  const catchCallback = useThunk(catchCallbackAction());
+  const dispatch = useDispatch();
+
+  const logIn = useCallback(() => {
+    dispatch(loginAction());
+  }, [dispatch]);
 
   useEffect(() => {
-    catchCallback();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    dispatch(catchCallbackAction());
+  }, [dispatch]);
 
   return { logIn };
 };

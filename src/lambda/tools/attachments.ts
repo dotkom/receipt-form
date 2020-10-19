@@ -1,51 +1,36 @@
-import { drawImage, PDFDocument, PDFDocumentFactory, PDFIndirectReference, PDFRawStream } from 'pdf-lib';
-import JPEGXObjectFactory from 'pdf-lib/lib/core/pdf-structures/factories/JPEGXObjectFactory';
-import PNGXObjectFactory from 'pdf-lib/lib/core/pdf-structures/factories/PNGXObjectFactory';
+import { PageSizes, PDFDocument, PDFImage } from 'pdf-lib';
 
 import { scaleDims } from './scale';
 
-const A4_PAGE_SIZE = [595, 842] as [number, number];
-
-const attachImage = (
-  imageReference: PDFIndirectReference<PDFRawStream>,
-  imageFactory: JPEGXObjectFactory | PNGXObjectFactory,
-  output: PDFDocument
-) => {
-  const { width, height } = imageFactory;
-  const [pageWidth, pageHeight] = A4_PAGE_SIZE;
+const attachImage = (image: PDFImage, output: PDFDocument) => {
+  const [pageWidth, pageHeight] = PageSizes.A4;
+  const { width, height } = image;
 
   const scaled = scaleDims(width, height, pageWidth, pageHeight);
 
-  const attachmentPage = output.createPage(A4_PAGE_SIZE);
-  attachmentPage.addImageObject('attachment', imageReference);
-
-  const attachmentContentStream = output.createContentStream(
-    drawImage('attachment', {
-      x: pageWidth - scaled.width,
-      y: pageHeight - scaled.height,
-      width: scaled.width,
-      height: scaled.height,
-    })
-  );
-
-  attachmentPage.addContentStreams(output.register(attachmentContentStream));
-
-  output.addPage(attachmentPage);
+  const attachmentPage = output.addPage(PageSizes.A4);
+  attachmentPage.drawImage(image, {
+    x: pageWidth - scaled.width,
+    y: pageHeight - scaled.height,
+    width: scaled.width,
+    height: scaled.height,
+  });
 };
 
-export const attachPNG = (fileData: Uint8Array, output: PDFDocument) => {
-  const [attachmentImage, sizes] = output.embedPNG(fileData);
-  attachImage(attachmentImage, sizes, output);
+export const attachPng = async (fileData: Uint8Array, output: PDFDocument) => {
+  const pngImage = await output.embedPng(fileData);
+  attachImage(pngImage, output);
 };
 
-export const attachJPG = (fileData: Uint8Array, output: PDFDocument) => {
-  const [attachmentImage, sizes] = output.embedJPG(fileData);
-  attachImage(attachmentImage, sizes, output);
+export const attachJpg = async (fileData: Uint8Array, output: PDFDocument) => {
+  const jpgImage = await output.embedJpg(fileData);
+  attachImage(jpgImage, output);
 };
 
-export const attachPDF = (pdfData: Uint8Array, output: PDFDocument) => {
-  const pdf = PDFDocumentFactory.load(pdfData);
-  for (const pdfPage of pdf.getPages()) {
-    output.addPage(pdfPage);
-  }
+export const attachPdf = async (pdfData: Uint8Array, output: PDFDocument) => {
+  const pdf = await PDFDocument.load(pdfData);
+  const copiedPages = await output.copyPages(pdf, pdf.getPageIndices());
+  copiedPages.forEach((page) => {
+    output.addPage(page);
+  });
 };

@@ -5,7 +5,7 @@ import { useInteraction } from 'hooks/useInteraction';
 import { useValidation } from 'hooks/useValidation';
 import { COMMITTEES } from 'models/comittees';
 import { useDispatch } from 'redux/hooks';
-import { ActionType } from 'redux/reducers/formReducer';
+import { formDataUpdated } from 'redux/reducers/formReducer';
 
 import { Label } from './Base';
 import { Select } from './Dropdown';
@@ -29,12 +29,11 @@ export const CommitteeDropdown: FC = () => {
     const key = event.target.value;
     const committee = COMMITTEES.find((com) => com.group === key);
     if (committee) {
-      dispatch({
-        type: ActionType.CHANGE,
-        data: {
+      dispatch(
+        formDataUpdated({
           committee,
-        },
-      });
+        })
+      );
       setInteracted();
     }
   };

@@ -1,19 +1,16 @@
 import { Middleware } from 'redux';
 
 import { validate } from 'form/validation';
-import { ActionType as FormActionType } from 'redux/reducers/formReducer';
-import { ActionType as ValidationActionType } from 'redux/reducers/validationReducer';
-import { Dispatch, State, Store } from 'redux/types';
+import { formDataUpdated } from 'redux/reducers/formReducer';
+import { setValidation } from 'redux/reducers/validationReducer';
+import { State } from 'redux/store';
 
-export const formValidatorMiddleware: Middleware<Store, State, Dispatch> = (store) => (next) => (action) => {
+export const formValidatorMiddleware: Middleware = (store) => (next) => (action) => {
   const result = next(action);
-  if (action.type === FormActionType.CHANGE) {
-    const { form } = store.getState();
+  if (action.type === formDataUpdated.type) {
+    const { form } = store.getState() as State;
     const validation = validate(form);
-    store.dispatch({
-      type: ValidationActionType.SET_VALIDATION,
-      data: validation,
-    });
+    store.dispatch(setValidation(validation));
   }
   return result;
 };

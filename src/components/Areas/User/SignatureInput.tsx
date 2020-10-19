@@ -5,7 +5,7 @@ import { FileInput } from 'components/Input';
 import { useInteraction } from 'hooks/useInteraction';
 import { useValidation } from 'hooks/useValidation';
 import { useDispatch, useSelector } from 'redux/hooks';
-import { ActionType } from 'redux/reducers/formReducer';
+import { formDataUpdated } from 'redux/reducers/formReducer';
 import { isFileEqual } from 'utils/file';
 
 interface IProps {
@@ -21,21 +21,19 @@ export const SignatureInput: FC<IProps> = ({ editClick }) => {
   const signature = useSelector((state) => state.form.signature, isSignatureEqual);
 
   const removeFile = () => {
-    dispatch({
-      type: ActionType.CHANGE,
-      data: {
+    dispatch(
+      formDataUpdated({
         signature: null,
-      },
-    });
+      })
+    );
   };
 
   const handleFileChange = (file: File) => {
-    dispatch({
-      type: ActionType.CHANGE,
-      data: {
+    dispatch(
+      formDataUpdated({
         signature: file,
-      },
-    });
+      })
+    );
   };
 
   const { validation, level } = useValidation('signature');

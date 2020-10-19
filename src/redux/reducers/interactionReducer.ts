@@ -1,33 +1,25 @@
-import { Reducer } from 'redux';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { FieldInteractions, INITIAL_INTERACTION, interactAll } from 'form/interaction';
 
-export enum ActionType {
-  SET_INTERACTED = 'SET_INTERACTED',
-  SET_ALL_INTERACTED = 'SET_ALL_INTERACTED',
-}
-
-export interface IAction<K extends ActionType, T = undefined> {
-  type: K;
-  data: T;
-}
-
-export type Actions =
-  | IAction<ActionType.SET_INTERACTED, Partial<FieldInteractions>>
-  | IAction<ActionType.SET_ALL_INTERACTED>;
-
-export const interactionReducer: Reducer<FieldInteractions, Actions> = (state = INITIAL_INTERACTION, action) => {
-  switch (action.type) {
-    case ActionType.SET_INTERACTED:
+export const interactionSlice = createSlice({
+  name: 'interaction',
+  initialState: INITIAL_INTERACTION,
+  reducers: {
+    setInteraction(state, action: PayloadAction<Partial<FieldInteractions>>) {
       return {
         ...state,
-        ...action.data,
+        ...action.payload,
       };
-    case ActionType.SET_ALL_INTERACTED:
+    },
+    setAllInteracted() {
       return {
         ...interactAll(),
       };
-    default:
-      return state;
-  }
-};
+    },
+  },
+});
+
+export const { setAllInteracted, setInteraction } = interactionSlice.actions;
+
+export const interactionReducer = interactionSlice.reducer;
