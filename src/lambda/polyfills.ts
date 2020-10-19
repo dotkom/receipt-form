@@ -1,9 +1,6 @@
 import 'core-js/stable/array/flat';
 import 'core-js/stable/array/flat-map';
 import { JSDOM } from 'jsdom';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import FileReaderImpl from 'jsdom/lib/jsdom/living/generated/FileReader';
 
 const dom = new JSDOM();
 
@@ -22,4 +19,4 @@ declare global {
 global.File = dom.window.File;
 global.Blob = dom.window.Blob;
 global.FileList = dom.window.FileList;
-global.FileReader = FileReaderImpl.createInterface({ window: dom.window }).interface;
+global.FileReader = dom.window.FileReader;
