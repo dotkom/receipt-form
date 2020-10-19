@@ -41,7 +41,7 @@ const logInRedirect = async (state: IState) => {
 };
 
 const processUser = async (user: User, state: IState): Promise<IState> => {
-  const profile: IAuthProfile = user.profile;
+  const profile: IAuthProfile = user.profile as IAuthProfile;
   const extProfile = await getProfile(user.access_token);
   const email = getEmail(profile.email, extProfile);
   return {

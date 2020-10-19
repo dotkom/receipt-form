@@ -1,8 +1,12 @@
-import React, { HTMLProps } from 'react';
+import React, { FC, SVGProps } from 'react';
 
 import { colors } from 'constants/colors';
 
-export const Cross = ({ color, title, ...props }: HTMLProps<SVGSVGElement>) => {
+interface Props extends SVGProps<SVGSVGElement> {
+  title: string;
+}
+
+export const Cross: FC<Props> = ({ color, title, ...props }) => {
   return (
     <svg width="100%" height="100%" viewBox="0 0 11 11" {...props}>
       <title>{title}</title>
