@@ -1,11 +1,11 @@
 import * as path from 'path';
-import { PDFDocumentFactory, PDFDocumentWriter, StandardFonts } from 'pdf-lib';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
 import getConfig from 'next/config';
 
 import { IState } from 'form/state';
 import { readFileAsBytes } from 'utils/readFileAsBytes';
 
-import { attachJPG, attachPDF, attachPNG } from './tools/attachments';
+import { attachJpg, attachPdf, attachPng } from './tools/attachments';
 import { embedSignature, embedText } from './tools/embed';
 import { readFileAsync } from './tools/readFileAsync';
 
@@ -15,47 +15,44 @@ export type NonNullableState = { [K in keyof IState]: NonNullable<IState[K]> };
 
 /**
  * Generates a Reciptform based on the input
- * TODO: Requires validation of fields
  */
-export const pdfGenerator = async (inputForm: IState) => {
+export const pdfGenerator = async (form: NonNullableState) => {
   try {
-    const form = inputForm as NonNullableState;
-
     /** Initialize template from file */
     const templatePath = path.join(serverRuntimeConfig.PROJECT_ROOT, './src/lambda/assets/template.pdf');
     const templateFile = await readFileAsync(templatePath);
-    const template = PDFDocumentFactory.load(templateFile);
+    const template = await PDFDocument.load(templateFile);
 
     /** Initialize a new PDF document as output */
-    const outputPDF = PDFDocumentFactory.create();
-    const [timesRomanRef] = template.embedStandardFont(StandardFonts.TimesRoman);
+    const outputPdf = await PDFDocument.create();
+    const timesRomanRef = outputPdf.embedStandardFont(StandardFonts.TimesRoman);
 
     /** Load text and signature to templated page */
-    const page = template.getPages()[0];
-    page.addFontDictionary('TimesRoman', timesRomanRef);
-    embedText(form, template, page);
-    await embedSignature(form.signature, template, page);
-    outputPDF.addPage(page);
+    const [page] = await outputPdf.copyPages(template, [0]);
+    page.setFont(timesRomanRef)
+    embedText(form, page);
+    await embedSignature(form.signature, outputPdf, page);
+    outputPdf.addPage(page);
 
     /** Load all attachments as separate pages */
     for (const attachment of form.attachments) {
       const attachmentBytes = await readFileAsBytes(attachment);
       switch (attachment.type) {
         case 'image/jpeg':
-          attachJPG(attachmentBytes, outputPDF);
+          await attachJpg(attachmentBytes, outputPdf);
           break;
         case 'image/png':
-          attachPNG(attachmentBytes, outputPDF);
+          await attachPng(attachmentBytes, outputPdf);
           break;
         case 'application/pdf':
-          attachPDF(attachmentBytes, outputPDF);
+          await attachPdf(attachmentBytes, outputPdf);
           break;
         default:
           throw new Error('Unsupported file type supplied as attachment');
       }
     }
 
-    const pdfBytes = PDFDocumentWriter.saveToBytes(outputPDF);
+    const pdfBytes = await outputPdf.save();
     return pdfBytes;
   } catch (err) {
     if (err.code === 'ENOENT') {

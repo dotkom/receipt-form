@@ -1,9 +1,15 @@
-export const positionText = (x: number, y: number) => ({
+import { ColorTypes, PDFPageDrawTextOptions } from 'pdf-lib';
+
+export const positionText = (x: number, y: number): PDFPageDrawTextOptions => ({
   x,
   y,
   size: 14,
-  font: 'TimesRoman',
-  colorRgb: [0, 0, 0],
+  color: {
+    type: ColorTypes.RGB,
+    red: 0,
+    green: 0,
+    blue: 0,
+  },
 });
 
 const MAX_CHAR_LENGTH = 65;
@@ -11,7 +17,7 @@ const MAX_CHAR_LENGTH = 65;
 /**
  * Converts a single line string to array of strings of maxCharLength
  */
-export const createMultiLine = (text: string) => {
+export const createMultiLine = (text: string): string => {
   const multiLine = [];
 
   /* Break each of the original lines by themselves */
@@ -37,5 +43,5 @@ export const createMultiLine = (text: string) => {
     }
     multiLine.push(currentLine);
   }
-  return multiLine;
+  return multiLine.join('\n');
 };

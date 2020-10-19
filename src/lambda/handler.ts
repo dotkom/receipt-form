@@ -4,7 +4,7 @@ import './polyfills';
 import { IDeserializedState, serializeReceipt } from 'form/state';
 import { getIsValid, IValidation } from 'form/validation';
 
-import { pdfGenerator } from './generatePDF';
+import { NonNullableState, pdfGenerator } from './generatePDF';
 
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { sendEmail } from './sendEmail';
@@ -85,7 +85,8 @@ export const generateReceipt = async (data: IDeserializedState | null): Promise<
     const state = await serializeReceipt(data);
     const [isValid, errors] = getIsValid(state);
     if (isValid) {
-      const pdf = await pdfGenerator(state);
+      const validState = state as NonNullableState
+      const pdf = await pdfGenerator(validState);
       if (!pdf) {
         return MISSING_PDF;
       }
