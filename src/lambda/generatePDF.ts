@@ -29,7 +29,7 @@ export const pdfGenerator = async (form: NonNullableState) => {
 
     /** Load text and signature to templated page */
     const [page] = await outputPdf.copyPages(template, [0]);
-    page.setFont(timesRomanRef)
+    page.setFont(timesRomanRef);
     embedText(form, page);
     await embedSignature(form.signature, outputPdf, page);
     outputPdf.addPage(page);

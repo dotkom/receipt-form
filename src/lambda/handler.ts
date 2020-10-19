@@ -85,7 +85,7 @@ export const generateReceipt = async (data: IDeserializedState | null): Promise<
     const state = await serializeReceipt(data);
     const [isValid, errors] = getIsValid(state);
     if (isValid) {
-      const validState = state as NonNullableState
+      const validState = state as NonNullableState;
       const pdf = await pdfGenerator(validState);
       if (!pdf) {
         return MISSING_PDF;
