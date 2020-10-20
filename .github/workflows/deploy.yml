@@ -20,6 +20,7 @@ jobs:
         env:
           NEXT_PUBLIC_AUTH_ENDPOINT: ${{ secrets.NEXT_PUBLIC_AUTH_ENDPOINT }}
           NEXT_PUBLIC_AUTH_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_AUTH_CLIENT_ID }}
+          NEXT_PUBLIC_OW4_ADDRESS: ${{ secrets.NEXT_PUBLIC_OW4_ADDRESS }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
         with:
           name: receipt-form
@@ -31,6 +32,7 @@ jobs:
           buildargs:
             NEXT_PUBLIC_AUTH_ENDPOINT
             NEXT_PUBLIC_AUTH_CLIENT_ID
+            NEXT_PUBLIC_OW4_ADDRESS
             NEXT_PUBLIC_SENTRY_DSN
 
       - name: Trigger deploy.sh remotely

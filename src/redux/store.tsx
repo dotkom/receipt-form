@@ -5,6 +5,7 @@ import { configureStore, DeepPartial, StateFromReducersMapObject } from '@reduxj
 
 import { formReducer } from './reducers/formReducer';
 import { interactionReducer } from './reducers/interactionReducer';
+import { groupsReducer } from './reducers/groupsReducer';
 import { statusReducer } from './reducers/statusReducer';
 import { userReducer } from './reducers/userReducer';
 import { validationReducer } from './reducers/validationReducer';
@@ -17,6 +18,7 @@ const reducer = {
   interaction: interactionReducer,
   userData: userReducer,
   status: statusReducer,
+  groups: groupsReducer,
 };
 /* eslint sort-keys: "off" */
 

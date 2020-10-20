@@ -3,13 +3,14 @@ import styled from 'styled-components';
 
 import { useInteraction } from 'hooks/useInteraction';
 import { useValidation } from 'hooks/useValidation';
-import { COMMITTEES } from 'models/comittees';
 import { useDispatch } from 'redux/hooks';
 import { formDataUpdated } from 'redux/reducers/formReducer';
 
 import { Label } from './Base';
 import { Select } from './Dropdown';
 import { ValidationMessages } from './ValidationMessages';
+import { useSelector } from 'redux/hooks';
+import { isOnlineGroup } from 'models/groups';
 
 const Option = styled.option``;
 
@@ -22,16 +23,18 @@ const SelectContainer = styled.div`
 
 export const CommitteeDropdown: FC = () => {
   const dispatch = useDispatch();
+  const groups = useSelector((state) => state.groups);
+  const selectedGroupId = useSelector((state) => state.form.committee?.id);
   const { interacted, setInteracted } = useInteraction('committee');
   const { validation, level } = useValidation('committee');
 
   const onDropdownChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const key = event.target.value;
-    const committee = COMMITTEES.find((com) => com.group === key);
-    if (committee) {
+    const groupId = Number(event.target.value);
+    const selectedGroup = groups.find((group) => group.id === groupId);
+    if (selectedGroup) {
       dispatch(
         formDataUpdated({
-          committee,
+          committee: selectedGroup,
         })
       );
       setInteracted();
@@ -47,15 +50,22 @@ export const CommitteeDropdown: FC = () => {
         defaultValue="default"
         onBlur={setInteracted}
         level={interacted ? level : undefined}
+        value={selectedGroupId || 'default'}
       >
         <Option disabled value="default">
           Velg enheten/komiteen kjøpet er gjort for
         </Option>
-        {COMMITTEES.map(({ group, name }) => (
-          <Option key={group} value={group}>
-            {name}
-          </Option>
-        ))}
+        {groups.map((group) =>
+          isOnlineGroup(group) ? (
+            <Option key={group.id} value={group.id}>
+              {group.name_long}
+            </Option>
+          ) : (
+            <Option key={group.name} value={group.id}>
+              {group.name}
+            </Option>
+          )
+        )}
       </Select>
     </SelectContainer>
   );

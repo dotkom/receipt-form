@@ -1,4 +1,3 @@
-import { COMMITTEES } from 'models/comittees';
 import { formatBytes } from 'utils/bytes';
 
 import { IState } from './state';
@@ -91,9 +90,9 @@ export const STATE_VALIDATION: StateValidators = {
   ],
   committee: [
     {
-      level: ValidationLevel.WARNING,
-      message: 'Du har skrevet inn en egen valgmulghet, bare gjør dette hvis ingen av valgene i listen passer',
-      validator: ({ committee }) => committee !== null && !!COMMITTEES.find((c) => c.group === committee.group),
+      level: ValidationLevel.REQUIRED,
+      message: 'Du må velge en komité eller gruppe',
+      validator: ({ committee }) => committee !== null,
     },
   ],
   comments: [

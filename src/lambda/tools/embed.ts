@@ -1,3 +1,4 @@
+import { getGroupName } from 'models/groups';
 import { PDFDocument, PDFPage } from 'pdf-lib';
 
 import { readFileAsBytes } from 'utils/readFileAsBytes';
@@ -12,7 +13,7 @@ export const embedText = (form: NonNullableState, page: PDFPage) => {
   page.drawText(form.fullname, positionText(165, 627));
   page.drawText(form.fullname, positionText(165, 627));
   page.drawText(form.email, positionText(165, 599));
-  page.drawText(form.committee.name, positionText(165, 571));
+  page.drawText(getGroupName(form.committee), positionText(165, 571));
   page.drawText(getCurrentDateString(), positionText(441, 571));
   page.drawText(form.type === 'card' ? form.cardDetails : form.account, positionText(165, 527));
   page.drawText(`${formatAmount(form.amount)} kr`, positionText(441, 527));
