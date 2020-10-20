@@ -76,25 +76,3 @@ export const serializeReceipt = async (deserializedState: IDeserializedState): P
     signature,
   };
 };
-
-const formAppend = (data: FormData, key: string, value: IState[keyof IState]) => {
-  if (typeof value === 'string') {
-    data.append(key, value);
-  } else if (typeof value === 'number') {
-    data.append(key, String(value));
-  } else if (value instanceof File) {
-    data.append(key, value, value.name);
-  } else if (value === null) {
-    data.append(key, String(value));
-  } else if (value instanceof Array) {
-    value.forEach((innerValue) => formAppend(data, key, innerValue));
-  } else if (value instanceof Object) {
-    data.append(key, JSON.stringify(value));
-  }
-};
-
-export const createFormData = (state: IState): FormData => {
-  const data = new FormData();
-  getEntries(state).forEach(([key, value]) => formAppend(data, key, value));
-  return data;
-};
