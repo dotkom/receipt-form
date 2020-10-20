@@ -7,6 +7,7 @@ import { SENTRY_DSN } from 'constants/sentry';
 import { AppProps } from 'next/dist/next-server/lib/router/router';
 
 import '../index.css';
+import { StoreProvider } from 'redux/store';
 
 Sentry.init({
   dsn: SENTRY_DSN,
@@ -19,7 +20,9 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
       </Head>
       <SentryBoundry>
-        <Component {...pageProps} />;
+        <StoreProvider>
+          <Component {...pageProps} />;
+        </StoreProvider>
       </SentryBoundry>
     </>
   );
