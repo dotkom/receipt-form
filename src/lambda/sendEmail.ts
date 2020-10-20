@@ -8,6 +8,7 @@ import { IState } from 'form/state';
 import { NonNullableState } from './generatePDF';
 import { getFileName, getFormattedText } from './tools/format';
 import { readFileAsync } from './tools/readFileAsync';
+import { getGroupName } from 'models/groups';
 
 const { serverRuntimeConfig } = getConfig();
 
@@ -78,7 +79,7 @@ export const sendEmail = async (pdf: string, formData: IState): Promise<boolean>
         to: DESTINATION_EMAIL,
         cc: [form.email, ...extraEmails],
         replyTo: form.email,
-        subject: `[${form.committee.shortName}] ${form.intent} - ${form.fullname}`,
+        subject: `[${getGroupName(form.committee)}] ${form.intent} - ${form.fullname}`,
         text: getFormattedText(form),
         attachments: [
           {

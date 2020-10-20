@@ -1,5 +1,4 @@
-import { ICommittee } from 'models/comittees';
-import { getEntries } from 'utils/object';
+import { Group } from 'models/groups';
 import { readDataUrlAsFile2 } from 'utils/readDataUrlAsFile';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 
@@ -15,7 +14,7 @@ export interface IState {
   intent: string | null;
   account: string | null;
   cardDetails: string | null;
-  committee: ICommittee | null;
+  committee: Group | null;
   comments: string | null;
   attachments: File[];
   mode: SendMode;
@@ -41,7 +40,7 @@ export interface IDeserializedState {
   email: string;
   amount: number;
   intent: string;
-  committee: ICommittee;
+  committee: Group;
   comments: string;
 
   /** 'type' describes which of either 'acount' and 'cardDetails' that is defined */
