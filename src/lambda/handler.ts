@@ -4,7 +4,8 @@ import './polyfills';
 import { IDeserializedState, serializeReceipt } from 'form/state';
 import { getIsValid } from 'form/validation';
 
-import { NonNullableState, pdfGenerator } from './generatePDF';
+import { NonNullableState } from './generatePDF';
+import { pdfGenerator2 } from './generatePDF2';
 
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { sendEmail } from './sendEmail';
@@ -46,9 +47,8 @@ export const generateReceipt = async (data: IDeserializedState | null): Promise<
     throw new ApiValidationError(errors);
   }
   const validState = state as NonNullableState;
-  const pdf = await pdfGenerator(validState);
-  const pdfBlob = new Blob([pdf]);
-  const pdfFile = new File([pdfBlob], 'receipt.pdf', { type: 'application/pdf' });
+  const pdf = await pdfGenerator2(validState);
+  const pdfFile = new File([pdf], 'receipt.pdf', { type: 'application/pdf' });
   const pdfString = await readFileAsDataUrl(pdfFile);
 
   if (state.mode === 'download') {

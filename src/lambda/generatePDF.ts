@@ -54,7 +54,8 @@ export const pdfGenerator = async (form: NonNullableState) => {
     }
 
     const pdfBytes = await outputPdf.save();
-    return pdfBytes;
+    const pdfBlob = new Blob([pdfBytes]);
+    return pdfBlob;
   } catch (err) {
     throw new PdfRenderError(err);
   }
