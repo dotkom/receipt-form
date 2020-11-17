@@ -2,111 +2,63 @@ import 'isomorphic-fetch';
 import './polyfills';
 
 import { IDeserializedState, serializeReceipt } from 'form/state';
-import { getIsValid, IValidation } from 'form/validation';
+import { getIsValid } from 'form/validation';
 
 import { NonNullableState, pdfGenerator } from './generatePDF';
 
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { sendEmail } from './sendEmail';
+import { ApiBodyError, ApiValidationError } from './errors';
 
-export interface IResultMessage {
-  statusCode: number;
-  body: {
-    message?: string;
-    data?: string;
-    validation?: IValidation[];
-  };
+export interface SuccessBody {
+  message: string;
+  data?: string;
 }
 
-export const MISSING_PDF: IResultMessage = {
-  statusCode: 500, // Bad request
-  body: {
-    message: 'Noe gikk galt, og PDF-en ble ikke generert. Vennligst prøv om igjen, eller ta kontakt med Dotkom.',
-  },
-};
+interface ResponseResult extends SuccessBody {
+  statusCode: number;
+}
 
-export const MISSING_BODY: IResultMessage = {
-  statusCode: 400, // Bad request
-  body: {
-    message: 'Det ble ikke sendt data med forespørselen, vennligst last inn siden på nytt og prøv igjen.',
-  },
-};
-
-export const VALIDATION_ERROR = (validation: IValidation[]): IResultMessage => ({
-  statusCode: 400,
-  body: {
-    message: 'Skjemaet passerer ikke validering, vennligst last inn siden på nytt og prøv igjen.',
-    validation,
-  },
-});
-
-export const GENERIC_ERROR: IResultMessage = {
-  statusCode: 400,
-  body: {
-    message: 'Noe ser ut til å ha gått galt under prosesseringen, vennligst last inn siden på nytt og prøv igjen.',
-  },
-};
-
-export const EMAIL_SUCCESS_MESSAGE: IResultMessage = {
+export const EMAIL_SUCCESS_MESSAGE: ResponseResult = {
   statusCode: 201,
-  body: {
-    message: 'E-post har blitt sendt til Bankom, med deg på kopi. Takk for at du bruker digitalt kvitteringsskjema!',
-  },
+  message: 'E-post har blitt sendt til Bankom, med deg på kopi. Takk for at du bruker digitalt kvitteringsskjema!',
 };
 
-export const EMAIL_ERROR_MESSAGE: IResultMessage = {
-  statusCode: 500,
-  body: {
-    message: 'Noe gikk galt under sendingen av E-post, vennligst prøv igjen eller ta kontakt med Dotkom.',
-  },
-};
-
-export const TEAPOT_SUCCESS: IResultMessage = {
+export const TEAPOT_SUCCESS: ResponseResult = {
   statusCode: 418, // I'm a teapot
-  body: {
-    message: '🍵 Jeg er en tekanne 🍵',
-  },
+  message: '🍵 Jeg er en tekanne 🍵',
 };
 
-export const DOWNLOAD_SUCCESS_MESSAGE = (data: string): IResultMessage => ({
-  statusCode: 201, // Created
-  body: {
-    message: 'Kvitteringsskjema ble generert som PDF, og lastes nå ned til din enhet!',
-    data,
-  },
+export const DOWNLOAD_SUCCESS_MESSAGE = (data: string): ResponseResult => ({
+  statusCode: 201,
+  message: 'Kvitteringsskjema ble generert som PDF, og lastes nå ned til din enhet!',
+  data,
 });
 
-export const generateReceipt = async (data: IDeserializedState | null): Promise<IResultMessage> => {
+export const generateReceipt = async (data: IDeserializedState | null): Promise<ResponseResult> => {
   if (!data) {
-    return MISSING_BODY;
+    throw new ApiBodyError();
   }
 
-  try {
-    const state = await serializeReceipt(data);
-    const [isValid, errors] = getIsValid(state);
-    if (isValid) {
-      const validState = state as NonNullableState;
-      const pdf = await pdfGenerator(validState);
-      if (!pdf) {
-        return MISSING_PDF;
-      }
-      const pdfBlob = new Blob([pdf]);
-      const pdfFile = new File([pdfBlob], 'receipt.pdf', { type: 'application/pdf' });
-      const pdfString = await readFileAsDataUrl(pdfFile);
-      if (state.mode === 'download') {
-        return DOWNLOAD_SUCCESS_MESSAGE(pdfString);
-      } else if (state.mode === 'email') {
-        const emailSuccess = await sendEmail(pdfString, state);
-        return emailSuccess ? EMAIL_SUCCESS_MESSAGE : EMAIL_ERROR_MESSAGE;
-      } else if (state.mode === 'teapot') {
-        return TEAPOT_SUCCESS;
-      }
-    } else {
-      return VALIDATION_ERROR(errors);
-    }
-  } catch (err) {
-    console.error(err);
-    return GENERIC_ERROR;
+  const state = await serializeReceipt(data);
+  const [isValid, errors] = getIsValid(state);
+  if (!isValid) {
+    throw new ApiValidationError(errors);
   }
-  return GENERIC_ERROR;
+  const validState = state as NonNullableState;
+  const pdf = await pdfGenerator(validState);
+  const pdfBlob = new Blob([pdf]);
+  const pdfFile = new File([pdfBlob], 'receipt.pdf', { type: 'application/pdf' });
+  const pdfString = await readFileAsDataUrl(pdfFile);
+
+  if (state.mode === 'download') {
+    return DOWNLOAD_SUCCESS_MESSAGE(pdfString);
+  } else if (state.mode === 'email') {
+    await sendEmail(pdfString, state);
+    return EMAIL_SUCCESS_MESSAGE;
+  } else if (state.mode === 'teapot') {
+    return TEAPOT_SUCCESS;
+  } else {
+    throw new ApiValidationError([]);
+  }
 };
