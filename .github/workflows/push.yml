@@ -3,13 +3,14 @@ on:
   push:
 
 jobs:
-  run-linters:
+  lint-test:
     name: Run linters
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
+
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -21,12 +22,16 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
+
       - name: Install dependencies
         run: yarn
+
       - name: Build
         run: yarn build
+
       - name: Typescript compile
         run: yarn tsc
+
       - name: Run linters
         uses: wearerequired/lint-action@v1
         with:
@@ -38,3 +43,6 @@ jobs:
           # Prettier
           prettier: true
           prettier_dir: src/
+
+      - name: Test
+        run: yarn test:ci

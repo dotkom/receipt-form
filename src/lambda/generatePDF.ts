@@ -21,7 +21,7 @@ export const pdfGenerator = async (form: NonNullableState) => {
     /** Initialize template from file */
     const templatePath = path.join(serverRuntimeConfig.PROJECT_ROOT, './src/lambda/assets/template.pdf');
     const templateFile = await readFileAsync(templatePath);
-    const template = await PDFDocument.load(templateFile);
+    const template = await PDFDocument.load(new Uint8Array(templateFile));
 
     /** Initialize a new PDF document as output */
     const outputPdf = await PDFDocument.create();

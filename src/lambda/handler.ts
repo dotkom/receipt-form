@@ -102,7 +102,7 @@ export const generateReceipt = async (data: IDeserializedState | null): Promise<
         return TEAPOT_SUCCESS;
       }
     } else {
-      VALIDATION_ERROR(errors);
+      return VALIDATION_ERROR(errors);
     }
   } catch (err) {
     console.error(err);
