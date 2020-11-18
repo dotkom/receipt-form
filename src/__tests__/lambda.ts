@@ -1,3 +1,4 @@
+import { ApiValidationError, ApiBodyError, ConfigError } from './../lambda/errors';
 import MimeTypes from 'mime-types';
 
 import { readFileAsync } from 'lambda/tools/readFileAsync';
@@ -37,35 +38,49 @@ test('Receipt is correctly generated with valid state', async () => {
   expect(statusCode).toBe(201);
 });
 
-test('Valid receipt does not add any validation errors', async () => {
-  const form = await getValidForm();
-  const { body } = await generateReceipt(form);
-
-  expect(body.validation).toBeUndefined();
-});
-
 test('Invalid receipt returns a 400 with validation errors', async () => {
   const form = await getValidForm();
   form.amount = -1;
-  const { statusCode, body } = await generateReceipt(form);
+  const handler = async () => {
+    await generateReceipt(form);
+  };
 
-  expect(statusCode).toBe(400);
-  expect(body.validation).toBeDefined();
+  expect(handler).rejects.toThrow(ApiValidationError);
 });
 
-test('Empty body returns 400 without validation errors', async () => {
-  const { statusCode, body } = await generateReceipt(null);
+test('Empty body throws body error', async () => {
+  const handler = async () => {
+    await generateReceipt(null);
+  };
 
-  expect(statusCode).toBe(400);
-  expect(body.validation).toBeUndefined();
+  expect(handler).rejects.toThrow(ApiBodyError);
 });
 
-test('Warning level validation should shoudl still generate receipt', async () => {
+test('Malformed body throws body error', async () => {
+  const handler = async () => {
+    await generateReceipt(({ foo: 'bar', baz: 200 } as unknown) as IDeserializedState);
+  };
+
+  expect(handler).rejects.toThrow(ApiBodyError);
+});
+
+test('Warning level validation should should still generate receipt', async () => {
   const form = await getValidForm();
+  form.mode = 'download';
   form.comments = '';
   form.email = 'test@test.com';
-  const { statusCode, body } = await generateReceipt(form);
+  const { statusCode, data } = await generateReceipt(form);
 
   expect(statusCode).toBe(201);
-  expect(body.validation).toBeUndefined();
+  expect(data).toBeDefined();
+});
+
+test('Email mode should throw when not configured correctly for testing', async () => {
+  const form = await getValidForm();
+  form.mode = 'email';
+  const handler = async () => {
+    await generateReceipt(form);
+  };
+
+  expect(handler).rejects.toThrow(ConfigError);
 });
