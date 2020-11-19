@@ -1,14 +1,12 @@
-
 name: Deploy
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '*'
   workflow_dispatch:
 
 jobs:
-
   deploy:
     runs-on: ubuntu-latest
     steps:
