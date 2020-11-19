@@ -47,7 +47,6 @@ export const CommitteeDropdown: FC = () => {
       <ValidationMessages validation={validation} display={interacted} />
       <Select
         onChange={onDropdownChange}
-        defaultValue="default"
         onBlur={setInteracted}
         level={interacted ? level : undefined}
         value={selectedGroupId || 'default'}

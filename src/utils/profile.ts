@@ -1,4 +1,6 @@
-const PROFILE_API = 'https://online.ntnu.no/api/v1/profile/';
+import { OW4_ADDRESS } from 'constants/backend';
+
+const PROFILE_API = `${OW4_ADDRESS}/api/v1/profile/`;
 
 /**
  * Full Onlineweb user profile.
