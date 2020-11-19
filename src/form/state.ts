@@ -1,3 +1,4 @@
+import { ApiBodyError } from './../lambda/errors';
 import { Group } from 'models/groups';
 import { readDataUrlAsFile2 } from 'utils/readDataUrlAsFile';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
@@ -65,13 +66,20 @@ export const deserializeReceipt = async (state: IState): Promise<IDeserializedSt
 };
 
 export const serializeReceipt = async (deserializedState: IDeserializedState): Promise<IState> => {
-  const attachments = await Promise.all(
-    deserializedState.attachments.map(async (dataUrl) => readDataUrlAsFile2(dataUrl))
-  );
-  const signature = await readDataUrlAsFile2(deserializedState.signature);
-  return {
-    ...deserializedState,
-    attachments: attachments.filter(Boolean) as File[],
-    signature,
-  };
+  try {
+    const attachments = await Promise.all(
+      deserializedState.attachments.map(async (dataUrl) => readDataUrlAsFile2(dataUrl))
+    );
+    const signature = await readDataUrlAsFile2(deserializedState.signature);
+    return {
+      ...deserializedState,
+      attachments: attachments.filter(Boolean) as File[],
+      signature,
+    };
+  } catch (err) {
+    if (err instanceof TypeError) {
+      throw new ApiBodyError(err.message);
+    }
+    throw err;
+  }
 };

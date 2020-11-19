@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { batch } from 'react-redux';
+import { batch, shallowEqual } from 'react-redux';
 import styled from 'styled-components';
 
 import { Button } from 'components/Button';
@@ -38,7 +38,7 @@ export const Submit = () => {
   const isValid = errorCount === 0;
   const downloadLoading = useSelector((state) => state.status.isDownloading);
   const mailLoading = useSelector((state) => state.status.isDownloading);
-  const response = useSelector((state) => state.status.responseMessage);
+  const response = useSelector((state) => state.status.response, shallowEqual);
   const loading = mailLoading || downloadLoading;
 
   const [interacted, setInteraction] = useState(false);
@@ -73,7 +73,7 @@ export const Submit = () => {
   return (
     <>
       {!isValid && interacted && <WarningMessage>{VALIDATION_COUNT(errorCount)}</WarningMessage>}
-      {!!response && <ResponseMessage response={response} />}
+      {!!response && <ResponseMessage statusCode={response.statusCode} message={response.body.message} />}
       {loading && <Spinner />}
       <SeparatedFieldSet>
         <Button title="Last ned PDF til egen maskin" onClick={download} disabled={loading}>

@@ -1,3 +1,4 @@
+import { PdfRenderError } from './errors';
 import * as path from 'path';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
 import getConfig from 'next/config';
@@ -55,10 +56,6 @@ export const pdfGenerator = async (form: NonNullableState) => {
     const pdfBytes = await outputPdf.save();
     return pdfBytes;
   } catch (err) {
-    if (err.code === 'ENOENT') {
-      console.error(err);
-      return;
-    }
-    throw err;
+    throw new PdfRenderError(err);
   }
 };

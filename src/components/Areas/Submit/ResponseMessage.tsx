@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 
 import { colors } from 'constants/colors';
-import { IResultMessage } from 'lambda/handler';
 
-interface IProps {
-  response: IResultMessage;
+interface Props {
+  statusCode: number;
+  message: string;
 }
 
-interface IMessageProps {
+interface MessageProps {
   statusCode: number;
 }
 
@@ -25,7 +25,7 @@ const getStatusCodeColor = (code: number) => {
   }
 };
 
-const Message = styled.h3<IMessageProps>`
+const Message = styled.h3<MessageProps>`
   color: ${({ statusCode }) => getStatusCodeColor(statusCode)};
 `;
 
@@ -33,6 +33,6 @@ const GENERIC_ERROR = `
 Noe ser ut til å ha gått galt under prosesseringen.
 `;
 
-export const ResponseMessage: FC<IProps> = ({ response }) => {
-  return <Message statusCode={response.statusCode}>{response.body ? response.body.message : GENERIC_ERROR}</Message>;
+export const ResponseMessage: FC<Props> = ({ statusCode, message }) => {
+  return <Message statusCode={statusCode}>{message || GENERIC_ERROR}</Message>;
 };
