@@ -1,4 +1,4 @@
-import { ApiValidationError, ApiBodyError, ConfigError } from './../lambda/errors';
+import { ApiValidationError, ApiBodyError, ConfigError, PdfRenderError } from './../lambda/errors';
 import MimeTypes from 'mime-types';
 
 import { readFileAsync } from 'lambda/tools/readFileAsync';
@@ -36,6 +36,39 @@ test('Receipt is correctly generated with valid state', async () => {
   const { statusCode } = await generateReceipt(form);
 
   expect(statusCode).toBe(201);
+});
+
+test('Receipt is correctly generated with all allowed file types', async () => {
+  const form = await getValidForm();
+  form.attachments = await Promise.all([
+    getDeserializedAssetFile('signature.png'),
+    getDeserializedAssetFile('cursed-cat.jpg'),
+    getDeserializedAssetFile('example.pdf'),
+  ]);
+  const { statusCode } = await generateReceipt(form);
+
+  expect(statusCode).toBe(201);
+});
+
+test('Error is thrown when attachments contain an unsuported file type', async () => {
+  const form = await getValidForm();
+  form.attachments = await Promise.all([getDeserializedAssetFile('hello.gif')]);
+
+  const handler1 = async () => {
+    await generateReceipt(form);
+  };
+  expect(handler1).rejects.toThrow(PdfRenderError);
+
+  /** Also check when it contains one wrong and one correct */
+  form.attachments = await Promise.all([
+    getDeserializedAssetFile('cursed-cat.jpg'),
+    getDeserializedAssetFile('hello.gif'),
+  ]);
+
+  const handler2 = async () => {
+    await generateReceipt(form);
+  };
+  expect(handler2).rejects.toThrow(PdfRenderError);
 });
 
 test('Invalid receipt returns a 400 with validation errors', async () => {
