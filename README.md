@@ -1,5 +1,7 @@
 # Receipt Form
 
+[![codecov](https://codecov.io/gh/dotkom/receipt-form/branch/master/graph/badge.svg?token=BGkDjRT8uU)](https://codecov.io/gh/dotkom/receipt-form)
+
 This application serves as a way to automatically create a receipt form for usage in Linjeforeningen Online.
 It is created as an over-engineered React webapp, because it is fun.
 
