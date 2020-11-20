@@ -76,10 +76,20 @@ export const Submit = () => {
       {!!response && <ResponseMessage statusCode={response.statusCode} message={response.body.message} />}
       {loading && <Spinner />}
       <SeparatedFieldSet>
-        <Button title="Last ned PDF til egen maskin" onClick={download} disabled={loading}>
+        <Button
+          data-testid="button-submit-download"
+          title="Last ned PDF til egen maskin"
+          onClick={download}
+          disabled={loading}
+        >
           Last ned PDF
         </Button>
-        <Button title="Send skjemaet direkte til Bankom" onClick={send} disabled={loading}>
+        <Button
+          data-testid="button-submit-email"
+          title="Send skjemaet direkte til Bankom"
+          onClick={send}
+          disabled={loading}
+        >
           Send til Bankom
         </Button>
       </SeparatedFieldSet>
