@@ -36,8 +36,8 @@ export const initStore = (preloadedState: DeepPartial<State> = {}) => {
 
 export const store = initStore();
 
-export const StoreProvider: FC = (props) => {
-  return <Provider {...props} store={store} />;
+export const StoreProvider: FC<{ initialStore?: ReturnType<typeof initStore> }> = (props) => {
+  return <Provider {...props} store={props.initialStore || store} />;
 };
 
 export type Dispatch = typeof store.dispatch;
