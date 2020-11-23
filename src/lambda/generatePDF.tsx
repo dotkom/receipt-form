@@ -4,16 +4,20 @@ import puppeteer from 'puppeteer';
 import { ServerStyleSheet } from 'styled-components';
 import { renderToString } from 'react-dom/server';
 
-import { NonNullableState } from 'lambda/generatePDF';
 import { PdfTemplate } from './components';
 import { readFileAsBytes } from 'utils/readFileAsBytes';
 import { attachJpg, attachPdf, attachPng } from './tools/attachments';
 import { sleep } from './tools/sleep';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
+import { PdfRenderError } from './errors';
+import { NODE_ENV } from 'constants/common';
+import { IState } from 'form/state';
 
-const A_SATISFACTORY_AMOUNT_OF_TIME = 10000; // 10 seconds
+const A_SATISFACTORY_AMOUNT_OF_TIME = NODE_ENV === 'test' ? 1 : 5000; // 5 seconds
 
-export const pdfGenerator2 = async (form: NonNullableState): Promise<Blob | void> => {
+export type NonNullableState = { [K in keyof IState]: NonNullable<IState[K]> };
+
+export const pdfGenerator = async (form: NonNullableState): Promise<Uint8Array> => {
   const browser = await puppeteer.launch({ headless: true });
   const sheet = new ServerStyleSheet();
   try {
@@ -29,7 +33,7 @@ export const pdfGenerator2 = async (form: NonNullableState): Promise<Blob | void
     await sleep(A_SATISFACTORY_AMOUNT_OF_TIME);
 
     /** Initialize a new PDF document as output */
-    const frontPageDocument = await PDFDocument.load(frontPage);
+    const frontPageDocument = await PDFDocument.load(new Uint8Array(frontPage));
     const outputPdf = await PDFDocument.create();
     const [documentPage] = await outputPdf.copyPages(frontPageDocument, [0]);
     outputPdf.addPage(documentPage);
@@ -53,10 +57,9 @@ export const pdfGenerator2 = async (form: NonNullableState): Promise<Blob | void
     }
 
     const pdfBytes = await outputPdf.save();
-    const pdfBlob = new Blob([pdfBytes]);
-    return pdfBlob;
+    return pdfBytes;
   } catch (error) {
-    console.error(error);
+    throw new PdfRenderError(error);
   } finally {
     sheet.seal();
   }
