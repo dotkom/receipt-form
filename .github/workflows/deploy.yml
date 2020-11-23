@@ -35,13 +35,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: registry.online.ntnu.no
           tag_semver: true
-          buildargs:
-            - NEXT_PUBLIC_GIT_BRANCH
-            - NEXT_PUBLIC_GIT_TAG
-            - NEXT_PUBLIC_AUTH_ENDPOINT
-            - NEXT_PUBLIC_AUTH_CLIENT_ID
-            - NEXT_PUBLIC_OW4_ADDRESS
-            - NEXT_PUBLIC_SENTRY_DSN
+          buildargs: NEXT_PUBLIC_GIT_BRANCH
+            NEXT_PUBLIC_GIT_TAG
+            NEXT_PUBLIC_AUTH_ENDPOINT
+            NEXT_PUBLIC_AUTH_CLIENT_ID
+            NEXT_PUBLIC_OW4_ADDRESS
+            NEXT_PUBLIC_SENTRY_DSN
 
       - name: Trigger deploy.sh remotely
         uses: appleboy/ssh-action@master
