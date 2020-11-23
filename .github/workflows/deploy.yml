@@ -34,7 +34,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           registry: registry.online.ntnu.no
-          tag_semver: true
+          tags: "latest,${{ steps.version.outputs.tag }}"
           buildargs: NEXT_PUBLIC_GIT_BRANCH
             NEXT_PUBLIC_GIT_TAG
             NEXT_PUBLIC_AUTH_ENDPOINT
