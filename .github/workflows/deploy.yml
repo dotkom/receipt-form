@@ -12,9 +12,18 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v2
 
+      # Set branch and tag variables for use in the app. Sent in as env variables to the build
+      - name: Get branch and tag
+        id: version
+        run: |
+          echo ::set-output name=branch::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
+
       - name: Publish docker image
         uses: elgohr/Publish-Docker-Github-Action@master
         env:
+          NEXT_PUBLIC_GIT_BRANCH: ${{ steps.version.outputs.branch }}
+          NEXT_PUBLIC_GIT_TAG: ${{ steps.version.outputs.tag }}
           NEXT_PUBLIC_AUTH_ENDPOINT: ${{ secrets.NEXT_PUBLIC_AUTH_ENDPOINT }}
           NEXT_PUBLIC_AUTH_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_AUTH_CLIENT_ID }}
           NEXT_PUBLIC_OW4_ADDRESS: ${{ secrets.NEXT_PUBLIC_OW4_ADDRESS }}
@@ -27,10 +36,12 @@ jobs:
           registry: registry.online.ntnu.no
           tag_semver: true
           buildargs:
-            NEXT_PUBLIC_AUTH_ENDPOINT
-            NEXT_PUBLIC_AUTH_CLIENT_ID
-            NEXT_PUBLIC_OW4_ADDRESS
-            NEXT_PUBLIC_SENTRY_DSN
+            - NEXT_PUBLIC_GIT_BRANCH
+            - NEXT_PUBLIC_GIT_TAG
+            - NEXT_PUBLIC_AUTH_ENDPOINT
+            - NEXT_PUBLIC_AUTH_CLIENT_ID
+            - NEXT_PUBLIC_OW4_ADDRESS
+            - NEXT_PUBLIC_SENTRY_DSN
 
       - name: Trigger deploy.sh remotely
         uses: appleboy/ssh-action@master
