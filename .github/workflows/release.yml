@@ -34,7 +34,7 @@ jobs:
       - name: Release
         run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BUILD_BOT_TOKEN }}
           GIT_AUTHOR_NAME: 'dotkom-build'
           GIT_COMMITTER_NAME: 'dotkom-build'
           GIT_AUTHOR_EMAIL: dotkom@online.ntnu.no
