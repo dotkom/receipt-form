@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import { colors, Logo } from '@dotkomonline/design-system';
 
 import { NonNullableState } from 'lambda/generatePDF';
@@ -7,20 +7,28 @@ import { getCurrentDateString } from '../tools/date';
 import { getGroupName } from 'models/groups';
 import { formatAmount } from 'lambda/tools/format';
 
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+`;
+
 const Html = styled.html`
-  width: 100%;
-  height: 100%;
+  width: 210mm;
+  height: 297mm;
+  background-color: white;
 `;
 
 const Body = styled.body`
   height: 100%;
-  margin: 60px;
+  padding: 20mm;
+  background-color: white;
 `;
 
 const Main = styled.main`
   display: grid;
   grid-template-columns: 2fr 6fr 1fr 3fr;
-  grid-template-rows: 40px 40px 80px 80px 80px fit-content 120px;
+  grid-template-rows: 16mm 16mm 16mm 16mm 16mm 110mm 140px;
   grid-template-areas:
     'name name name name'
     'email email email email'
@@ -30,7 +38,6 @@ const Main = styled.main`
     'comments comments comments comments'
     'signature signature signature signature';
 
-  box-sizing: border-box;
   background-color: black;
   border: 1px solid black;
   gap: 1px;
@@ -42,16 +49,25 @@ const GroupContainer = styled.div<{ area: string }>`
   background-color: ${colors.white};
 `;
 
+const Label = styled.label``;
+
 const Content = styled.p`
   padding: 0;
   margin: 0;
+  font-size: 20px;
 `;
 
-const InfoGroup: FC<{ label: string; value: string | string[]; area: string }> = ({ label, value, area }) => {
+const Comment = styled.p`
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+`;
+
+const InfoGroup: FC<{ label: string; value: string; area: string }> = ({ label, value, area }) => {
   return (
     <GroupContainer area={area}>
-      <label>{label}</label>
-      {!Array.isArray(value) ? <Content>{value}</Content> : value.map((v) => <Content key={v}>{v}</Content>)}
+      <Label>{label}</Label>
+      <Content>{value}</Content>
     </GroupContainer>
   );
 };
@@ -75,6 +91,7 @@ interface Props {
 export const PdfTemplate: FC<Props> = ({ form, signature }) => {
   return (
     <Html>
+      <GlobalStyle />
       <Body>
         <Header>
           <h1>Kvitteringsskjema</h1>
@@ -93,7 +110,11 @@ export const PdfTemplate: FC<Props> = ({ form, signature }) => {
           <InfoGroup area="amount" label="Beløp" value={`${formatAmount(form.amount)} kr`} />
           <InfoGroup area="intent" label="Anledning" value={form.intent} />
           <InfoGroup area="type" label="Type" value={form.type === 'card' ? 'Bankkort' : 'Utlegg'} />
-          <InfoGroup area="comments" label="Kommentarer" value={form.comments.split('\n')} />
+          <GroupContainer area="comments">
+            <Label>Kommentarer</Label>
+            {(form.comments || '') &&
+              form.comments.split('\n').map((comment) => <Comment key={comment}>{comment}</Comment>)}
+          </GroupContainer>
           <GroupContainer area="signature">
             <SignatureImage src={signature} />
           </GroupContainer>
