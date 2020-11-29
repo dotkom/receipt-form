@@ -13,6 +13,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<SuccessBody | E
   } catch (error) {
     if (error instanceof ApiError) {
       res.status(error.statusCode).json(error.getData());
+      throw error;
     } else {
       res.status(400).end();
       throw error;
