@@ -7,7 +7,7 @@ import { renderToString } from 'react-dom/server';
 import { PdfTemplate } from './components';
 import { readFileAsBytes } from 'utils/readFileAsBytes';
 import { attachJpg, attachPdf, attachPng } from './tools/attachments';
-import { sleep } from './tools/sleep';
+import { setTimeoutAsync } from './tools/timeout';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { PdfRenderError } from './errors';
 import { NODE_ENV } from 'constants/common';
@@ -84,7 +84,7 @@ export const pdfGenerator = async (form: NonNullableState): Promise<Uint8Array> 
     const [html, css] = renderToStringWithStyles(<PdfTemplate form={form} signature={signature} />);
     const pdf = await renderStringToPdf(html, css);
     const completePdf = await mergeAttachments(pdf, form.attachments);
-    await sleep(A_SATISFACTORY_AMOUNT_OF_TIME);
+    await setTimeoutAsync(A_SATISFACTORY_AMOUNT_OF_TIME);
     return completePdf;
   } catch (error) {
     throw new PdfRenderError(error);
