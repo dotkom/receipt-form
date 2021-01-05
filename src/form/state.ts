@@ -44,7 +44,7 @@ export interface IDeserializedState {
   committee: Group;
   comments: string;
 
-  /** 'type' describes which of either 'acount' and 'cardDetails' that is defined */
+  /** 'type' describes which of either 'account' and 'cardDetails' that is defined */
   type: ReceiptType;
   account: string | null;
   cardDetails: string | null;

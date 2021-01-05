@@ -47,8 +47,7 @@ export const generateReceipt = async (data: IDeserializedState | null): Promise<
   }
   const validState = state as NonNullableState;
   const pdf = await pdfGenerator(validState);
-  const pdfBlob = new Blob([pdf]);
-  const pdfFile = new File([pdfBlob], 'receipt.pdf', { type: 'application/pdf' });
+  const pdfFile = new File([pdf], 'receipt.pdf', { type: 'application/pdf' });
   const pdfString = await readFileAsDataUrl(pdfFile);
 
   if (state.mode === 'download') {
