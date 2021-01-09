@@ -33,7 +33,7 @@ const renderToStringWithStyles = (...params: Parameters<typeof renderToString>) 
 const renderStringToPdf = async (html: string, css: string) => {
   let browser: Browser | null = null;
   try {
-    browser = await puppeteer.launch({ headless: true });
+    browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox '] });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.addStyleTag({ content: css });
