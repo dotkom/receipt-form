@@ -1,5 +1,5 @@
 import React from 'react';
-import { EncryptedPDFError, PDFDocument } from 'pdf-lib';
+import { PDFDocument } from 'pdf-lib';
 import puppeteer, { Browser } from 'puppeteer';
 import { ServerStyleSheet } from 'styled-components';
 import { renderToString } from 'react-dom/server';
