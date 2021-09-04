@@ -21,6 +21,12 @@ export class PdfRenderError extends ApiError {
   displayMessage = 'Noe gikk galt, og PDF-en ble ikke generert. Vennligst prøv om igjen, eller ta kontakt med Dotkom.';
 }
 
+export class EncryptedAttachmentError extends ApiError {
+  statusCode = 400;
+  displayMessage =
+    'Et av vedleggene er en kryptert PDF og må dekrypteres før opplastning. Print den til PDF på nytt eller endre til et annet format.';
+}
+
 export class ApiBodyError extends ApiError {
   statusCode = 400;
   displayMessage = 'Det ble ikke sendt data med forespørselen, vennligst last inn siden på nytt og prøv igjen.';

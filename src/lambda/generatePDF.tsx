@@ -1,5 +1,5 @@
 import React from 'react';
-import { PDFDocument } from 'pdf-lib';
+import { EncryptedPDFError, PDFDocument } from 'pdf-lib';
 import puppeteer, { Browser } from 'puppeteer';
 import { ServerStyleSheet } from 'styled-components';
 import { renderToString } from 'react-dom/server';
@@ -9,7 +9,7 @@ import { readFileAsBytes } from 'utils/readFileAsBytes';
 import { attachJpg, attachPdf, attachPng } from './tools/attachments';
 import { setTimeoutAsync } from './tools/timeout';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
-import { PdfRenderError } from './errors';
+import { EncryptedAttachmentError, PdfRenderError } from './errors';
 import { NODE_ENV } from 'constants/common';
 import { IState } from 'form/state';
 
@@ -87,6 +87,9 @@ export const pdfGenerator = async (form: NonNullableState): Promise<Uint8Array> 
     await setTimeoutAsync(A_SATISFACTORY_AMOUNT_OF_TIME);
     return completePdf;
   } catch (error) {
+    if (error.message.includes('encrypted')) {
+      throw new EncryptedAttachmentError(error.message);
+    }
     throw new PdfRenderError(error);
   }
 };
