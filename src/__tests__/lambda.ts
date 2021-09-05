@@ -1,3 +1,4 @@
+import { EncryptedAttachmentError } from './../lambda/errors';
 import { IDeserializedState } from 'form/state';
 import { ApiValidationError, ApiBodyError, ConfigError, PdfRenderError } from 'lambda/errors';
 import { generateReceipt } from 'lambda/handler';
@@ -41,6 +42,16 @@ test('Error is thrown when attachments contain an unsuported file type', async (
     await generateReceipt(form);
   };
   expect(handler2).rejects.toThrow(PdfRenderError);
+});
+
+test('Error is thrown when attachments contain an encrypted PDF', async () => {
+  const form = await getValidForm();
+  form.attachments = await Promise.all([getDeserializedAssetFile('encrypted.pdf')]);
+
+  const handler = async () => {
+    await generateReceipt(form);
+  };
+  expect(handler).rejects.toThrow(EncryptedAttachmentError);
 });
 
 test('Invalid receipt returns a 400 with validation errors', async () => {
