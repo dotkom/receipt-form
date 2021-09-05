@@ -9,9 +9,13 @@ export class ApiError extends Error {
   statusCode = 400;
   displayMessage = '';
 
+  getDisplayMessage(): string | undefined {
+    return undefined;
+  }
+
   getData(): ErrorData {
     return {
-      message: this.displayMessage,
+      message: this.getDisplayMessage() ?? this.displayMessage,
     };
   }
 }
@@ -23,8 +27,22 @@ export class PdfRenderError extends ApiError {
 
 export class EncryptedAttachmentError extends ApiError {
   statusCode = 400;
-  displayMessage =
-    'Et av vedleggene er en kryptert PDF og må dekrypteres før opplastning. Print den til PDF på nytt eller endre til et annet format.';
+  displayMessage2 = '';
+  fileName?: string;
+
+  constructor(message?: string, fileName?: string) {
+    super(message);
+    this.fileName = fileName;
+  }
+
+  getDisplayMessage(): string {
+    const aboutPdf = this.fileName
+      ? `Vedlegget '${this.fileName}' en kryptert PDF og må dekrypteres før opplastning.`
+      : `Et av vedleggene er en kryptert PDF og må dekrypteres før opplastning.`;
+    const howToMitigate =
+      'Du kan prøve å skrive dokumentet til PDF på nytt uten kryptering, låse det opp med et passord, eller konvertere dokumentet til et bilde før du laster det opp.';
+    return `${aboutPdf} ${howToMitigate}`;
+  }
 }
 
 export class ApiBodyError extends ApiError {
