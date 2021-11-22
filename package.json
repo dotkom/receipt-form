@@ -1,6 +1,6 @@
 {
   "name": "kvittering",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "dependencies": {
     "@dotkomonline/design-system": "^0.22.0",
