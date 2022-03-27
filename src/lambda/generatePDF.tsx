@@ -86,7 +86,7 @@ export const pdfGenerator = async (form: NonNullableState): Promise<Uint8Array> 
     const completePdf = await mergeAttachments(pdf, form.attachments);
     await setTimeoutAsync(A_SATISFACTORY_AMOUNT_OF_TIME);
     return completePdf;
-  } catch (error: any) {
+  } catch (error) {
     if (error.message.includes('encrypted')) {
       throw new EncryptedAttachmentError(error.message);
     }

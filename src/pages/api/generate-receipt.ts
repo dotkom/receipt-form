@@ -6,7 +6,7 @@ import { sentryMiddleware } from 'lambda/sentry';
 import { ApiError, ErrorData } from 'lambda/errors';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<SuccessBody | ErrorData>) => {
-  debugger
+  debugger;
   try {
     const responseResult = await generateReceipt(req.body as IDeserializedState | null);
     const { statusCode, ...responseBody } = responseResult;
