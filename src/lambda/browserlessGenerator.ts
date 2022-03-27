@@ -5,6 +5,7 @@ import { mergeAttachments, NonNullableState } from './generatePDF';
 import { getCurrentDateString } from './tools/date';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { getGroupName } from 'models/groups';
+import { formatAmount } from './tools/format';
 
 const createTableRow = (document: PDFKit.PDFDocument, height: number, label: string, value: string) => {
   document.fontSize(14).text(label, 100, height).text(value, 220, height);
@@ -22,7 +23,7 @@ const createTableDocument = async (state: NonNullableState): Promise<Buffer> => 
   } else {
     createTableRow(pdf, 200, 'Kontonummer: ', state.account);
   }
-  createTableRow(pdf, 220, 'Beløp: ', state.amount.toString());
+  createTableRow(pdf, 220, 'Beløp: ', formatAmount(state.amount));
   createTableRow(pdf, 240, 'Anledning: ', state.intent);
   createTableRow(pdf, 260, 'Type: ', state.type === 'card' ? 'Bankkort' : 'Utlegg');
   pdf.fontSize(14).text('Kommentar', 100, 300).moveDown().text(state.comments, {
