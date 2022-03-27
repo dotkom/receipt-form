@@ -4,11 +4,12 @@ import './polyfills';
 import { IDeserializedState, serializeReceipt } from 'form/state';
 import { getIsValid } from 'form/validation';
 
-import { NonNullableState, pdfGenerator } from './generatePDF';
+import { NonNullableState } from './generatePDF';
 
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { sendEmail } from './sendEmail';
 import { ApiBodyError, ApiValidationError } from './errors';
+import { pdfGenerator } from './browserlessGenerator';
 
 export interface SuccessBody {
   message: string;
