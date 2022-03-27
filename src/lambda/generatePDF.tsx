@@ -49,7 +49,7 @@ const renderStringToPdf = async (html: string, css: string) => {
   }
 };
 
-const mergeAttachments = async (pdf: Buffer, attachments: File[]) => {
+export const mergeAttachments = async (pdf: Buffer, attachments: File[]) => {
   /** Initialize a new PDF document as output */
   const frontPageDocument = await PDFDocument.load(new Uint8Array(pdf));
   const outputPdf = await PDFDocument.create();
@@ -93,5 +93,3 @@ export const pdfGenerator = async (form: NonNullableState): Promise<Uint8Array> 
     throw new PdfRenderError(error);
   }
 };
-
-export default mergeAttachments;

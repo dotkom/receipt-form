@@ -4,13 +4,12 @@ import './polyfills';
 import { IDeserializedState, serializeReceipt } from 'form/state';
 import { getIsValid } from 'form/validation';
 
-import { NonNullableState, pdfGenerator } from './generatePDF';
+import { NonNullableState } from './generatePDF';
 
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { sendEmail } from './sendEmail';
 import { ApiBodyError, ApiValidationError } from './errors';
-
-import newPdfGenerator from './pdfkit-generator'
+import { pdfGenerator } from './browserlessGenerator';
 
 export interface SuccessBody {
   message: string;
@@ -48,8 +47,7 @@ export const generateReceipt = async (data: IDeserializedState | null): Promise<
     throw new ApiValidationError(errors);
   }
   const validState = state as NonNullableState;
-  //const pdf = await pdfGenerator(validState);
-  const pdf = await newPdfGenerator(validState);
+  const pdf = await pdfGenerator(validState);
   const pdfFile = new File([pdf], 'receipt.pdf', { type: 'application/pdf' });
   const pdfString = await readFileAsDataUrl(pdfFile);
 
