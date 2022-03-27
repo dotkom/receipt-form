@@ -14,11 +14,12 @@ interface IProps {
   disabled?: boolean;
   placeholder?: string;
   format?: (value: string) => string;
+  temp?: string;
 }
 
-export const ReceiptTextField: FC<IProps> = ({ field, format, ...props }) => {
+export const ReceiptTextField: FC<IProps> = ({ temp, field, format, ...props }) => {
   const dispatch = useDispatch();
-  const value = useSelector((state) => state.form[field] || '');
+  const value = useSelector((state) => state.form[field] || (temp || ''));
 
   const change = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = format ? format(event.target.value) : event.target.value;

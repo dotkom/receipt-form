@@ -45,8 +45,8 @@ export const UserInfo = () => {
         </SeparatedFieldSet>
       </InfoFieldSet>
       <FieldSet>
-        <ReceiptTextField label="Navn" field="fullname" placeholder="Ditt fulle navn" />
-        <ReceiptTextField label="E-post" field="email" placeholder="Din e-postadresse. Onlinemail hvis du har" />
+        <ReceiptTextField temp="Henrik Skog" label="Navn" field="fullname" placeholder="Ditt fulle navn" />
+        <ReceiptTextField temp="hjskog@online.ntnu.no" label="E-post" field="email" placeholder="Din e-postadresse. Onlinemail hvis du har" />
       </FieldSet>
       {editMode ? (
         <CreateSignature editClick={() => setEditMode(false)} />

@@ -10,6 +10,8 @@ import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { sendEmail } from './sendEmail';
 import { ApiBodyError, ApiValidationError } from './errors';
 
+import newPdfGenerator from './pdfkit-generator'
+
 export interface SuccessBody {
   message: string;
   data?: string;
@@ -46,7 +48,8 @@ export const generateReceipt = async (data: IDeserializedState | null): Promise<
     throw new ApiValidationError(errors);
   }
   const validState = state as NonNullableState;
-  const pdf = await pdfGenerator(validState);
+  //const pdf = await pdfGenerator(validState);
+  const pdf = await newPdfGenerator(validState);
   const pdfFile = new File([pdf], 'receipt.pdf', { type: 'application/pdf' });
   const pdfString = await readFileAsDataUrl(pdfFile);
 
