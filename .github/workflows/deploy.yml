@@ -34,13 +34,9 @@ jobs:
         with:
           push: true
           tags: registry.online.ntnu.no/receipt-form:latest
-          file: prod.dockerfile
-          build-args: NEXT_PUBLIC_GIT_BRANCH
-            NEXT_PUBLIC_GIT_TAG
-            NEXT_PUBLIC_AUTH_ENDPOINT
-            NEXT_PUBLIC_AUTH_CLIENT_ID
-            NEXT_PUBLIC_OW4_ADDRESS
-            NEXT_PUBLIC_SENTRY_DSN
+          file: ./prod.dockerfile
+          context: .
+          build-args: NEXT_PUBLIC_GIT_BRANCH,NEXT_PUBLIC_GIT_TAG,NEXT_PUBLIC_AUTH_ENDPOINT,NEXT_PUBLIC_AUTH_CLIENT_ID,NEXT_PUBLIC_OW4_ADDRESS,NEXT_PUBLIC_SENTRY_DSN
         env:
           NEXT_PUBLIC_GIT_BRANCH: ${{ steps.version.outputs.branch }}
           NEXT_PUBLIC_GIT_TAG: ${{ steps.version.outputs.tag }}
