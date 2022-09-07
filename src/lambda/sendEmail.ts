@@ -1,6 +1,4 @@
-import * as path from 'path';
 import nodemailer from 'nodemailer';
-import getConfig from 'next/config';
 
 import { DESTINATION_EMAIL, EXTRA_CC_EMAILS, SENDER_EMAIL } from 'constants/mail';
 import { IState } from 'form/state';
@@ -8,39 +6,11 @@ import { getGroupName } from 'models/groups';
 
 import { NonNullableState } from './generatePDF';
 import { getFileName, getFormattedText } from './tools/format';
-import { readFileAsync } from './tools/readFileAsync';
-import { ConfigError, ApiEmailError } from './errors';
-
-const { serverRuntimeConfig } = getConfig();
+import { ApiEmailError } from './errors';
 
 const extraEmails = EXTRA_CC_EMAILS.split(',');
 
-export interface IGoogleAuthFile {
-  type: string;
-  project_id: string;
-  private_key_id: string;
-  private_key: string;
-  client_email: string;
-  client_id: string;
-  auth_uri: string;
-  token_uri: string;
-  auth_provider_x509_cert_url: string;
-  client_x509_cert_url: string;
-}
-
-export const AUTH_FILE_PATH = path.join(serverRuntimeConfig.PROJECT_ROOT, './keys/gsuite.json');
-
-export const getAuthFile = async (): Promise<IGoogleAuthFile> => {
-  try {
-    const file = await readFileAsync(AUTH_FILE_PATH);
-    return JSON.parse(file.toString()) as IGoogleAuthFile;
-  } catch (err) {
-    throw new ConfigError(`Gsuite authentcation file at ${AUTH_FILE_PATH} was not found, or is incorrect.`);
-  }
-};
-
 const createTransporter = async (): Promise<ReturnType<typeof nodemailer.createTransport>> => {
-  const authFile = await getAuthFile();
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -48,8 +18,8 @@ const createTransporter = async (): Promise<ReturnType<typeof nodemailer.createT
     auth: {
       type: 'OAuth2',
       user: SENDER_EMAIL,
-      serviceClient: authFile.client_id,
-      privateKey: authFile.private_key,
+      serviceClient: process.env.NEXT_SERVICE_CLIENT_ID,
+      privateKey: process.env.NEXT_SERVICE_PRIVATE_KEY,
     },
   });
   try {
