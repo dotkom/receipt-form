@@ -66,19 +66,19 @@ export const SignatureInput: FC<IProps> = ({ editClick }) => {
     [dispatch]
   );
 
-  const handleLoadInitialSignature = useCallback(async () => {
-    const storedSignature = await readSignatureFromStorage();
-    if (storedSignature) {
-      handleFileChange(storedSignature);
-      setShouldStoreSignature(true);
-    }
-    /**
-     * DS checkbox can't be controlled from the outside as it should be.
-     * We have to wait for initial load of the signature to know what the default value
-     * of the checkbox should be, and render it only after we know that.
-     */
-    setHasLoadedInitial(true);
-  }, [handleFileChange]);
+  // const handleLoadInitialSignature = useCallback(async () => {
+  //   const storedSignature = await readSignatureFromStorage();
+  //   if (storedSignature) {
+  //     handleFileChange(storedSignature);
+  //     setShouldStoreSignature(true);
+  //   }
+  //   /**
+  //    * DS checkbox can't be controlled from the outside as it should be.
+  //    * We have to wait for initial load of the signature to know what the default value
+  //    * of the checkbox should be, and render it only after we know that.
+  //    */
+  //   setHasLoadedInitial(true);
+  // }, [handleFileChange]);
 
   useEffect(
     () => {
