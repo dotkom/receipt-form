@@ -9,7 +9,7 @@ import { formDataUpdated } from 'redux/reducers/formReducer';
 import { isFileEqual } from 'utils/file';
 import { Checkbox } from '@dotkomonline/design-system';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
-import { readDataUrlAsFile } from 'utils/readDataUrlAsFile';
+//import { readDataUrlAsFile } from 'utils/readDataUrlAsFile';
 
 interface IProps {
   editClick: () => void;
@@ -21,14 +21,14 @@ const isSignatureEqual = (prev: File | null, next: File | null) => {
 
 const SIGNATURE_STORAGE_KEY = 'SAVED_SIGNATURE';
 
-const readSignatureFromStorage = async (): Promise<File | null> => {
-  const signatureString = localStorage.getItem(SIGNATURE_STORAGE_KEY);
-  if (signatureString) {
-    const signature = await readDataUrlAsFile(signatureString);
-    return signature;
-  }
-  return null;
-};
+// const readSignatureFromStorage = async (): Promise<File | null> => {
+//   const signatureString = localStorage.getItem(SIGNATURE_STORAGE_KEY);
+//   if (signatureString) {
+//     const signature = await readDataUrlAsFile(signatureString);
+//     return signature;
+//   }
+//   return null;
+// };
 
 const saveSignatureToStorage = async (signature: File) => {
   const signatureString = await readFileAsDataUrl(signature);
@@ -41,7 +41,7 @@ const removeSignatureFromStorage = async () => {
 
 export const SignatureInput: FC<IProps> = ({ editClick }) => {
   /* Dirty has since DS controlled inputs are broken AF */
-  const [hasLoadedInitial, setHasLoadedInitial] = useState(false);
+  const [hasLoadedInitial /*setHasLoadedInitial]*/] = useState(false);
   const [shouldStoreSignature, setShouldStoreSignature] = useState(false);
   const dispatch = useDispatch();
   const signature = useSelector((state) => state.form.signature, isSignatureEqual);
