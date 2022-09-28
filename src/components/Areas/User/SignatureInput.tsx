@@ -80,9 +80,11 @@ export const SignatureInput: FC<IProps> = ({ editClick }) => {
     setHasLoadedInitial(true);
   }, [handleFileChange]);
 
-  useEffect(() => {
-    handleLoadInitialSignature();
-  }, [handleLoadInitialSignature]);
+  useEffect(
+    () => {
+      //handleLoadInitialSignature();
+    } /*[handleLoadInitialSignature]*/
+  );
 
   const handleShouldStoreSignatureChange = async (shouldStore = false) => {
     setShouldStoreSignature(shouldStore);
