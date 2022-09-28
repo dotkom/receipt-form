@@ -44,6 +44,10 @@ const processUser = async (user: User, state: IState): Promise<IState> => {
   const profile: IAuthProfile = user.profile as IAuthProfile;
   const extProfile = await getProfile(user.access_token);
   const email = getEmail(profile.email, extProfile);
+  if (state.signature?.type === 'application/octet-stream') {
+    state.signature = null;
+  }
+
   return {
     ...state,
     fullname: profile.name,
@@ -64,6 +68,7 @@ export const loginAction = createAsyncThunk('user/login', async (_, { dispatch, 
     const user: User | null = await getManager().getUser();
     if (user) {
       const newForm = await processUser(user, form);
+      console.log({ newForm });
       updateForm(dispatch, newForm);
     } else {
       logInRedirect(form);
