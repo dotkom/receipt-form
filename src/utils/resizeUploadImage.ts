@@ -23,6 +23,8 @@ export function resizeUploadImage(file: File): Promise<File> {
   const img = document.createElement('img');
 
   return new Promise((resolve, reject) => {
+    const new_file_name = file.name.replace(/\.[^/.]+$/, '.jpg');
+
     img.onload = () => {
       const { width, height } = rescaledResolution(img.width, img.height);
 
@@ -30,7 +32,7 @@ export function resizeUploadImage(file: File): Promise<File> {
       canvas.height = height;
 
       const ctx = canvas.getContext('2d');
-      if (!ctx) {
+      if (ctx === null) {
         reject(new Error('Could not get canvas context'));
         return;
       }
@@ -43,7 +45,7 @@ export function resizeUploadImage(file: File): Promise<File> {
           return;
         }
 
-        resolve(new File([blob], 'kvittering.jpg', { type: 'image/jpeg' }));
+        resolve(new File([blob], new_file_name, { type: 'image/jpeg' }));
       });
     };
     img.onerror = reject;
