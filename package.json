@@ -3,7 +3,7 @@
   "version": "2.2.1",
   "private": true,
   "dependencies": {
-    "@dotkomonline/design-system": "^0.22.0",
+    "@dotkomonline/design-system": "^0.22.2",
     "@reduxjs/toolkit": "^1.4.0",
     "@sentry/browser": "^5.0.3",
     "@sentry/node": "^5.4.3",
