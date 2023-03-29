@@ -6,6 +6,7 @@ import { useValidation } from 'hooks/useValidation';
 import { useDispatch, useSelector } from 'redux/hooks';
 import { areFilesEqual } from 'utils/file';
 import { formDataUpdated } from 'redux/reducers/formReducer';
+import { resizeUploadImage } from 'utils/resizeUploadImage';
 
 export const AttachmentsInputs: FC = () => {
   const dispatch = useDispatch();
@@ -18,8 +19,9 @@ export const AttachmentsInputs: FC = () => {
     dispatch(formDataUpdated({ attachments: newAttachments }));
   };
 
-  const handleFileChange = (file: File) => {
-    const newAttachments = [...attachments, file];
+  const handleFileChange = async (file: File) => {
+    const resizedFile = await resizeUploadImage(file);
+    const newAttachments = [...attachments, resizedFile];
     dispatch(formDataUpdated({ attachments: newAttachments }));
     setInteracted();
   };
