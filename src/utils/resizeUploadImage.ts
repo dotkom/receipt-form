@@ -39,14 +39,17 @@ export function resizeUploadImage(file: File): Promise<File> {
 
       ctx.drawImage(img, 0, 0, width, height);
 
-      canvas.toBlob((blob) => {
-        if (!blob) {
-          reject(new Error('Could not resize image'));
-          return;
-        }
-
-        resolve(new File([blob], new_file_name, { type: 'image/jpeg' }));
-      });
+      canvas.toBlob(
+        (blob) => {
+          if (blob === null) {
+            reject(new Error('Could not resize image'));
+            return;
+          }
+          resolve(new File([blob], new_file_name, { type: 'image/jpeg' }));
+        },
+        'image/jpeg',
+        0.8
+      );
     };
     img.onerror = reject;
     img.src = URL.createObjectURL(file);
