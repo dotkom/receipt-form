@@ -1,11 +1,15 @@
 import AWS from "aws-sdk";
 
+const credentials = (process.env.NEXT_AWS_ACCESS_KEY_ID && process.env.NEXT_AWS_SECRET_ACCESS_KEY) ?
+  {
+    accessKeyId: process.env.NEXT_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NEXT_AWS_SECRET_ACCESS_KEY,
+  } :
+  undefined;
+
 AWS.config.update({
   region: process.env.NEXT_AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.NEXT_AWS_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.NEXT_AWS_SECRET_ACCESS_KEY as string,
-  },
+  credentials,
 })
 
 // upload file to S3 bucket and make it publicly downloadable

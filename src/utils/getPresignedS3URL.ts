@@ -8,12 +8,16 @@ if (process.env.NEXT_AWS_SECRET_ACCESS_KEY === undefined) {
   throw new Error('NEXT_AWS_SECRET_ACCESS_KEY is not defined')
 }
 
+const credentials = (process.env.NEXT_AWS_ACCESS_KEY_ID && process.env.NEXT_AWS_SECRET_ACCESS_KEY) ?
+  {
+    accessKeyId: process.env.NEXT_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NEXT_AWS_SECRET_ACCESS_KEY,
+  } :
+  undefined;
+
 AWS.config.update({
   region: process.env.NEXT_AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.NEXT_AWS_ACCESS_KEY_ID as string,
-    secretAccessKey: process.env.NEXT_AWS_SECRET_ACCESS_KEY as string,
-  },
+  credentials,
 })
 
 export const getPresignedS3URL = async (name: string, contentType: string) => {
