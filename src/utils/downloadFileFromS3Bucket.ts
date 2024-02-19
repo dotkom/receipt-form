@@ -1,14 +1,14 @@
 import AWS from "aws-sdk";
 
-const credentials = (process.env.NEXT_AWS_ACCESS_KEY_ID && process.env.NEXT_AWS_SECRET_ACCESS_KEY) ?
+const credentials = (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) ?
   {
-    accessKeyId: process.env.NEXT_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.NEXT_AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   } :
   undefined;
 
 AWS.config.update({
-  region: process.env.NEXT_AWS_REGION,
+  region: process.env.AWS_REGION,
   credentials,
 })
 
@@ -18,7 +18,7 @@ export async function downloadFileFromS3Bucket(key: string): Promise<File> {
   });
 
   const params = {
-    Bucket: process.env.NEXT_AWS_S3_BUCKET_NAME as string,
+    Bucket: process.env.AWS_S3_BUCKET_NAME as string,
     Key: key,
   };
 
