@@ -1,13 +1,5 @@
 import AWS from "aws-sdk";
 
-if (process.env.NEXT_AWS_ACCESS_KEY_ID === undefined) {
-  throw new Error('NEXT_AWS_ACCESS_KEY_ID is not defined')
-}
-
-if (process.env.NEXT_AWS_SECRET_ACCESS_KEY === undefined) {
-  throw new Error('NEXT_AWS_SECRET_ACCESS_KEY is not defined')
-}
-
 const credentials = (process.env.NEXT_AWS_ACCESS_KEY_ID && process.env.NEXT_AWS_SECRET_ACCESS_KEY) ?
   {
     accessKeyId: process.env.NEXT_AWS_ACCESS_KEY_ID,
