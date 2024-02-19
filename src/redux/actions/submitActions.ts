@@ -3,9 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NonNullableState } from 'lambda/generatePDF';
 import { getFileName } from 'lambda/tools/format';
-import { downloadFile } from 'utils/download';
 import { postReceipt } from 'utils/postReceipt';
-import { readDataUrlAsFile } from 'utils/readDataUrlAsFile';
 import { downloadFinished, downloadStarted, loadingDone, setResponse } from 'redux/reducers/statusReducer';
 import { State } from 'redux/store';
 import { SuccessBody } from 'lambda/handler';
@@ -14,10 +12,13 @@ const handleDownload = async (response: SuccessBody, state: NonNullableState) =>
   if (response.data) {
     /** Use the same filename that would be generated when sending a mail */
     const fileName = getFileName(state);
-    const pdfFile = await readDataUrlAsFile(response.data, fileName);
-    if (pdfFile) {
-      downloadFile(pdfFile);
-    }
+    // response.data is a URL to the file
+
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.href = response.data;
+    a.download = fileName;
+    a.click();
   }
 };
 

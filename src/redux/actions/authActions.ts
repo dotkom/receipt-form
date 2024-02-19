@@ -96,6 +96,7 @@ export const catchCallbackAction = createAsyncThunk('user/catchCallback', async 
     window.location.hash = '';
   } catch (err) {
     /** Do nothing if no user data is present */
+    window.location.hash = '';
     return;
   }
 });

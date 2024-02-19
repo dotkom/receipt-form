@@ -44,6 +44,8 @@ jobs:
           NEXT_PUBLIC_AUTH_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_AUTH_CLIENT_ID }}
           NEXT_PUBLIC_OW4_ADDRESS: ${{ secrets.NEXT_PUBLIC_OW4_ADDRESS }}
           NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_AWS_REGION: ${{ secrets.NEXT_AWS_REGION }}
+          NEXT_AWS_S3_BUCKET_NAME: ${{ secrets.NEXT_AWS_S3_BUCKET_NAME }}
       - name: Trigger deploy.sh remotely
         uses: appleboy/ssh-action@master
         with:
