@@ -34,7 +34,7 @@ export const getPresignedS3URL = async (name: string, contentType: string): Prom
       "Content-Type": contentType,
     },
     Conditions: [
-      ["content-length-range", 0, 1024 * 1024 * 20],
+      ["content-length-range", 0, 1024 * 1024 * 25],
     ],
     Expires: 60,
   })
