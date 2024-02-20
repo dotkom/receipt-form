@@ -68,7 +68,6 @@ export const loginAction = createAsyncThunk('user/login', async (_, { dispatch, 
     const user: User | null = await getManager().getUser();
     if (user) {
       const newForm = await processUser(user, form);
-      console.log({ newForm });
       updateForm(dispatch, newForm);
     } else {
       logInRedirect(form);

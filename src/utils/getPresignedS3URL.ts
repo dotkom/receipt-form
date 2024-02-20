@@ -12,17 +12,33 @@ AWS.config.update({
   credentials,
 })
 
-export const getPresignedS3URL = async (name: string, contentType: string) => {
-  const s3 = new AWS.S3({
-    apiVersion: '2006-03-01',
-    params: { Bucket: process.env.AWS_S3_BUCKET_NAME },
-  })
+const s3 = new AWS.S3({
+  apiVersion: '2006-03-01',
+});
 
-  const params = {
-    Bucket: process.env.AWS_S3_BUCKET_NAME,
-    Key: `uploads/${+new Date()}-${name}`,
-    ContentType: contentType,
+const createPresignedPost = (params: AWS.S3.PresignedPost.Params) => new Promise((resolve, reject) => {
+  s3.createPresignedPost(params, function (err, data) {
+    if (err) {
+      reject(err);
+    } else {
+      resolve(data)
+    }
+  });
+});
+
+export const getPresignedS3URL = async (name: string, contentType: string): Promise<{ url: string, fields: {[key: string]: string}}> => {
+  return await createPresignedPost({
+    Bucket: "receipt-form",
+    Fields: {
+      key: `uploads/${+new Date()}-${name}`,
+      "Content-Type": contentType,
+    },
+    Conditions: [
+      ["content-length-range", 0, 1024 * 1024 * 10],
+    ],
+    Expires: 60,
+  }) as {
+    url: string;
+    fields: {[key: string]: string};
   }
-
-  return { url: await s3.getSignedUrlPromise('putObject', params), key: params.Key }
 }
