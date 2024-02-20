@@ -16,7 +16,7 @@ const s3 = new AWS.S3({
   apiVersion: '2006-03-01',
 });
 
-const createPresignedPost = (params: AWS.S3.PresignedPost.Params) => new Promise((resolve, reject) => {
+const createPresignedPost = (params: AWS.S3.PresignedPost.Params): Promise<AWS.S3.PresignedPost> => new Promise((resolve, reject) => {
   s3.createPresignedPost(params, function (err, data) {
     if (err) {
       reject(err);
@@ -37,8 +37,5 @@ export const getPresignedS3URL = async (name: string, contentType: string): Prom
       ["content-length-range", 0, 1024 * 1024 * 10],
     ],
     Expires: 60,
-  }) as {
-    url: string;
-    fields: {[key: string]: string};
-  }
+  })
 }
