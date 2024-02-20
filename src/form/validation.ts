@@ -29,8 +29,8 @@ export const ACCOUNT_NUMBER_REGEX = new RegExp(/^\d{4} \d{2} \d{5}$/);
 export const COMMITTEE_EMAIL_REGEX = new RegExp(/^.{2,50}@online\.ntnu\.no$/);
 export const EMAIL_REGEX = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
 export const CARD_DETAIL_REGEX = new RegExp(/^.{5,30}$/);
-export const FILE_SIZE_WARN = 7 * 1024 * 1024; // 7 MB
-export const FILE_SIZE_MAX = 9 * 1024 * 1024; // 9 MB
+export const FILE_SIZE_WARN = 20 * 1024 * 1024; // 20 MB
+export const FILE_SIZE_MAX = 25 * 1024 * 1024; // 25 MB
 
 export const STATE_VALIDATION: StateValidators = {
   fullname: [

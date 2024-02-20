@@ -68,7 +68,6 @@ export const loginAction = createAsyncThunk('user/login', async (_, { dispatch, 
     const user: User | null = await getManager().getUser();
     if (user) {
       const newForm = await processUser(user, form);
-      console.log({ newForm });
       updateForm(dispatch, newForm);
     } else {
       logInRedirect(form);
@@ -96,6 +95,7 @@ export const catchCallbackAction = createAsyncThunk('user/catchCallback', async 
     window.location.hash = '';
   } catch (err) {
     /** Do nothing if no user data is present */
+    window.location.hash = '';
     return;
   }
 });

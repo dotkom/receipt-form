@@ -10,6 +10,7 @@ import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
 import { sendEmail } from './sendEmail';
 import { ApiBodyError, ApiValidationError } from './errors';
 import { pdfGenerator } from './browserlessGenerator';
+import { uploadFileToS3Bucket } from "../utils/uploadFileToS3Bucket";
 
 export interface SuccessBody {
   message: string;
@@ -48,12 +49,16 @@ export const generateReceipt = async (data: IDeserializedState | null): Promise<
   }
   const validState = state as NonNullableState;
   const pdf = await pdfGenerator(validState);
-  const pdfFile = new File([pdf], 'receipt.pdf', { type: 'application/pdf' });
-  const pdfString = await readFileAsDataUrl(pdfFile);
 
   if (state.mode === 'download') {
-    return DOWNLOAD_SUCCESS_MESSAGE(pdfString);
+    const dato = `${new Date().toISOString().split('T')[0]}`;
+    const filename = `kvittering-${dato}-${+Date.now()}.pdf`;
+    const downloadUrl = await uploadFileToS3Bucket(pdf, `receipts/${filename}`);
+    return DOWNLOAD_SUCCESS_MESSAGE(downloadUrl);
   } else if (state.mode === 'email') {
+    const pdfFile = new File([pdf], 'receipt.pdf', { type: 'application/pdf' });
+    const pdfString = await readFileAsDataUrl(pdfFile);
+
     await sendEmail(pdfString, state);
     return EMAIL_SUCCESS_MESSAGE;
   } else if (state.mode === 'teapot') {

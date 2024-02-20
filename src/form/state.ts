@@ -2,6 +2,8 @@ import { ApiBodyError } from './../lambda/errors';
 import { Group } from 'models/groups';
 import { readDataUrlAsFile2 } from 'utils/readDataUrlAsFile';
 import { readFileAsDataUrl } from 'utils/readFileAsDataUrl';
+import { uploadFile } from "../utils/uploadFile";
+import { downloadFileFromS3Bucket } from "../utils/downloadFileFromS3Bucket";
 
 export type ReceiptType = 'card' | 'deposit';
 export type SendMode = 'download' | 'email' | 'teapot';
@@ -56,7 +58,9 @@ export interface IDeserializedState {
 }
 
 export const deserializeReceipt = async (state: IState): Promise<IDeserializedState> => {
-  const attachments = await Promise.all(state.attachments.map(async (file) => readFileAsDataUrl(file)));
+  const attachments = await Promise.all(
+    state.attachments.map(async (file) => uploadFile(file))
+  );
   const signature = await readFileAsDataUrl(state.signature || new File([], 'newfile'));
   return {
     ...state,
@@ -67,9 +71,11 @@ export const deserializeReceipt = async (state: IState): Promise<IDeserializedSt
 
 export const serializeReceipt = async (deserializedState: IDeserializedState): Promise<IState> => {
   try {
-    const attachments = await Promise.all(
-      deserializedState.attachments.map(async (dataUrl) => readDataUrlAsFile2(dataUrl))
-    );
+    const illegalAttachment = deserializedState.attachments.find((attachment) => !attachment.startsWith("uploads/"));
+    if (illegalAttachment) {
+      throw new TypeError('Illegal attachment');
+    }
+    const attachments = await Promise.all(deserializedState.attachments.map(downloadFileFromS3Bucket));
     const signature = await readDataUrlAsFile2(deserializedState.signature);
     return {
       ...deserializedState,
