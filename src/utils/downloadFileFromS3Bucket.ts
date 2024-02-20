@@ -13,12 +13,16 @@ AWS.config.update({
 })
 
 export async function downloadFileFromS3Bucket(key: string): Promise<File> {
+  if (!process.env.AWS_S3_BUCKET_NAME) {
+    throw new Error('AWS_S3_BUCKET_NAME is not set');
+  }
+
   const s3 = new AWS.S3({
     apiVersion: '2006-03-01',
   });
 
   const params = {
-    Bucket: process.env.AWS_S3_BUCKET_NAME as string,
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
     Key: key,
   };
 

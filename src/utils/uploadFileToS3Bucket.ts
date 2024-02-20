@@ -14,13 +14,16 @@ AWS.config.update({
 
 // upload file to S3 bucket and make it publicly downloadable
 export async function uploadFileToS3Bucket(file: Uint8Array, key: string): Promise<string> {
+  if (!process.env.AWS_S3_BUCKET_NAME) {
+    throw new Error('AWS_S3_BUCKET_NAME is not set');
+  }
   const s3 = new AWS.S3({
     apiVersion: '2006-03-01',
-    params: { Bucket: process.env.AWS_S3_BUCKET_NAME as string },
+    params: { Bucket: process.env.AWS_S3_BUCKET_NAME },
   });
 
   const params = {
-    Bucket: process.env.AWS_S3_BUCKET_NAME as string,
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
     Key: key,
     Body: file,
     ACL: 'public-read',
