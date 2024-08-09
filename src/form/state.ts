@@ -21,6 +21,7 @@ export interface IState {
   comments: string | null;
   attachments: File[];
   mode: SendMode;
+  saveInfo: boolean;
 }
 
 export const INITIAL_STATE: IState = {
@@ -36,6 +37,7 @@ export const INITIAL_STATE: IState = {
   comments: null,
   attachments: [],
   mode: 'download',
+  saveInfo: false,
 };
 
 export interface IDeserializedState {

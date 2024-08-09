@@ -32,7 +32,7 @@ const selectErrorCount = (state: State): number => {
   return errors.length;
 };
 
-export const Submit = () => {
+export const Submit = (props: { onSubmit?: () => void }) => {
   const dispatch = useDispatch();
   const errorCount = useSelector(selectErrorCount);
   const isValid = errorCount === 0;
@@ -59,6 +59,7 @@ export const Submit = () => {
   const download = async () => {
     handleInteraction();
     if (isValid) {
+      props.onSubmit?.();
       dispatch(downloadFormAction());
     }
   };
@@ -66,6 +67,7 @@ export const Submit = () => {
   const send = async () => {
     handleInteraction();
     if (isValid) {
+      props.onSubmit?.();
       dispatch(emailFormAction());
     }
   };
