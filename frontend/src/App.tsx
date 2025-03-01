@@ -1,9 +1,11 @@
 import MyForm from "./components/form";
+import { Header } from "./components/header";
 
 function App() {
 	return (
-		<main className="flex flex-col items-center justify-center h-screen">
-				<MyForm />
+		<main className="">
+			<Header />
+			<MyForm />
 		</main>
 	);
 }
