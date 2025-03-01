@@ -31,28 +31,59 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-const formSchema = z.object({
-	name: z.string().min(1),
-	email: z.string().min(1),
-	type: z.string(),
-	accountNumber: z.number().min(1),
-	cardNumber: z.number().min(1),
-	amount: z.number(),
-	responsible: z.string(),
-	anledning: z.string().min(1),
-	comments: z.string(),
-	file: z.string().optional(),
-}).refine((data) => {
-	if (data.accountNumber && data.cardNumber) {
-		return false;
-	}
-	return true;
-}, {
-	message: "Kan ikke ha både kontonr og kortnr",
-	path: ["cardNumber"],
-});
+const formSchema = z
+	.object({
+		name: z.string().min(1),
+		email: z.string().min(1),
+		type: z.string(),
+		accountNumber: z.number().min(1),
+		cardNumber: z.number().min(1),
+		amount: z.number(),
+		responsible: z.string(),
+		anledning: z.string().min(1),
+		comments: z.string(),
+		file: z.string().optional(),
+	})
+	.refine(
+		(data) => {
+			if (data.accountNumber && data.cardNumber) {
+				return false;
+			}
+			return true;
+		},
+		{
+			message: "Kan ikke ha både kontonr og kortnr",
+			path: ["cardNumber"],
+		},
+	);
 
-// should not be possible to submit both accountNumber and cardNumber
+const GROUPS = [
+	"Applikasjonskomiteen",
+	"Arrangementskomiteen",
+	"Backlog",
+	"Bank- og økonomikomiteen",
+	"Bedriftskomiteen",
+	"Debug",
+	"Drifts- og Utviklingskomiteen",
+	"Ekskursjonskomiteen",
+	"Fag- og kurskomiteen",
+	"Females in IT",
+	"Hovedstyret",
+	"IT-Ekskursjonen",
+	"Jubileumskomiteen",
+	"Karrieredagene",
+	"Komitéledere",
+	"Online Idrettslag",
+	"Onlines Fond",
+	"Pangsjonistkomiteen",
+	"Profil- og aviskomiteen",
+	"Redaksjonen",
+	"Tech Talks",
+	"Trivselskomiteen",
+	"Velkomstkomiteen",
+	"X-Sport",
+	"Onlinepotten",
+];
 
 export default function MyForm() {
 	const [files, setFiles] = useState<File[] | null>(null);
@@ -65,16 +96,16 @@ export default function MyForm() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			email: "test@test.com",
-			name: "test",
-			type: "kort",
-			cardNumber: 1234567890,
-			accountNumber: 1234567890,
-			file: "halla",
-			amount: 100,
-			responsible: "m@example.com",
-			anledning: "test",
-			comments: "test",
+			// email: "test@test.com",
+			// name: "test",
+			// type: "kort",
+			// cardNumber: 1234567890,
+			// accountNumber: 1234567890,
+			// file: "halla",
+			// amount: 100,
+			// responsible: "m@example.com",
+			// anledning: "test",
+			// comments: "test",
 		},
 	});
 
@@ -105,9 +136,9 @@ export default function MyForm() {
 						<FormItem>
 							<FormLabel>Navn</FormLabel>
 							<FormControl>
-								<Input placeholder="" type="" {...field} />
+								<Input placeholder="Ditt fulle navn" type="text" {...field} />
 							</FormControl>
-
+							<FormDescription>Skriv inn ditt fulle navn</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -120,7 +151,7 @@ export default function MyForm() {
 						<FormItem>
 							<FormLabel>E-post</FormLabel>
 							<FormControl>
-								<Input placeholder="" type="" {...field} />
+								<Input placeholder="din.epost@online.ntnu.no" type="email" {...field} />
 							</FormControl>
 							<FormDescription>Online-mail hvis du har</FormDescription>
 							<FormMessage />
@@ -128,48 +159,47 @@ export default function MyForm() {
 					)}
 				/>
 
+				<div className="grid grid-cols-12 gap-4 bg-gray-100 p-4 rounded-lg">
+					<div className="col-span-12 text-sm text-gray-500">
+						Kun en av disse skal fylles ut. Hvis du har betalt med et
+						komite-kort, fyll ut kortnr. Hvis du har lagt ut privat, fyll inn
+						kontonr som pengene skal gå til.
+					</div>
 
-<div className="grid grid-cols-12 gap-4 bg-gray-100 p-4 rounded-lg">
+					<div className="col-span-6">
+						<FormField
+							control={form.control}
+							name="accountNumber"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Kontonr</FormLabel>
+									<FormControl>
+										<Input placeholder="F.eks. 1234 56 78901" type="number" {...field} />
+									</FormControl>
+									<FormDescription>Kontonummer for refusjon av utlegg</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
 
-  <div className="col-span-12 text-sm text-gray-500">
-    Kun en av disse skal fylles ut. Hvis du har betalt med et komite-kort, fyll ut kortnr. Hvis du har lagt ut privat, fyll inn kontonr som pengene skal gå til.
-  </div>
-          
-          <div className="col-span-6">
-				<FormField
-					control={form.control}
-					name="accountNumber"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Kontonr</FormLabel>
-							<FormControl>
-								<Input placeholder="" type="number" {...field} />
-							</FormControl>
-              <FormDescription>Kontonummer</FormDescription>
-
-							<FormMessage />
-						</FormItem>
-					)}
-					/>
+					<div className="col-span-6">
+						<FormField
+							control={form.control}
+							name="cardNumber"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Kortnr</FormLabel>
+									<FormControl>
+										<Input placeholder="Siste 4 siffer på kortet" type="number" {...field} />
+									</FormControl>
+									<FormDescription>Kortnummer hvis du brukte komiteens kort</FormDescription>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+					</div>
 				</div>
-
-				<div className="col-span-6">
-					<FormField
-						control={form.control}
-					name="cardNumber"
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Kortnr</FormLabel>
-							<FormControl>
-								<Input placeholder="" type="number" {...field} />
-							</FormControl>
-              <FormDescription>Kortnummer</FormDescription>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-				</div>
-        </div>
 
 				<FormField
 					control={form.control}
@@ -180,7 +210,7 @@ export default function MyForm() {
 							<FormControl>
 								<Input
 									{...field}
-									placeholder=""
+									placeholder="Beløp i NOK"
 									type="number"
 									onChange={(e) => {
 										const value = e.target.value;
@@ -190,7 +220,7 @@ export default function MyForm() {
 									}}
 								/>
 							</FormControl>
-
+							<FormDescription>Totalbeløp for kvitteringen</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -205,16 +235,18 @@ export default function MyForm() {
 							<Select onValueChange={field.onChange} defaultValue={field.value}>
 								<FormControl>
 									<SelectTrigger>
-										<SelectValue placeholder="" />
+										<SelectValue placeholder="Velg komité eller gruppe" />
 									</SelectTrigger>
 								</FormControl>
 								<SelectContent>
-									<SelectItem value="m@example.com">m@example.com</SelectItem>
-									<SelectItem value="m@google.com">m@google.com</SelectItem>
-									<SelectItem value="m@support.com">m@support.com</SelectItem>
+									{GROUPS.map((group) => (
+										<SelectItem key={group} value={group}>
+											{group}
+										</SelectItem>
+									))}
 								</SelectContent>
 							</Select>
-
+							<FormDescription>Velg hvilken komité eller gruppe utgiften tilhører</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -227,7 +259,7 @@ export default function MyForm() {
 						<FormItem>
 							<FormLabel>Anledning</FormLabel>
 							<FormControl>
-								<Input placeholder="" type="text" {...field} />
+								<Input placeholder="F.eks. Komitémøte, arrangement, innkjøp" type="text" {...field} />
 							</FormControl>
 							<FormDescription>Grunnlaget for kjøpet</FormDescription>
 							<FormMessage />
@@ -242,9 +274,13 @@ export default function MyForm() {
 						<FormItem>
 							<FormLabel>Kommentarer</FormLabel>
 							<FormControl>
-								<Textarea placeholder="" className="resize-none" {...field} />
+								<Textarea 
+									placeholder="Legg til eventuelle kommentarer eller forklaringer her" 
+									className="resize-none" 
+									{...field} 
+								/>
 							</FormControl>
-
+							<FormDescription>Tilleggsinformasjon om utgiften hvis nødvendig</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
@@ -255,7 +291,7 @@ export default function MyForm() {
 					name="file"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Select File</FormLabel>
+							<FormLabel>Last opp kvittering</FormLabel>
 							<FormControl>
 								<FileUploader
 									value={files}
@@ -270,11 +306,11 @@ export default function MyForm() {
 										<div className="flex items-center justify-center flex-col p-8 w-full ">
 											<CloudUpload className="text-gray-500 w-10 h-10" />
 											<p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
-												<span className="font-semibold">Click to upload</span>
-												&nbsp; or drag and drop
+												<span className="font-semibold">Klikk for å laste opp</span>
+												&nbsp; eller dra og slipp
 											</p>
 											<p className="text-xs text-gray-500 dark:text-gray-400">
-												SVG, PNG, JPG or GIF
+												SVG, PNG, JPG eller PDF
 											</p>
 										</div>
 									</FileInput>
@@ -291,12 +327,12 @@ export default function MyForm() {
 									</FileUploaderContent>
 								</FileUploader>
 							</FormControl>
-							<FormDescription>Select a file to upload.</FormDescription>
+							<FormDescription>Last opp bilde eller scan av kvitteringen (maks 25MB per fil)</FormDescription>
 							<FormMessage />
 						</FormItem>
 					)}
 				/>
-				<Button type="submit">Submit</Button>
+				<Button type="submit">Send inn</Button>
 			</form>
 		</Form>
 	);
