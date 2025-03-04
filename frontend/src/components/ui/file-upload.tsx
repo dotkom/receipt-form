@@ -87,7 +87,7 @@ export const FileUploader = forwardRef<
 		const [activeIndex, setActiveIndex] = useState(-1);
 		const {
 			accept = {
-				"image/*": [".jpg", ".jpeg", ".png"],
+				"image/*": [".jpg", ".jpeg", ".png", ".heic"],
 			},
 			maxFiles = 1,
 			maxSize = 4 * 1024 * 1024,
@@ -172,6 +172,15 @@ export const FileUploader = forwardRef<
 					acceptedFiles,
 					rejectedFiles,
 				});
+
+				// check for heic files
+				const heicFiles = files.filter((file) => file.type === "image/heic");
+				if (heicFiles.length > 0) {
+					toast.error(
+						"Bro, ikke HEIC fil a plis. Trykk på de tre prikkene og eksporter til 'filer', og last opp derifra"
+					);
+					return;
+				}
 
 				if (!files) {
 					toast.error("file error , probably too big");
