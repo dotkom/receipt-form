@@ -98,17 +98,17 @@ export default function ReceiptForm() {
 	};
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
-		defaultValues: {
-			email: "test@test.com",
-			name: "test",
-			type: "kort",
-			cardNumber: undefined,
-			accountNumber: "1234567890",
-			amount: 100,
-			responsibleCommittee: "Hovedstyret",
-			intent: "test",
-			comments: "test",
-		},
+		// defaultValues: {
+		// 	email: "test@test.com",
+		// 	name: "test",
+		// 	type: "kort",
+		// 	cardNumber: undefined,
+		// 	accountNumber: "1234567890",
+		// 	amount: 100,
+		// 	responsibleCommittee: "Hovedstyret",
+		// 	intent: "test",
+		// 	comments: "test",
+		// },
 	});
 
 	async function sendEmail() {
@@ -230,9 +230,10 @@ export default function ReceiptForm() {
 
 					<div className="grid grid-cols-12 gap-4 bg-gray-100 p-4 rounded-lg">
 						<div className="col-span-12 text-sm text-gray-500">
-							Kun en av disse skal fylles ut. Hvis du har betalt med et
-							komite-kort, fyll ut kortnr. Hvis du har lagt ut privat, fyll inn
-							kontonr som pengene skal gå til.
+							Kun en av disse skal fylles ut. Hvis du har betalt for noe med ett
+							av Online sine kort, fyll ut til høyre. Hvis du har lagt ut
+							privat, fyll inn kontonr i input til venstre. kontonr som pengene
+							skal gå til.
 						</div>
 
 						<div className="col-span-6">
@@ -267,7 +268,7 @@ export default function ReceiptForm() {
 										<FormLabel>Kortnr</FormLabel>
 										<FormControl>
 											<Input
-												placeholder="Siste 4 siffer på kortet"
+												placeholder="Kortnummer/hvilken komite kortet tilhører"
 												type="string"
 												{...field}
 											/>
@@ -439,14 +440,14 @@ export default function ReceiptForm() {
 					{pdfUrl && (
 						<div>
 							<div>Kvittering:</div>
-								<a
-									href={pdfUrl}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="block text-sm text-blue-500"
-								>
-									{pdfUrl}
-								</a>
+							<a
+								href={pdfUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="block text-sm text-blue-500"
+							>
+								{pdfUrl}
+							</a>
 
 							<Button onClick={sendEmail}>Send til Bankkom</Button>
 						</div>
