@@ -7,8 +7,8 @@
 set -e
 
 # Configuration - MAKE SURE THESE MATCH YOUR DEPLOYMENT SCRIPT
-BUCKET_NAME="your-vite-app-bucket"  # Must match the bucket name in test_s3_deploy.sh
-REGION="eu-west-1"                  # Must match the region in test_s3_deploy.sh
+BUCKET_NAME="kvittering5.online.ntnu.no"  # Must match the bucket name in test_s3_deploy.sh
+REGION="eu-north-1"                  # Must match the region in test_s3_deploy.sh
 
 # Colors for output
 RED='\033[0;31m'

@@ -11,14 +11,18 @@ from core.data_types import Attachment
 
 def _process_image(attachment_data: str, mime_type: str) -> PdfReader:
     """Process an image (JPEG or PNG) and convert it to a PDF page."""
-    print(f"Processing {mime_type} attachment")
-
     # Create a new PDF with the image
     img_buffer = io.BytesIO()
     img_pdf = canvas.Canvas(img_buffer, pagesize=pagesizes.A4)
 
-    response = requests.get(attachment_data)
-    img_bytes = response.content
+    parsed_url = urlparse(attachment_data)
+
+
+    key = parsed_url.path.lstrip("/")
+
+    s3_client = boto3.client("s3")
+    response = s3_client.get_object(Bucket=env["STORAGE_BUCKET"], Key=key)
+    img_bytes = response["Body"].read()
 
     img = ImageReader(io.BytesIO(img_bytes))
 
@@ -53,6 +57,7 @@ def merge_attachments(pdf_data: bytes, attachments: List[Attachment]) -> bytes:
 
     # Process each attachment
     for attachment in attachments:
+        print(f"Processing attachment: {attachment.url}")
         attachment_url = attachment.url
         mime_type = attachment.mime_type
 

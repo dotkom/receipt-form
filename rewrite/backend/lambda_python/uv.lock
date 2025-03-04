@@ -288,6 +288,7 @@ dependencies = [
     { name = "pypdf2" },
     { name = "reportlab" },
     { name = "requests" },
+    { name = "urllib3" },
 ]
 
 [package.metadata]
@@ -300,6 +301,7 @@ requires-dist = [
     { name = "pypdf2", specifier = ">=3.0.1" },
     { name = "reportlab", specifier = ">=4.3.1" },
     { name = "requests", specifier = ">=2.32.3" },
+    { name = "urllib3", specifier = ">=2.3.0" },
 ]
 
 [[package]]

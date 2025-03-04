@@ -29,3 +29,14 @@ aws s3 cp deployment.zip s3://$S3_ARTIFACTS_BUCKET/$PROJECT_NAME/lambda.zip
 echo "Deployment complete! Lambda package uploaded to s3://$S3_ARTIFACTS_BUCKET/$PROJECT_NAME/lambda.zip" 
 
 aws lambda update-function-code --function-name $LAMBDA_FUNCTION_NAME --s3-bucket $S3_ARTIFACTS_BUCKET --s3-key $PROJECT_NAME/lambda.zip
+
+echo "Waiting for Lambda function to be fully updated..."
+while true; do
+    STATUS=$(aws lambda get-function --function-name $LAMBDA_FUNCTION_NAME --query 'Configuration.[State,LastUpdateStatus]' --output text)
+    if [[ $STATUS == *"Active"* ]] && [[ $STATUS == *"Successful"* ]]; then
+        echo "Lambda function is now live and ready!"
+        break
+    fi
+    echo "Still updating... Current status: $STATUS"
+    sleep 3
+done

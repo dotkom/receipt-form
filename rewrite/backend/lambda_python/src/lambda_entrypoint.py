@@ -6,6 +6,7 @@ from core.pdf_table import pdf_generator
 from core.data_types import FormData
 from core.get_and_validate_env import get_and_validate_env
 from core.send_email import send_email
+from urllib.parse import urlparse
 
 MAX_SIZE_MB = 25
 
@@ -37,17 +38,14 @@ def handler(event, context):
                 key = body.get("key")
                 mime_type = body.get("mime_type")
 
-                conditions = [["content-length-range", 0, MAX_SIZE_MB * 1024 * 1024]]
+                conditions = [
+                    ["content-length-range", 0, MAX_SIZE_MB * 1024 * 1024],
+                    ["starts-with", "$Content-Type", ""]
+                ]
 
                 presigned_post = s3_client.generate_presigned_post(
                     Bucket=env["STORAGE_BUCKET"],
                     Key=key,
-                    Fields={
-                        # "Content-Type": mime_type,
-                        # have not gotten this to work:( 
-                        # octet-stream is default and leads to open preview in browser 
-                        # prompting download isntead of opening directly which is annoying
-                    },
                     Conditions=conditions,
                     ExpiresIn=3600,  # URL expires in 1 hour
                 )
@@ -71,15 +69,37 @@ def handler(event, context):
                 form_data = FormData.from_json(form_data_dict)
                 pdf = pdf_generator(form_data)
                 key = f"pdfs/{datetime.now().strftime('%Y-%m-%d')}-{uuid.uuid4()}.pdf"
-                s3_client.put_object(Bucket=env["STORAGE_BUCKET"], Key=key, Body=pdf)
+                s3_client.put_object(Bucket=env["STORAGE_BUCKET"], Key=key, Body=pdf, ContentType="application/pdf")
 
-                send_email(pdf, form_data, env["SENDER_EMAIL"], env["RECIPIENT_EMAIL"], env["CC_RECIPIENT_EMAILS"])
-
-                pdf_url = f"https://{env['STORAGE_BUCKET']}.s3.amazonaws.com/{key}"
+                # create presigned url for pdf
+                presigned_url = s3_client.generate_presigned_url(
+                    Bucket=env["STORAGE_BUCKET"],
+                    Key=key,
+                    ExpiresIn=3600,
+                )
 
                 return response(
                     message="PDF generated successfully",
-                    data={"pdf_url": pdf_url},
+                    data={"pdf_url": presigned_url},
+                    status_code=200,
+                )
+
+            if route == "send_email":
+                pdf_url = body.get("pdf_url")
+                form_data_dict = body.get("form_data")
+                form_data = FormData.from_json(form_data_dict)
+
+                # Extract the key from the S3 URL
+                parsed_url = urlparse(pdf_url)
+                key = parsed_url.path.lstrip('/')  # Remove leading slash
+                s3_response = s3_client.get_object(Bucket=env["STORAGE_BUCKET"], Key=key)
+                pdf_data = s3_response['Body'].read()
+
+                send_email(pdf_data, form_data, env["SENDER_EMAIL"], env["RECIPIENT_EMAIL"], env["CC_RECIPIENT_EMAILS"])
+
+                return response(
+                    message="PDF sent successfully",
+                    data={},
                     status_code=200,
                 )
 

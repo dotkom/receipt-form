@@ -50,7 +50,7 @@ export const useFileUpload = () => {
 export type UploadedFile = {
 	file: File;
 	url: string;
-}
+};
 
 type FileUploaderProps = {
 	value: UploadedFile[] | null;
@@ -87,7 +87,7 @@ export const FileUploader = forwardRef<
 		const [activeIndex, setActiveIndex] = useState(-1);
 		const {
 			accept = {
-				"image/*": [".jpg", ".jpeg", ".png", ".gif"],
+				"image/*": [".jpg", ".jpeg", ".png"],
 			},
 			maxFiles = 1,
 			maxSize = 4 * 1024 * 1024,
@@ -310,7 +310,7 @@ export const FileUploaderItem = forwardRef<
 			)}
 			{...props}
 		>
-			<div className="font-medium leading-none tracking-tight flex items-center gap-1.5 h-full w-full">
+			<div className="font-medium leading-none tracking-tight flex items-center gap-1.5 h-full w-full" >
 				{children}
 			</div>
 			<button

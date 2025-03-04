@@ -7,7 +7,7 @@
 set -e
 
 # Configuration - CHANGE THESE VALUES
-BUCKET_NAME="kvittering3.online.ntnu.no"  # Must be globally unique
+BUCKET_NAME="kvittering2.online.ntnu.no"  # Must be globally unique
 REGION="eu-north-1"                  # AWS region
 DIST_DIR="../../dist"
 
