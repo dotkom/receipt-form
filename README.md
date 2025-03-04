@@ -15,3 +15,5 @@ The infra is located in https://github.com/dotkom/terraform-monorepo/tree/main/p
 - [ ] CI/CD pipeline
 - [ ] Message on slack if a pdf generation fails
 - [ ] One end to end test would be nice to have to make it easier to make changes
+- [ ] Think about if it makes sense to migrate to monoweb. 
+
