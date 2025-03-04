@@ -438,7 +438,7 @@ export default function ReceiptForm() {
 
 					{pdfUrl && (
 						<div>
-							<div>
+							<div>Kvittering:</div>
 								<a
 									href={pdfUrl}
 									target="_blank"
@@ -447,7 +447,6 @@ export default function ReceiptForm() {
 								>
 									{pdfUrl}
 								</a>
-							</div>
 
 							<Button onClick={sendEmail}>Send til Bankkom</Button>
 						</div>

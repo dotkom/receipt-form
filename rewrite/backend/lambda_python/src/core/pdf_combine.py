@@ -1,13 +1,18 @@
 import io
 from typing import Dict, List, Any
 import requests
+import boto3
 
 import reportlab.lib.pagesizes as pagesizes
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from PyPDF2 import PdfReader, PdfWriter
 from core.data_types import Attachment
+from core.utils import extract_s3_key_from_url
+from core.get_and_validate_env import get_and_validate_env
 
+s3_client = boto3.client("s3")
+env = get_and_validate_env()
 
 def _process_image(attachment_data: str, mime_type: str) -> PdfReader:
     """Process an image (JPEG or PNG) and convert it to a PDF page."""
@@ -15,12 +20,10 @@ def _process_image(attachment_data: str, mime_type: str) -> PdfReader:
     img_buffer = io.BytesIO()
     img_pdf = canvas.Canvas(img_buffer, pagesize=pagesizes.A4)
 
-    parsed_url = urlparse(attachment_data)
+    key = extract_s3_key_from_url(attachment_data)
 
+    print(f"Processing image from S3: {key}")
 
-    key = parsed_url.path.lstrip("/")
-
-    s3_client = boto3.client("s3")
     response = s3_client.get_object(Bucket=env["STORAGE_BUCKET"], Key=key)
     img_bytes = response["Body"].read()
 

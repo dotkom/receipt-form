@@ -5,7 +5,9 @@ def get_and_validate_env():
         "SENDER_EMAIL": os.environ.get("SENDER_EMAIL", "").strip(),
         "RECIPIENT_EMAIL": os.environ.get("RECIPIENT_EMAIL", "").strip(),
         "CC_RECIPIENT_EMAILS": [email.strip() for email in os.environ.get("CC_RECIPIENT_EMAILS", "").split(",") if email.strip()],
-        "STORAGE_BUCKET": os.environ.get("STORAGE_BUCKET", "").strip()
+        "STORAGE_BUCKET": os.environ.get("STORAGE_BUCKET", "").strip(),
+        "EMAIL_ENABLED": os.environ.get("EMAIL_ENABLED", "true").strip(),
+        "ENABLE_DEBUG_INFO_IN_FRONTEND": os.environ.get("ENABLE_DEBUG_INFO_IN_FRONTEND", "false").strip()
     }
 
     if not email_config["SENDER_EMAIL"] or "@" not in email_config["SENDER_EMAIL"]:
@@ -18,5 +20,11 @@ def get_and_validate_env():
         raise ValueError("STORAGE_BUCKET missing or empty")
     if not all("@" in email for email in email_config["CC_RECIPIENT_EMAILS"]):
         raise ValueError("Invalid email format in CC_RECIPIENT_EMAILS")
+
+    if email_config["EMAIL_ENABLED"] not in ["true", "false"]:
+        raise ValueError("EMAIL_ENABLED must be 'true' or 'false'")
+
+    if email_config["ENABLE_DEBUG_INFO_IN_FRONTEND"] not in ["true", "false"]:
+        raise ValueError("ENABLE_DEBUG_INFO_IN_FRONTEND must be 'true' or 'false'")
 
     return email_config

@@ -73,8 +73,11 @@ def handler(event, context):
 
                 # create presigned url for pdf
                 presigned_url = s3_client.generate_presigned_url(
-                    Bucket=env["STORAGE_BUCKET"],
-                    Key=key,
+                    'get_object',
+                    Params={
+                        'Bucket': env["STORAGE_BUCKET"],
+                        'Key': key
+                    },
                     ExpiresIn=3600,
                 )
 
@@ -85,6 +88,13 @@ def handler(event, context):
                 )
 
             if route == "send_email":
+                if env["EMAIL_ENABLED"] == "false":
+                    return response(
+                        message="Email is disabled",
+                        data={},
+                        status_code=200,
+                    )
+
                 pdf_url = body.get("pdf_url")
                 form_data_dict = body.get("form_data")
                 form_data = FormData.from_json(form_data_dict)
