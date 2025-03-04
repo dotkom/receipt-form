@@ -429,7 +429,7 @@ export default function ReceiptForm() {
 									</FileUploader>
 								</FormControl>
 								<FormDescription>
-									Last opp bilde eller scan av kvitteringen (maks 25MB per fil)
+									Last opp bilde eller scan av kvitteringen (maks 25MB per fil). Kun jpeg og png støttes.
 								</FormDescription>
 								<FormMessage />
 							</FormItem>
