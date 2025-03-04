@@ -1,27 +1,17 @@
 # Receipt Form
 
 This application serves as a way to automatically create a receipt form for usage in Linjeforeningen Online.
-It is created as an over-engineered React webapp, because it is fun.
 
-[![codecov](https://codecov.io/gh/dotkom/receipt-form/branch/master/graph/badge.svg?token=BGkDjRT8uU)](https://codecov.io/gh/dotkom/receipt-form)
+## Application architecture
 
-## How to run
+The frontend is a React app bundled with Vite. It uses shadcn/ui for the components.
 
-This project uses the Nextjs framework to run both the back-end and front-end.
-The following scripts will let you run or build the application:
+The backend is for now unfortunately python application that is hosted on aws Lambda. 
 
-### `yarn dev`
+The infra is located in https://github.com/dotkom/terraform-monorepo/tree/main/prod/receipt.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
-
-### `yarn build`
-
-Builds the app for production to the `./next` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## TODO:
+- [ ] Env in doppler
+- [ ] CI/CD pipeline
+- [ ] Message on slack if a pdf generation fails
+- [ ] One end to end test would be nice to have to make it easier to make changes
